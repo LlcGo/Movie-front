@@ -3,7 +3,6 @@
   <div>
     <NPlayer
         :options="{ src: 'http://localhost:7529/uploads/meeting_01.mp4' }"
-        :set="setPlayer"
     />
   </div>
 </template>
