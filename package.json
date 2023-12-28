@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nplayer/danmaku": "^1.0.12",
+    "@nplayer/vue": "^1.0.12",
     "ant-design-vue": "^4.0.8",
     "axios": "^1.6.3",
     "nplayer": "^1.0.15",

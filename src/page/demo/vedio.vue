@@ -1,18 +1,22 @@
 
 <template>
-  <div id="nPlayer" ref="nPlayer">
+  <div>
+    <NPlayer
+        :options="{ src: 'http://localhost:7529/uploads/meeting_01.mp4' }"
+        :set="setPlayer"
+    />
   </div>
 </template>
 
+
 <script setup lang="ts">
-import { ref } from 'vue'
-import Player from 'nplayer'
-const play = new Player({src: 'https://v-cdn.zjol.com.cn/280443.mp4',});
-play.mount('#nPlayer')
+import {onMounted} from "vue";
 
-defineProps<{ msg: string }>()
+let player = null;
+onMounted(() => {
+  console.log(player);
+});
 
-const count = ref(0)
 </script>
 
 <style scoped>
