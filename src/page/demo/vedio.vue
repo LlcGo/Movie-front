@@ -38,7 +38,7 @@ const playVideo  = async (i:any, val:any)=> {
   myAxios.get(`/getVideoSizeById/${Number(videoId.value)}`).then(res => {
     console.log('返回的结果--->',res);
     const totalSize = res;
-    const chunkSize = Math.ceil(totalSize / 20); //分成五片 每篇是20%
+    const chunkSize = Math.ceil(totalSize / 20); //已20为基准取除，看分成的份数
 
     // 定义分片传输的函数
     const loadVideoChunk = (startByte:number, endByte:number) => {

@@ -16,7 +16,7 @@ export async function postFormProgress(chunkNumber:any,chunkSize:any,file:Blob,f
     formData.append('chunkNumber',chunkNumber);
     formData.append('chunkSize',chunkSize);
     formData.append('fileName',fileName)
-    return myAxios.post('/api/upload',formData, {
+    return myAxios.post('/upload',formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         },

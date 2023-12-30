@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import {postFormProgress, uploadFile} from "../service/test.ts";
-import {FileChunk, FileControllerService} from "../../generated";
+import {postFormProgress} from "../service/test.ts";
+import {FileChunk} from "../../generated";
 
 
 const beforeUpload = async (files:any) => {
@@ -31,7 +31,10 @@ const beforeUpload = async (files:any) => {
       //能被分成几次上传
       const totalChunks = Math.ceil(file.size / chunkSize);
       for (let i = 0; i < totalChunks; i++) {
+        //每次的起始下标
          const start = i * chunkSize;
+         //每次结束的下标,每次都只取最小的，最后一次就取最终的大小file.size,
+        // 防止最后一次start + chunkSize，导致超出流的范围
          const end = Math.min(start + chunkSize,file.size);
          const chunk = file.slice(start,end);
         console.log('chunk-->',chunk)
@@ -43,7 +46,6 @@ const beforeUpload = async (files:any) => {
         }
          await upload(fileChunk);
       }
-
 }
 
 /**
@@ -51,7 +53,7 @@ const beforeUpload = async (files:any) => {
  * @param flie
  */
 const upload = async (flie:any) => {
-     await postFormProgress(flie.chunkNumber + 1,flie.chunkSize,flie.file,flie.filename)
+     await postFormProgress(flie.chunkNumber ,flie.chunkSize,flie.file,flie.filename)
   }
 
   const handleChange = (info : any) => {
