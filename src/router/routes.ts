@@ -1,13 +1,13 @@
 import {RouteRecordRaw} from "vue-router";
-import HelloWorld from "../components/HelloWorld.vue";
 import Demo from "../page/demo/demo.vue";
 import Vedio from "../page/demo/vedio.vue";
+import Chat from "../page/demo/Chat.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "666",
-        component: HelloWorld,
+        component: Chat,
     },
     {
         path: "/user",
