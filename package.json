@@ -14,7 +14,9 @@
     "ant-design-vue": "^4.0.8",
     "axios": "^1.6.3",
     "nplayer": "^1.0.15",
+    "pinia": "^2.1.7",
     "vue": "^3.3.11",
+    "vue-native-websocket": "^2.0.15",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

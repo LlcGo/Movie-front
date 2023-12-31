@@ -3,11 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
-import type { BaseResponse_List_UserVO_ } from '../models/BaseResponse_List_UserVO_';
+import type { BaseResponse_List_UserVo_ } from '../models/BaseResponse_List_UserVo_';
 import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
-import type { BaseResponse_Page_UserVO_ } from '../models/BaseResponse_Page_UserVO_';
+import type { BaseResponse_Page_UserVo_ } from '../models/BaseResponse_Page_UserVo_';
 import type { BaseResponse_User_ } from '../models/BaseResponse_User_';
-import type { BaseResponse_UserVO_ } from '../models/BaseResponse_UserVO_';
+import type { BaseResponse_UserVo_ } from '../models/BaseResponse_UserVo_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { UserAddRequest } from '../models/UserAddRequest';
 import type { UserLoginRequest } from '../models/UserLoginRequest';
@@ -67,12 +67,12 @@ deleteRequest: DeleteRequest,
     /**
      * getUserById
      * @param id id
-     * @returns BaseResponse_UserVO_ OK
+     * @returns BaseResponse_UserVo_ OK
      * @throws ApiError
      */
     public static getUserByIdUsingGet(
 id?: number,
-): CancelablePromise<BaseResponse_UserVO_> {
+): CancelablePromise<BaseResponse_UserVo_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/user/get',
@@ -89,10 +89,10 @@ id?: number,
 
     /**
      * getLoginUser
-     * @returns BaseResponse_UserVO_ OK
+     * @returns BaseResponse_UserVo_ OK
      * @throws ApiError
      */
-    public static getLoginUserUsingGet(): CancelablePromise<BaseResponse_UserVO_> {
+    public static getLoginUserUsingGet(): CancelablePromise<BaseResponse_UserVo_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/user/get/login',
@@ -118,7 +118,7 @@ id?: number,
      * @param userAvatar 
      * @param userName 
      * @param userRole 
-     * @returns BaseResponse_List_UserVO_ OK
+     * @returns BaseResponse_List_UserVo_ OK
      * @throws ApiError
      */
     public static listUserUsingGet(
@@ -134,7 +134,7 @@ userAccount?: string,
 userAvatar?: string,
 userName?: string,
 userRole?: string,
-): CancelablePromise<BaseResponse_List_UserVO_> {
+): CancelablePromise<BaseResponse_List_UserVo_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/user/list',
@@ -174,7 +174,7 @@ userRole?: string,
      * @param userAvatar 
      * @param userName 
      * @param userRole 
-     * @returns BaseResponse_Page_UserVO_ OK
+     * @returns BaseResponse_Page_UserVo_ OK
      * @throws ApiError
      */
     public static listUserByPageUsingGet(
@@ -190,7 +190,7 @@ userAccount?: string,
 userAvatar?: string,
 userName?: string,
 userRole?: string,
-): CancelablePromise<BaseResponse_Page_UserVO_> {
+): CancelablePromise<BaseResponse_Page_UserVo_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/user/list/page',
