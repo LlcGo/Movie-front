@@ -13,3 +13,4 @@ createApp(App)
     .use(Antd)
     .use(NPlayer)
     .mount('#app')
+

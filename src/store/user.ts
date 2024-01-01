@@ -12,8 +12,8 @@ const apiLogin =   async(user: UserLoginRequest ):Promise<BaseResponse_User_> =>
     return Promise.reject(new Error('invalid credentials'))
 }
 
-export const useUserStore = defineStore({
-    id: 'user',
+export const useUserStore = defineStore('user',{
+
     state: () => ({
         currentUser :undefined as UserVo
     }),
@@ -27,18 +27,19 @@ export const useUserStore = defineStore({
             // we could do other stuff like redirecting the user
         },
 
-        setUser(user:UserVo) {
+        async setUser(user:UserVo) {
            // const res =  await UserControllerService.getLoginUserUsingGet()
             this.$patch({
                 currentUser: user,
             })
+            return user;
             // we could do other stuff like redirecting the user
         },
 
         /**
          * Attempt to login a user
          */
-        async login(user: UserLoginRequest ):Promise<BaseResponse_User_> {
+        async login(user: UserLoginRequest ):Promise<UserVo> {
             const userData:BaseResponse_User_ = await apiLogin(user)
             this.$patch({
                 currentUser:userData.data as UserVo,

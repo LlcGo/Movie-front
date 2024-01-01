@@ -4,67 +4,87 @@
     <div class="lt">
       <a-textarea
           :auto-size="{ minRows: 5, maxRows: 10 }"
-          v-model:value="chat"/>
+          v-model:value="currentChatMsg"/>
     </div>
 
+<!--    <div class="scroll">-->
+<!--      <div class="myContain">-->
+<!--        <div class="myChat">-->
+<!--          <a-avatar class="my" size="large">-->
+<!--            <template #icon>-->
+<!--              <UserOutlined/>-->
+<!--            </template>-->
+<!--          </a-avatar>-->
+<!--          <div class="ll">-->
+<!--            6666666666-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
     <div class="scroll">
-      <div class="myContain">
-        <div class="myChat">
-          <a-avatar class="my" size="large">
-            <template #icon>
-              <UserOutlined/>
-            </template>
-          </a-avatar>
-          <div class="ll">
-            6666666666
-          </div>
-        </div>
+      <div style="top: 0px;
+    position: relative;
+    height: 51px;"></div>
+<!--      如果当前的id是自己的id就再右边-->
+      <div v-if="true">
+        <MyChat/>
+
+        <MyChat/>
       </div>
+      <!--      如果当前的id是不是自己的id就再右边-->
+      <div v-if="true">
+        <OtherChat/>
 
-
-      <div class="otherChat">
-        <a-avatar class="other" size="large">
-          <template #icon>
-            <UserOutlined/>
-          </template>
-        </a-avatar>
-        <div class="otherLl">
-          6666666666
-        </div>
-      </div>
-
-
-      <div class="otherChat">
-        <a-avatar class="other" size="large">
-          <template #icon>
-            <UserOutlined/>
-          </template>
-        </a-avatar>
-        <div class="otherLl">
-          {{ context }}
-        </div>
+        <OtherChat/>
       </div>
 
     </div>
-
 
     <a-button class="chatButton" type="primary" @click="sendMessage()">发送</a-button>
-
   </div>
-{{currentUser}}
+
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useUserStore} from "../../store/user.ts";
 import {storeToRefs} from "pinia";
+import {DataContent} from "../../../generated/models/DataContent.ts";
+import {ChatMsg} from "../../../generated/models/ChatMsg.ts";
+import MyChat from "../../components/chat/MyChat.vue";
+import OtherChat from "../../components/chat/OtherChat.vue";
+import {ChatControllerService} from "../../../generated";
 
 const useStore = useUserStore()
 const { currentUser } = storeToRefs(useStore)
-const chat = ref()
+const currentChatMsg = ref();
+//CONNECT(1, "第一次(或重连)初始化连接"),
+//CHAT(2, "聊天消息"),
+//SIGNED(3, "消息签收"),
+//KEEPALIVE(4, "客户端保持心跳"),
+//PULL_FRIEND(5, "拉取好友");
+const chat = reactive<DataContent>({
+  action: 2,
+  chatMsg: undefined,
+  extand: '',
+})
+
+//unsign(0, "未签收"),
+//signed(1, "已签收");
+const chatMsg = reactive<ChatMsg>({
+  sendUserId: '',
+  acceptUserId: '1741461358159978498',
+  msg: '',
+  signFlag : 0,
+})
+// 创建WebSocket连接
 const socket = new WebSocket('ws://localhost:7530/chat');
 const context = ref();
-// 创建WebSocket连接
+
+onMounted(async () => {
+  console.log('Chat---->',currentUser.value);
+  const res = await ChatControllerService.getChatUsingGet('1741461358159978498','1741446004448710657');
+  console.log('返回的数据----->',res)
+})
 
 // 建立连接事件
 socket.onopen = function() {
@@ -72,8 +92,22 @@ socket.onopen = function() {
 };
 
 const sendMessage = () => {
+  chatMsg.msg = currentChatMsg.value;
+  chat.chatMsg = chatMsg;
+  let sendMsg = {
+    sendUserId: currentUser.value.id,
+    acceptUserId: '1741461358159978498',
+    msg: currentChatMsg.value,
+    signFlag : 0,
+  }
+  let sendChat = {
+    action: 2,
+    chatMsg: sendMsg,
+    extand: '',
+  }
   // 向服务器发送消息
-  socket.send(chat.value);
+  console.log('发送的消息---》',sendChat)
+  socket.send(JSON.stringify(sendChat));
 }
 
 
@@ -118,60 +152,10 @@ socket.onerror = function(error) {
 }
 
 
-.myContain {
-  position: relative;
-  height: 10%;
-}
-
-.my {
-  position: absolute;
-  right: 10px;
-  top: 50px
-}
-
-.myChat {
-  right: 0;
-  background: red;
-  width: 50%;
-  position: absolute;
-}
-
-.ll {
-  padding: 12px;
-  top: 56px;
-  position: absolute;
-  max-width: 50%;
-  right: 58px;
-  background: #80b9f2;
-  border-radius: 16px 0 16px 16px;
-}
-
-
-.otherChat {
-  margin-top: 5%;
-  position: relative;
-}
-
-.other {
-  left: 10px;
-}
-
-.otherLl {
-  position: absolute;
-  top: 3px;
-  max-width: 50%;
-  left: 57px;
-  padding: 12px;
-  background: white;
-  border-radius: 0 16px 16px 16px;
-  word-wrap: break-word;
-  word-break: break-word;
-}
-
 .scroll{
   overflow-y:scroll;
   position: relative;
-  height: 75%;
+  height: 81%;
   width: 80vw;
 }
 </style>

@@ -4,9 +4,9 @@
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_List_UserVo_ } from '../models/BaseResponse_List_UserVo_';
-import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
 import type { BaseResponse_Page_UserVo_ } from '../models/BaseResponse_Page_UserVo_';
-import type { BaseResponse_User_ } from '../models/BaseResponse_User_';
+import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
+import type { BaseResponse_Users_ } from '../models/BaseResponse_Users_';
 import type { BaseResponse_UserVo_ } from '../models/BaseResponse_UserVo_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { UserAddRequest } from '../models/UserAddRequest';
@@ -23,13 +23,13 @@ export class UserControllerService {
     /**
      * addUser
      * @param userAddRequest userAddRequest
-     * @returns BaseResponse_long_ OK
+     * @returns BaseResponse_string_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static addUserUsingPost(
 userAddRequest: UserAddRequest,
-): CancelablePromise<BaseResponse_long_ | any> {
+): CancelablePromise<BaseResponse_string_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/user/add',
@@ -219,13 +219,13 @@ userRole?: string,
     /**
      * userLogin
      * @param userLoginRequest userLoginRequest
-     * @returns BaseResponse_User_ OK
+     * @returns BaseResponse_Users_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static userLoginUsingPost(
 userLoginRequest: UserLoginRequest,
-): CancelablePromise<BaseResponse_User_ | any> {
+): CancelablePromise<BaseResponse_Users_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/user/login',
@@ -259,13 +259,13 @@ userLoginRequest: UserLoginRequest,
     /**
      * userRegister
      * @param userRegisterRequest userRegisterRequest
-     * @returns BaseResponse_long_ OK
+     * @returns BaseResponse_string_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static userRegisterUsingPost(
 userRegisterRequest: UserRegisterRequest,
-): CancelablePromise<BaseResponse_long_ | any> {
+): CancelablePromise<BaseResponse_string_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/user/register',
