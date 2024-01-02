@@ -4,6 +4,7 @@ import Vedio from "../page/demo/vedio.vue";
 import Chat from "../page/demo/Chat.vue";
 import Login from "../page/user/login.vue";
 import Regist from "../page/user/regist.vue";
+import Chat2 from "../page/demo/Chat2.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/chat",
         name: "聊天",
         component: Chat,
+    },
+    {
+        path: "/chat2",
+        name: "聊天2",
+        component: Chat2,
     }
 ]
 export default routes

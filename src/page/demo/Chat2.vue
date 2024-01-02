@@ -1,36 +1,45 @@
 <template>
   <div class="box">
 
-  <div class="left">
-    好友显示框
-  </div>
-  <div class="right">
+    <div class="lt">
+      <a-textarea
+          :auto-size="{ minRows: 5, maxRows: 10 }"
+          v-model:value="currentChatMsg"/>
+    </div>
 
-      <div class="lt">
-        <a-textarea
-            :auto-size="{ minRows: 5, maxRows: 10 }"
-            v-model:value="currentChatMsg"/>
-      </div>
-      <div class="scroll">
-        <div style="top: 0px;
+<!--    <div class="scroll">-->
+<!--      <div class="myContain">-->
+<!--        <div class="myChat">-->
+<!--          <a-avatar class="my" size="large">-->
+<!--            <template #icon>-->
+<!--              <UserOutlined/>-->
+<!--            </template>-->
+<!--          </a-avatar>-->
+<!--          <div class="ll">-->
+<!--            6666666666-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+    <div class="scroll">
+      <div style="top: 0px;
     position: relative;
     height: 51px;"></div>
-        <!--      <div v-if="flag">-->
+<!--      <div v-if="flag">-->
         <div v-for="item in chats">
           <!--      如果当前的id是自己的id就再右边-->
-          <div v-if="item.sendUserId == '1741446004448710657'">
+          <div v-if="item.sendUserId == '1741461358159978498'">
             <MyChat :msg="item.msg"/>
           </div>
           <!--      如果当前的id是不是自己的id就再右边-->
-          <div v-if="item.sendUserId !== '1741446004448710657'">
+          <div v-if="item.sendUserId !== '1741461358159978498'">
             <OtherChat :msg="item.msg"/>
           </div>
         </div>
       </div>
+<!--    </div>-->
 
-
-      <a-button class="chatButton" type="primary" @click="sendMessage()">发送</a-button>
-    </div>
+    <a-button class="chatButton" type="primary" @click="sendMessage()">发送</a-button>
   </div>
 
 </template>
@@ -56,7 +65,7 @@ const chats = ref<Array<ChatMsg>>([]);
 //KEEPALIVE(4, "客户端保持心跳"),
 //PULL_FRIEND(5, "拉取好友");
 const chat = reactive<DataContent>({
-  action: 1,
+  action: 2,
   chatMsg: undefined,
   extand: '',
 })
@@ -78,10 +87,22 @@ onMounted( async () => {
   initConnect();
 })
 
-
-
+const initConnect = () => {
+  let sendMsg = {
+    sendUserId: '1741461358159978498',
+    acceptUserId: '',
+    msg: '',
+    signFlag : 0,
+  }
+  let sendChat = {
+    action: 1,
+    chatMsg: sendMsg,
+    extand: '',
+  }
+  socket.send(JSON.stringify(sendChat))
+}
 const init = async () => {
-  const res = await ChatControllerService.getChatUsingGet('1741461358159978498','1741446004448710657');
+  const res = await ChatControllerService.getChatUsingGet('1741446004448710657','1741461358159978498');
   // chats.value = res.data.
   if(res.data){
     chats.value = [];
@@ -110,8 +131,8 @@ const sendMessage =() => {
   chatMsg.msg = currentChatMsg.value;
   chat.chatMsg = chatMsg;
   let sendMsg = {
-    sendUserId: '1741446004448710657',
-    acceptUserId: '1741461358159978498',
+    sendUserId: '1741461358159978498',
+    acceptUserId: '1741446004448710657',
     msg: currentChatMsg.value,
     signFlag : 0,
   }
@@ -124,31 +145,17 @@ const sendMessage =() => {
   console.log('发送的消息---》',sendChat)
   socket.send(JSON.stringify(sendChat));
   let send = {
-    acceptUserId:"1741461358159978498",
+    acceptUserId:"1741755987040161794",
     createTime: new Date(),
-    id:"1741755987040161794",
+    id:"1741461358159978498",
     msg:currentChatMsg.value,
-    sendUserId:"1741446004448710657",
+    sendUserId:"1741461358159978498",
     signFlag:0
   }
   currentChatMsg.value = '';
   write(send)
 }
 
-const initConnect = () => {
-  let sendMsg = {
-    sendUserId: '1741446004448710657',
-    acceptUserId: '',
-    msg: '',
-    signFlag : 0,
-  }
-  let sendChat = {
-    action: 1,
-    chatMsg: sendMsg,
-    extand: '',
-  }
-  socket.send(JSON.stringify(sendChat))
-}
 
 // 监听接收到服务器消息的事件
 socket.onmessage = function(event) {
@@ -156,7 +163,7 @@ socket.onmessage = function(event) {
 
   let rMsg = JSON.parse(message);
   console.log('接收到服务器消息:', rMsg);
-  if(rMsg.chatMsg.sendUserId != '1741446004448710657'){
+  if(rMsg.chatMsg.sendUserId != '1741461358159978498'){
     let send = {
       acceptUserId:rMsg.chatMsg.acceptUserId,
       createTime: new Date(),
@@ -167,7 +174,6 @@ socket.onmessage = function(event) {
     }
     write(send)
   }
-  context.value = message
 };
 
 // 监听连接关闭事件
@@ -191,10 +197,9 @@ socket.onerror = function(error) {
   margin: 50px auto;
 }
 
-
 .lt {
   position: absolute;
-  width: 80%;
+  width: 100%;
   bottom: 0;
 }
 
@@ -206,22 +211,11 @@ socket.onerror = function(error) {
 
 
 .scroll{
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
-  height: 65vh;
+  height: 80%;
+  width: 80vw;
   display: flex;
   flex-direction: column-reverse;
-}
-
-.left{
-  float: left;
-  background: red;
-  width: 20%;
-  height: 100%;
-}
-
-.right{
-  float: right;
-  width: 80%;
 }
 </style>

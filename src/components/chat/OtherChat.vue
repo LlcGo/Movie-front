@@ -1,5 +1,4 @@
 <template>
-
     <div class="otherChat">
       <a-avatar class="other" size="large">
         <template #icon>
@@ -7,19 +6,18 @@
         </template>
       </a-avatar>
       <div class="otherLl">
-        666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
-        666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
-        666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
-        666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
+        {{ props.msg }}
       </div>
     </div>
-
-
-
 </template>
 
 <script setup lang="ts">
-
+const props = defineProps({
+  msg: {
+    type: String,
+    default: "",
+  },
+})
 
 </script>
 
@@ -29,16 +27,17 @@
 .otherChat {
   margin-top: 2%;
   position: relative;
+  margin-left: 1%;
 }
 
 .other {
-  left: 10px;
+  position: relative;
 }
 
 .otherLl {
-  position:relative;
-  right: -59px;
-  top: -31px;
+  position: absolute;
+  left: 48px;
+  top: 9px;
   max-width: 50%;
   line-height: 1.5;
   font-size: 14px;
