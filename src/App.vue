@@ -4,18 +4,20 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {onMounted, provide, ref} from "vue";
 import {UserControllerService} from "../generated";
 import {useUserStore} from "./store/user.ts";
 import {useRoute} from "vue-router";
 const userStore = useUserStore();
-
+const user = ref();
 
 onMounted(async ()=>{
- const res = await UserControllerService.getLoginUserUsingGet()
+  const res = await userStore.setUser()
   console.log('App onMounted----->',res)
-  await userStore.setUser(res.data)
+  user.value = res
 })
+
+provide('currentUser', user.value)
 </script>
 
 <style scoped>

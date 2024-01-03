@@ -27,12 +27,12 @@ export const useUserStore = defineStore('user',{
             // we could do other stuff like redirecting the user
         },
 
-        async setUser(user:UserVo) {
-           // const res =  await UserControllerService.getLoginUserUsingGet()
+        async setUser() {
+            const res =  await UserControllerService.getLoginUserUsingGet()
             this.$patch({
-                currentUser: user,
+                currentUser: res.data,
             })
-            return user;
+            return res.data;
             // we could do other stuff like redirecting the user
         },
 
@@ -44,6 +44,7 @@ export const useUserStore = defineStore('user',{
             this.$patch({
                 currentUser:userData.data as UserVo,
             })
+            sessionStorage.setItem('user', JSON.stringify(userData.data));
             return userData.data;
         },
     },
