@@ -94,7 +94,6 @@ let currentSendMessage = ref();
 
 // 创建WebSocket连接
 const socket = new WebSocket('ws://localhost:7530/chat');
-const user = inject('currentUser')
 const scrollRef = ref();
 onMounted( async () => {
   // window.addEventListener('scroll', handleScroll, true);  // 监听（绑定）滚轮滚动事件
@@ -102,7 +101,6 @@ onMounted( async () => {
   await init();
   await initConnect();
   refreshScroll()
-
 })
 
 
@@ -132,7 +130,6 @@ const refreshScroll = () => {
 //获取朋友信息
 const getFriends = async () =>{
   console.log('user--->',currentUser)
-  console.log('mount',user)
   console.log('聊天对象的id--->',currentOtherUserId.value)
   // alert(currentUser.value)
   myFriends.value =[];

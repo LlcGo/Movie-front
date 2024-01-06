@@ -3,19 +3,31 @@ import Demo from "../page/demo/demo.vue";
 import Vedio from "../page/demo/vedio.vue";
 import Chat from "../page/demo/Chat.vue";
 import Login from "../page/user/login.vue";
-import Regist from "../page/user/regist.vue";
 import Chat2 from "../page/demo/Chat2.vue";
+import Layout from "../components/Layout.vue";
+import TestHeader from "../components/TestHeader.vue";
+import Index from "../page/context/front/index.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        name: "首页",
+        name: "登录",
         component: Login,
     },
     {
-        path: "/register",
-        name: "注册",
-        component: Regist,
+        path: "/layout",
+        name: "布局",
+        component: Layout,
+        children:[{
+            path:'',
+            name:'主页',
+            component:Index
+        }]
+    },
+    {
+        path: "/test",
+        name: "头部",
+        component: TestHeader,
     },
     {
         path: "/user",
@@ -36,6 +48,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/chat2",
         name: "聊天2",
         component: Chat2,
-    }
+    },
+
 ]
 export default routes

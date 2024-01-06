@@ -4,11 +4,13 @@
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_List_UserVo_ } from '../models/BaseResponse_List_UserVo_';
+import type { BaseResponse_object_ } from '../models/BaseResponse_object_';
 import type { BaseResponse_Page_UserVo_ } from '../models/BaseResponse_Page_UserVo_';
 import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { BaseResponse_Users_ } from '../models/BaseResponse_Users_';
 import type { BaseResponse_UserVo_ } from '../models/BaseResponse_UserVo_';
 import type { DeleteRequest } from '../models/DeleteRequest';
+import type { QCCode } from '../models/QCCode';
 import type { UserAddRequest } from '../models/UserAddRequest';
 import type { UserLoginRequest } from '../models/UserLoginRequest';
 import type { UserRegisterRequest } from '../models/UserRegisterRequest';
@@ -292,6 +294,56 @@ userUpdateRequest: UserUpdateRequest,
             method: 'POST',
             url: '/user/update',
             body: userUpdateRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * comparePicCode
+     * @param codeTypeEnum codeTypeEnum
+     * @param qcCode qcCode
+     * @returns BaseResponse_object_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static comparePicCodeUsingPost(
+codeTypeEnum: 'forgetPwdCode' | 'loginCode' | 'registerCode',
+qcCode: QCCode,
+): CancelablePromise<BaseResponse_object_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/{codeTypeEnum}/comparePicCode',
+            path: {
+                'codeTypeEnum': codeTypeEnum,
+            },
+            body: qcCode,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getVerifyCode
+     * @param codeTypeEnum codeTypeEnum
+     * @returns any OK
+     * @throws ApiError
+     */
+    public static getVerifyCodeUsingGet(
+codeTypeEnum: 'forgetPwdCode' | 'loginCode' | 'registerCode',
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/user/{codeTypeEnum}/getVerifyCode',
+            path: {
+                'codeTypeEnum': codeTypeEnum,
+            },
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

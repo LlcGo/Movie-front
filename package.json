@@ -25,6 +25,8 @@
     "@types/node": "^20.10.5",
     "@vitejs/plugin-vue": "^4.5.2",
     "openapi-typescript-codegen": "^0.25.0",
+    "sass": "^1.69.7",
+    "sass-loader": "^13.3.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vue-tsc": "^1.8.25"
