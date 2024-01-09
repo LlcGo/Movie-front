@@ -3,13 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ChatMsg = {
-    acceptUserId?: string;
+export type Favorites = {
     createTime?: string;
-    id?: string;
+    id?: number;
     isDelete?: number;
-    msg?: string;
-    sendUserId?: string;
-    signFlag?: number;
+    movieId?: number;
     updateTime?: string;
+    userId?: string;
 };

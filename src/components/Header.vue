@@ -173,9 +173,7 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   top: 10%;
 }
 
-.scFont {
 
-}
 
 :deep(:where(.css-dev-only-do-not-override-3m4nqy).ant-input-group .ant-input){
   height: 100%;

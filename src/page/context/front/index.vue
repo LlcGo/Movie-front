@@ -1,9 +1,10 @@
 
 <template>
   <div class="big">
+<!--    轮播图-->
     <div id="slideshow">
       <!-- 插入轮播的图片们 -->
-      <img class="active" src="http://img.kumi.cn/photo/01/69/30/016930f03d2e34cc.jpg" />
+      <img class="active" src="http://t1.mmonly.cc/uploads/tu/201602/198/qh1spjs3guk.jpg" />
       <img src="https://image2.sina.com.cn/dongman/pic/chshidzrcji/U1595P55T4D115697F50DT20070406083109.jpeg" />
       <img src="http://t1.mmonly.cc/uploads/tu/201602/198/qh1spjs3guk.jpg" />
       <!-- 插入轮播的页码们 -->
@@ -19,12 +20,20 @@
       <p>这是第二幅图片咩</p>
       <p>到第三幅了！</p>
     </div>
+<!--    内容-->
+    <SeriesList/>
+
+    <SeriesList/>
+
+    <SeriesList/>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-
+import xtf from '../../../assets/xtf.jpg'
+import SeriesList from "../../../components/movieList/SeriesList.vue";
 defineProps<{ msg: string }>()
 
 const count = ref(0)
@@ -87,9 +96,7 @@ function slideshow() {
 </script>
 
 <style scoped>
-.read-the-docs {
-  color: #888;
-}
+
 .big{
   margin: 0 auto;
   position: absolute;
@@ -98,10 +105,20 @@ function slideshow() {
   width: 100%;
   background-color: bisque;
 }
-.context{
-  background-color: blue;
-  height: 40px;
+
+
+
+
+img{
+  width: 100%;
+  height: 100%;
+  background-size: cover;
 }
+
+
+
+
+
 
 *{
   padding: 0;
@@ -156,7 +173,6 @@ function slideshow() {
   padding: 5px 30px;
   font-size: 20px;
   color: white;
-  //background-color: rgba(100,100,100,0.6); /*用rgba设置一个带透明度的背景颜色*/
   background-image: linear-gradient(90deg,hsla(0,0%,100%,0),hsla(0,0%,100%,.1) 77%,hsla(0,0%,100%,0));
   opacity: 0;
   transition: all 1s;
