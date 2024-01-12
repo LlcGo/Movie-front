@@ -21,29 +21,38 @@
       <p>到第三幅了！</p>
     </div>
 <!--    内容-->
-    <SeriesList/>
+    <div v-for="movie in movieList" >
+      <div v-if="movie.length > 0">
+        <SeriesList :movie="movie"/>
+      </div>
 
-    <SeriesList/>
+    </div>
 
-    <SeriesList/>
 
   </div>
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import xtf from '../../../assets/xtf.jpg'
 import SeriesList from "../../../components/movieList/SeriesList.vue";
+import {Movie, MovieControllerService} from "../../../../generated";
 defineProps<{ msg: string }>()
 
-const count = ref(0)
+const movieList = ref<Map<number, Array<Movie>>>([]);
 
-//---------主角：轮播图函数-------------
+
 onMounted(()=>{
   slideshow();
+  init();
 })
 
-//---------主角：轮播图函数-------------
+const init = async () => {
+  const res = await MovieControllerService.listIndexMovieByPageUsingGet()
+  movieList.value = res.data
+  // console.log(res.data)
+}
+
+//轮播图函数
 function slideshow() {
   var slideshow=document.getElementById("slideshow"),
       imgs=slideshow.getElementsByTagName("img"), //得到图片们
@@ -101,9 +110,7 @@ function slideshow() {
   margin: 0 auto;
   position: absolute;
   top: 0;
-  height: 1600px;
   width: 100%;
-  background-color: bisque;
 }
 
 

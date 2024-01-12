@@ -134,7 +134,6 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 
 
 .content {
-  height:2000px;
   /*just to get the page to scroll*/
 }
 

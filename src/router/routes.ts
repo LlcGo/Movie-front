@@ -6,7 +6,8 @@ import Login from "../page/user/login.vue";
 import Chat2 from "../page/demo/Chat2.vue";
 import Layout from "../components/Layout.vue";
 import TestHeader from "../components/TestHeader.vue";
-import Index from "../page/context/front/index.vue";
+import Index from "../page/context/front/Index.vue";
+import MovieDetails from "../page/context/front/MovieDetails.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -22,6 +23,10 @@ const routes: Array<RouteRecordRaw> = [
             path:'',
             name:'主页',
             component:Index
+        },{
+            path:'detail',
+            name:'详情',
+            component:MovieDetails
         }]
     },
     {
