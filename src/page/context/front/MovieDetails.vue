@@ -59,7 +59,7 @@
     </div>
     <div v-if="choose == 1" class="pf">
       <div class="movie">给【致命魔术】打分</div>
-      <a-rate v-model:value="value" :tooltips="desc" @click="test"/>
+      <a-rate v-model:value="score" :tooltips="desc" @click="toScore"/>
       <span class="ant-rate-text">{{ desc[value - 1] }}</span>
     </div>
 
@@ -68,7 +68,7 @@
         评论
       </div>
       <div class="commentSize">
-          312
+         {{count}}
       </div>
     </div>
 
@@ -77,60 +77,60 @@
         <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
       </div>
       <div class="commentInput">
-        <a-input v-model:value="value" size="large" placeholder="large size" />
+        <a-input v-model:value="content" size="large" placeholder="large size" />
       </div>
       <div class="commentButton">
-        <a-button type="primary">发布</a-button>
+        <a-button type="primary" @click="pushComment">发布</a-button>
       </div>
     </div>
 
-    <a-comment class="commentO">
-      <template #actions>
+    <div v-for="comment in currentComment">
+      <a-comment class="commentO">
+        <template #actions>
       <span key="comment-basic-like">
-        <a-tooltip title="Like">
-          <template v-if="action === 'liked'">
-            <LikeFilled @click="like" />
+        <a-tooltip title="喜欢">
+          <template v-if="comment.like">
+            <LikeFilled @click="like(comment?.id)" />
           </template>
           <template v-else>
-            <LikeOutlined @click="like" />
+            <LikeOutlined @click="like(comment?.id)" />
           </template>
         </a-tooltip>
         <span style="padding-left: 8px; cursor: auto">
-          {{ likes }}
+          {{ comment?.liked }}
         </span>
       </span>
-        <span key="comment-basic-dislike">
-        <a-tooltip title="Dislike">
-          <template v-if="action === 'disliked'">
-            <DislikeFilled @click="dislike" />
+          <span key="comment-basic-dislike">
+        <a-tooltip title="不喜欢">
+          <template v-if="comment.hate">
+            <DislikeFilled @click="dislike(comment?.id)" />
           </template>
           <template v-else>
-            <DislikeOutlined @click="dislike" />
+            <DislikeOutlined @click="dislike(comment?.id)" />
           </template>
         </a-tooltip>
         <span style="padding-left: 8px; cursor: auto">
-          {{ dislikes }}
+          {{ comment?.disLiked }}
         </span>
       </span>
-        <span key="comment-basic-reply-to">Reply to</span>
-      </template>
-      <template #author><a>Han Solo</a></template>
-      <template #avatar>
-        <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-      </template>
-      <template #content>
-        <p>
-          We supply a series of design principles, practical patterns and high quality design
-          resources (Sketch and Axure), to help people create their product prototypes beautifully and
-          efficiently.
-        </p>
-      </template>
-      <template #datetime>
-        <a-tooltip :title="dayjs().format('YYYY-MM-DD HH:mm:ss')">
-          <span>{{ dayjs().fromNow() }}</span>
-        </a-tooltip>
-      </template>
-    </a-comment>
+        </template>
+        <template #author><a>{{comment?.user?.username}}</a></template>
+        <template #avatar>
+          <a-avatar src="https://joeschmoe.io/api/v1/random"  />
+        </template>
+        <template #content>
+          <p>
+           {{comment?.content}}
+          </p>
+        </template>
+        <template #datetime>
+          <a-tooltip >
+            <span>{{dayjs(comment?.createTime).format('YYYY-MM-DD')}}</span>
+          </a-tooltip>
+        </template>
+      </a-comment>
+    </div>
+
 
   </div>
   <div class="right">
@@ -236,50 +236,158 @@ import img from '../../../assets/xtf.jpg'
 import hot from '../../../assets/hot.png'
 import {onMounted, ref} from 'vue';
 const value = ref<number>(3);
+//内容
+const content = ref();
 const desc = ref<string[]>(['很差', '较差', '一般', '很好', '力推']);
 const choose = ref(0);
 import dayjs from 'dayjs';
 import { LikeFilled, LikeOutlined, DislikeFilled, DislikeOutlined } from '@ant-design/icons-vue';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {useRoute} from "vue-router";
-import {Movie} from "../../../../generated";
+import {
+  Movie,
+  Remark,
+  RemarkAddRequest,
+  RemarkAndUserControllerService,
+  RemarkControllerService, RemarkUserAddQuery
+} from "../../../../generated";
 import getYear from "../../typeEnum/Year.ts";
 import getMoveType from "../../typeEnum/MovieType.ts";
 import getMovieNation from "../../typeEnum/MovieNation.ts";
 import getMovieState from "../../typeEnum/MovieState.ts";
+import {message} from "ant-design-vue";
 dayjs.extend(relativeTime);
 
 const {query} = useRoute();
-const likes = ref<number>(0);
-const dislikes = ref<number>(0);
+
 const action = ref<string>();
+//当前的电影
 const currentMovie = ref<Movie>();
+//存储当前的评论
+const currentComment = ref<Array<Remark>>();
+//总共评论多少条
+const count = ref();
+//评分
+const score = ref();
 
 onMounted(()=>{
   currentMovie.value = JSON.parse(query.currentMovie)
   console.log(currentMovie.value)
+  getComment();
+  getCount();
 })
 
+const toScore = async () => {
+  let data : RemarkAddRequest = {
+    score: score.value * 2,
+    movieId: currentMovie.value.id,
+  }
+  const res = await  RemarkControllerService.addRemarkUsingPost(data);
+  console.log(res)
+  if(res.message == 'ok'){
+    message.success("评分成功")
+  }
+}
 
+const getComment = async () => {
+  const res =await RemarkControllerService.listRemarkByPageUsingGet(currentMovie.value.id);
+  currentComment.value = res.data.records
+  console.log(currentComment.value)
+}
 
-const like = () => {
-  likes.value = 1;
-  dislikes.value = 0;
-  action.value = 'liked';
+const getCount = async () => {
+  const res = await RemarkControllerService.listCountUsingGet(currentMovie.value.id)
+  count.value = res.data;
+}
+
+/**
+ * 发布评论 不带分数
+ */
+const pushComment = async () => {
+  let data : RemarkAddRequest = {
+    content : content.value,
+    movieId: currentMovie.value.id,
+  }
+  const res = await RemarkControllerService.addRemarkUsingPost(data);
+  if(res.code == 0){
+    getComment();
+    getCount();
+  }
+}
+
+const like = async (id:number) => {
+  currentComment.value?.forEach(item =>{
+    if (item.id == id){
+      console.log('点之前的 hate',item.hate)
+      console.log('点之前的 like',item.like)
+      // 如果此时 hate 还是为 true
+      if(item.hate){
+        item.hate = false;
+        item.disLiked = item.disLiked - 1;
+      }
+      //如果是true 改为 false
+      if(item.like){
+
+        item.like = false;
+        item.liked = item.liked - 1;
+      }else {
+
+        item.like = true;
+        item.liked = item.liked + 1;
+      }
+    }
+  })
+  //喜欢 2
+  let data : RemarkUserAddQuery = {
+      remarkId: id,
+      support: 2
+  }
+  console.log(data);
+  const res = await RemarkAndUserControllerService.likeUsingPost(data)
+  console.log(res);
+  if(res.data){
+    getComment();
+    getCount();
+  }
 };
 
-const dislike = () => {
-  likes.value = 0;
-  dislikes.value = 1;
-  action.value = 'disliked';
+const dislike =async (id:number) => {
+  //不喜欢 1
+  currentComment.value?.forEach(item =>{
+     if (item.id == id){
+       console.log('点之前的 hate',item.hate)
+       console.log('点之前的 like',item.like)
+       //如果此时 like 还是 true
+       if(item.like){
+          item.like = false;
+          item.liked = item.liked - 1
+       }
+       //如果是true 改为 false
+       if(item.hate){
+         item.hate = false;
+         item.disLiked = item.disLiked - 1;
+       }else {
+         item.hate = true;
+         item.disLiked = item.disLiked + 1;
+       }
+     }
+  })
+  let data : RemarkUserAddQuery = {
+    remarkId: id,
+    support: 1
+  }
+  console.log(data);
+  const res = await RemarkAndUserControllerService.likeUsingPost(data)
+  if(res.data){
+    getComment();
+    getCount();
+  }
 };
 const chooseState = (state) => {
   choose.value = state;
 }
 
-const test = () => {
-  alert(value.value)
-}
+
 </script>
 
 <style scoped>
