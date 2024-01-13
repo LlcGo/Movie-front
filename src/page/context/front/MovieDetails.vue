@@ -6,8 +6,8 @@
     <div class="title">
       <div class="title1">致命魔术</div>
       <div class="title2">
-        10.0
-        <a-rate class="rate" :value="5" disabled />
+        {{currentMovie?.score > 0 ? Math.floor(currentMovie?.score /2) + ".0" : 0}}
+        <a-rate class="rate" :value="currentMovie?.score > 0 ? Math.floor(currentMovie?.score /2 ) : 0" disabled />
       </div>
 
     </div>
@@ -17,15 +17,33 @@
         <template #split>
           <a-divider type="vertical" />
         </template>
-          <div style="font-size: 16px">年份:<p style="display: inline">2006</p></div>
-          <div style="font-size: 16px">地区:<p style="display: inline">英国</p></div>
-          <div style="font-size: 16px">类型:<p style="display: inline">悬疑</p></div>
+          <div style="font-size: 16px">年份:<p style="display: inline" >
+            {{getYear(currentMovie?.year) }}
+          </p></div>
+          <div style="font-size: 16px">地区:<p style="display: inline" >
+            {{ getMovieNation(currentMovie?.nation) }}
+          </p></div>
+          <div style="font-size: 16px">类型:<p style="display: inline" >
+            {{ getMoveType(currentMovie?.type) }}
+          </p></div>
       </a-space>
-      <div class="state">状态</div>
-      <div class="actor">主演：lc</div>
-      <div class="dy">导演:lc</div>
-      <div class="jj">简介:asdasd</div>
-      <a-button  style="margin-top: 8%" type="primary">立即播放</a-button>
+      <div class="state">
+        状态:
+        <div class="xsjl">
+          {{getMovieState(currentMovie?.state)}}
+        </div>
+
+      </div>
+      <div class="actor" v-html=" '主演：'+ currentMovie?.actorsName"></div>
+      <div class="dy">
+        导演:
+        <div class="xsjl">
+          {{ currentMovie?.directorName }}
+        </div>
+
+      </div>
+<!--      <div class="jj">简介:{{ currentMovie?.movieProfile }}</div>-->
+      <a-button  style="margin-top: 10%" type="primary">立即播放</a-button>
     </div>
   </div>
 <div class="content">
@@ -37,7 +55,7 @@
       我要评分
     </div>
     <div v-if="choose == 0" class="xx3">
-      19世纪末，人们对科学文明还不是认识得太过清楚，于是，安吉尔（休•杰克曼HughJackman饰）和伯登（克里斯蒂安•贝尔ChristianBale饰）的魔术，成为了伦敦城内的神奇人物。安吉尔出身贵族，魔术手段华丽丰富，是富人圈子里的表演常客。而伯登即使出身平平，争强好胜的心智和充满创造力的魔术技巧，却也令他有了名气。两人自小本是要好的伙伴，然而，现在魔术界二人各有领地，并且都有野心想成为音乐大厅里的顶级魔术师，一番明争暗斗如箭在弦上。伯登掌握了精彩的分身术，叫座又叫好。而安吉尔见情势不妙，搬来科学家助阵——他发明的交流电有无穷魔力，保证让观众目瞪口呆。二人出招接招，一来一往，争斗在剧烈升级，友谊和道德都被抛诸脑后，一场血案在悄悄酝酿
+      {{currentMovie?.movieProfile}}
     </div>
     <div v-if="choose == 1" class="pf">
       <div class="movie">给【致命魔术】打分</div>
@@ -216,18 +234,33 @@
 <script setup lang="ts">
 import img from '../../../assets/xtf.jpg'
 import hot from '../../../assets/hot.png'
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 const value = ref<number>(3);
 const desc = ref<string[]>(['很差', '较差', '一般', '很好', '力推']);
 const choose = ref(0);
 import dayjs from 'dayjs';
 import { LikeFilled, LikeOutlined, DislikeFilled, DislikeOutlined } from '@ant-design/icons-vue';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import {useRoute} from "vue-router";
+import {Movie} from "../../../../generated";
+import getYear from "../../typeEnum/Year.ts";
+import getMoveType from "../../typeEnum/MovieType.ts";
+import getMovieNation from "../../typeEnum/MovieNation.ts";
+import getMovieState from "../../typeEnum/MovieState.ts";
 dayjs.extend(relativeTime);
 
+const {query} = useRoute();
 const likes = ref<number>(0);
 const dislikes = ref<number>(0);
 const action = ref<string>();
+const currentMovie = ref<Movie>();
+
+onMounted(()=>{
+  currentMovie.value = JSON.parse(query.currentMovie)
+  console.log(currentMovie.value)
+})
+
+
 
 const like = () => {
   likes.value = 1;
@@ -250,6 +283,10 @@ const test = () => {
 </script>
 
 <style scoped>
+.xsjl{
+  display: inline;
+  margin-left: 1%;
+}
 .rate{
   position: relative;
   left: 15%;
@@ -426,17 +463,15 @@ const test = () => {
   top: 6%;
 }
 .state{
-  margin-top:3%;
+  margin-top: 5%;
 }
 .actor{
-  margin-top: 3%;
+  margin-top: 5%;
 }
 .dy{
-  margin-top: 3%;
+  margin-top: 5%;
 }
-.jj{
-  margin-top: 3%;
-}
+
 
 .left{
   float: left;

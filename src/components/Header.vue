@@ -39,9 +39,9 @@ function resizeHeaderOnScroll() {
       shrinkOn = 200,
       headerEl = document.getElementById('header');
   if (scroll > shrinkOn) {
-    headerEl.classList.remove('shrink');
+    headerEl?.classList.remove('shrink');
   } else {
-    headerEl.classList.add('shrink');
+    headerEl?.classList.add('shrink');
   }
 }
 function getCurrentScroll() {
@@ -62,7 +62,6 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   color:skyblue;
   z-index: 1000;
   height: 100px;
-//overflow: hidden;
   -webkit-transition: height 0.5s;
   -moz-transition: height 0.5s;
   transition: height 0.5s;

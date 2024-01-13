@@ -11,7 +11,7 @@
 
           <div v-for="movieItem in props.movie" class="movieWarp">
             <div class="imgClass">
-              <img :src="movieItem.img">
+              <img :src="movieItem.img" @click="toDetail(movieItem)">
             </div>
             <div class="fontBox">
 
@@ -31,9 +31,12 @@
 
 <script setup lang="ts">
 import xtf from "../../assets/xtf.jpg";
+import getMoveType from "../../page/typeEnum/MovieType.ts";
 import {onMounted, ref} from "vue";
 import {Movie} from "../../../generated";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const title = ref();
 
 const props = defineProps({
@@ -45,6 +48,15 @@ onMounted(()=>{
   getType();
 })
 
+const toDetail = (movieItem:Movie) => {
+  // alert(movieItem.id)
+  router.push({
+    path:'/layout/detail',
+    query: {
+     currentMovie:JSON.stringify(movieItem)
+    }
+  })
+}
 
 const getType = () => {
   console.log('每一个系列里',props.movie)
@@ -52,7 +64,7 @@ const getType = () => {
     props.movie.forEach(item =>{
        item.actorsName = item.actorsName.replace(",",'&nbsp;')
     })
-    title.value = movieType(props.movie[0].type);
+    title.value = (getMoveType(props.movie[0].type));
     return;
   }
   title.value = '暂无';
@@ -68,32 +80,32 @@ const getType = () => {
 // 8 动画片
 // 9 悬疑片
 // 10 纪录片
-const movieType = (type) => {
-  switch (type){
-    case 0:
-      return "战争片"
-    case 1:
-      return "奇幻片"
-    case 2:
-      return "科幻片"
-    case 3:
-      return "剧情片"
-    case 4:
-      return "恐怖片"
-    case 5:
-      return "爱情片"
-    case 6:
-      return "动作片"
-    case 7:
-      return "喜剧片"
-    case 8:
-      return "动画片"
-    case 9:
-      return "悬疑片"
-    case 10:
-      return "纪录片"
-  }
-}
+// const movieType = (type) => {
+//   switch (type){
+//     case 0:
+//       return "战争片"
+//     case 1:
+//       return "奇幻片"
+//     case 2:
+//       return "科幻片"
+//     case 3:
+//       return "剧情片"
+//     case 4:
+//       return "恐怖片"
+//     case 5:
+//       return "爱情片"
+//     case 6:
+//       return "动作片"
+//     case 7:
+//       return "喜剧片"
+//     case 8:
+//       return "动画片"
+//     case 9:
+//       return "悬疑片"
+//     case 10:
+//       return "纪录片"
+//   }
+// }
 
 
 
