@@ -68,7 +68,7 @@
         评论
       </div>
       <div class="commentSize">
-         {{count}}
+         {{total}}
       </div>
     </div>
 
@@ -77,7 +77,7 @@
         <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
       </div>
       <div class="commentInput">
-        <a-input v-model:value="content" size="large" placeholder="large size" />
+        <a-input v-model:value="content" size="large" placeholder="电影评论" />
       </div>
       <div class="commentButton">
         <a-button type="primary" @click="pushComment">发布</a-button>
@@ -130,7 +130,12 @@
         </template>
       </a-comment>
     </div>
-
+    <a-pagination  v-model:current="current"
+                   v-model:pageSize="pageSize"
+                   @change="getComment"
+                   :total="total"
+                   show-less-items
+                   style="margin-bottom: 20%;margin-top: 5%" />
 
   </div>
   <div class="right">
@@ -256,6 +261,11 @@ import getMoveType from "../../typeEnum/MovieType.ts";
 import getMovieNation from "../../typeEnum/MovieNation.ts";
 import getMovieState from "../../typeEnum/MovieState.ts";
 import {message} from "ant-design-vue";
+
+//当前页码
+const current = ref(1);
+const total = ref();
+const pageSize = ref(6)
 dayjs.extend(relativeTime);
 
 const {query} = useRoute();
@@ -274,7 +284,7 @@ onMounted(()=>{
   currentMovie.value = JSON.parse(query.currentMovie)
   console.log(currentMovie.value)
   getComment();
-  getCount();
+  // getCount();
 })
 
 const toScore = async () => {
@@ -290,15 +300,17 @@ const toScore = async () => {
 }
 
 const getComment = async () => {
-  const res =await RemarkControllerService.listRemarkByPageUsingGet(currentMovie.value.id);
+  const res =await RemarkControllerService.listRemarkByPageUsingGet(currentMovie.value.id,current.value,pageSize.value);
+  total.value = res.data?.total
+  // alert(total.value)
   currentComment.value = res.data.records
   console.log(currentComment.value)
 }
 
-const getCount = async () => {
-  const res = await RemarkControllerService.listCountUsingGet(currentMovie.value.id)
-  count.value = res.data;
-}
+// const getCount = async () => {
+//   const res = await RemarkControllerService.listCountUsingGet(currentMovie.value.id)
+//   count.value = res.data;
+// }
 
 /**
  * 发布评论 不带分数
@@ -309,9 +321,9 @@ const pushComment = async () => {
     movieId: currentMovie.value.id,
   }
   const res = await RemarkControllerService.addRemarkUsingPost(data);
+  content.value = '';
   if(res.code == 0){
     getComment();
-    getCount();
   }
 }
 
@@ -347,7 +359,7 @@ const like = async (id:number) => {
   console.log(res);
   if(res.data){
     getComment();
-    getCount();
+    // getCount();
   }
 };
 
@@ -380,7 +392,7 @@ const dislike =async (id:number) => {
   const res = await RemarkAndUserControllerService.likeUsingPost(data)
   if(res.data){
     getComment();
-    getCount();
+    // getCount();
   }
 };
 const chooseState = (state) => {
