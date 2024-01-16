@@ -11,7 +11,6 @@
         v-model:value="value"
         placeholder="根据影片名搜索影片"
         enter-button
-        @search="onSearch"
     />
 
     <img class="messageImg" :src="message">

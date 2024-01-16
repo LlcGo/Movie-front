@@ -1,6 +1,6 @@
 import {RouteRecordRaw} from "vue-router";
 import Demo from "../page/demo/demo.vue";
-import Vedio from "../page/demo/vedio.vue";
+import Vedio from "../page/context/front/Video.vue";
 import Chat from "../page/demo/Chat.vue";
 import Login from "../page/user/login.vue";
 import Chat2 from "../page/demo/Chat2.vue";
@@ -8,6 +8,7 @@ import Layout from "../components/Layout.vue";
 import TestHeader from "../components/TestHeader.vue";
 import Index from "../page/context/front/Index.vue";
 import MovieDetails from "../page/context/front/MovieDetails.vue";
+import Details from "../page/context/front/Details.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -25,8 +26,17 @@ const routes: Array<RouteRecordRaw> = [
             component:Index
         },{
             path:'detail',
-            name:'详情',
-            component:MovieDetails
+            name:'xq',
+            component:MovieDetails,
+            children:[{
+                path: "watch",
+                name: "影视",
+                component: Vedio,
+            },{
+                path: '',
+                name: '详情',
+                component : Details
+            }]
         }]
     },
     {
@@ -35,15 +45,11 @@ const routes: Array<RouteRecordRaw> = [
         component: TestHeader,
     },
     {
-        path: "/user",
+        path: "/v",
         name: "用户",
         component: Demo,
     },
-    {
-        path: "/v",
-        name: "用户",
-        component: Vedio,
-    },
+
     {
         path: "/chat",
         name: "聊天",

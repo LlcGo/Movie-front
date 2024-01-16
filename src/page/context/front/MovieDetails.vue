@@ -1,51 +1,6 @@
 
 <template>
- <div class="top">
- </div>
-  <div class="topDetail">
-    <div class="title">
-      <div class="title1">致命魔术</div>
-      <div class="title2">
-        {{currentMovie?.score > 0 ? Math.floor(currentMovie?.score /2) + ".0" : 0}}
-        <a-rate class="rate" :value="currentMovie?.score > 0 ? Math.floor(currentMovie?.score /2 ) : 0" disabled />
-      </div>
-
-    </div>
-    <img class="img" :src="img"/>
-    <div class="xx">
-      <a-space>
-        <template #split>
-          <a-divider type="vertical" />
-        </template>
-          <div style="font-size: 16px">年份:<p style="display: inline" >
-            {{getYear(currentMovie?.year) }}
-          </p></div>
-          <div style="font-size: 16px">地区:<p style="display: inline" >
-            {{ getMovieNation(currentMovie?.nation) }}
-          </p></div>
-          <div style="font-size: 16px">类型:<p style="display: inline" >
-            {{ getMoveType(currentMovie?.type) }}
-          </p></div>
-      </a-space>
-      <div class="state">
-        状态:
-        <div class="xsjl">
-          {{getMovieState(currentMovie?.state)}}
-        </div>
-
-      </div>
-      <div class="actor" v-html=" '主演：'+ currentMovie?.actorsName"></div>
-      <div class="dy">
-        导演:
-        <div class="xsjl">
-          {{ currentMovie?.directorName }}
-        </div>
-
-      </div>
-<!--      <div class="jj">简介:{{ currentMovie?.movieProfile }}</div>-->
-      <a-button  style="margin-top: 10%" type="primary">立即播放</a-button>
-    </div>
-  </div>
+  <RouterView  :currentMovie="currentMovie" />
 <div class="content">
   <div class="left">
     <div class="font" @click="chooseState(0)">
@@ -136,7 +91,6 @@
                    :total="total"
                    show-less-items
                    style="margin-bottom: 20%;margin-top: 5%" />
-
   </div>
   <div class="right">
     <div class="rightTitleTop">悬疑片周排行榜</div>
@@ -239,7 +193,7 @@
 <script setup lang="ts">
 import img from '../../../assets/xtf.jpg'
 import hot from '../../../assets/hot.png'
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 const value = ref<number>(3);
 //内容
 const content = ref();
@@ -256,11 +210,9 @@ import {
   RemarkAndUserControllerService,
   RemarkControllerService, RemarkUserAddQuery
 } from "../../../../generated";
-import getYear from "../../typeEnum/Year.ts";
-import getMoveType from "../../typeEnum/MovieType.ts";
-import getMovieNation from "../../typeEnum/MovieNation.ts";
-import getMovieState from "../../typeEnum/MovieState.ts";
 import {message} from "ant-design-vue";
+
+
 
 //当前页码
 const current = ref(1);
@@ -270,41 +222,30 @@ dayjs.extend(relativeTime);
 
 const {query} = useRoute();
 
-const action = ref<string>();
+
 //当前的电影
 const currentMovie = ref<Movie>();
 //存储当前的评论
 const currentComment = ref<Array<Remark>>();
-//总共评论多少条
-const count = ref();
 //评分
 const score = ref();
 
 onMounted(()=>{
-  currentMovie.value = JSON.parse(query.currentMovie)
-  console.log(currentMovie.value)
-  getComment();
+    currentMovie.value = JSON.parse(query.currentMovie)
+    console.log(currentMovie.value)
+    getComment();
+    document.documentElement.scrollTop = 0
   // getCount();
 })
 
-const toScore = async () => {
-  let data : RemarkAddRequest = {
-    score: score.value * 2,
-    movieId: currentMovie.value.id,
-  }
-  const res = await  RemarkControllerService.addRemarkUsingPost(data);
-  console.log(res)
-  if(res.message == 'ok'){
-    message.success("评分成功")
-  }
-}
+//设置是否观影
 
 const getComment = async () => {
-  const res =await RemarkControllerService.listRemarkByPageUsingGet(currentMovie.value.id,current.value,pageSize.value);
+  const res =await RemarkControllerService.listRemarkByPageUsingGet(current.value,currentMovie.value.id,pageSize.value);
   total.value = res.data?.total
   // alert(total.value)
   currentComment.value = res.data.records
-  console.log(currentComment.value)
+  // console.log(currentComment.value)
 }
 
 // const getCount = async () => {
@@ -367,8 +308,8 @@ const dislike =async (id:number) => {
   //不喜欢 1
   currentComment.value?.forEach(item =>{
      if (item.id == id){
-       console.log('点之前的 hate',item.hate)
-       console.log('点之前的 like',item.like)
+       // console.log('点之前的 hate',item.hate)
+       // console.log('点之前的 like',item.like)
        //如果此时 like 还是 true
        if(item.like){
           item.like = false;
@@ -388,7 +329,7 @@ const dislike =async (id:number) => {
     remarkId: id,
     support: 1
   }
-  console.log(data);
+  // console.log(data);
   const res = await RemarkAndUserControllerService.likeUsingPost(data)
   if(res.data){
     getComment();
@@ -398,30 +339,34 @@ const dislike =async (id:number) => {
 const chooseState = (state) => {
   choose.value = state;
 }
-
+const toScore = async () => {
+  let data : RemarkAddRequest = {
+    score: score.value * 2,
+    movieId: currentMovie.value.id,
+  }
+  const res = await  RemarkControllerService.addRemarkUsingPost(data);
+  // console.log(res)
+  if(res.message == 'ok'){
+    message.success("评分成功")
+  }
+}
 
 </script>
 
 <style scoped>
-.xsjl{
+
+
+.left{
+  float: left;
+  width: 70%;
+}
+.right{
+  float: left;
+  width: 30%;
+}
+.ant-rate-text{
+  line-height: 50px;
   display: inline;
-  margin-left: 1%;
-}
-.rate{
-  position: relative;
-  left: 15%;
-}
-.title1{
-  font-size: 20px;
-  font-weight: 600;
-}
-.title2{
-  margin-top: 10%;
-}
-.title{
-  position: absolute;
-  left: 25.5%;
-  top: -40%;
 }
 .commentO{
   margin-top: 3%;
@@ -550,59 +495,10 @@ const chooseState = (state) => {
   font-size: 20px;
   font-weight: 550;
 }
-
-.top{
-  width: 100%;
-  height: 220px;
-  background-image: url("../../../assets/deimg.png");
-}
 .content{
   margin-top: 3.5%;
   height: 45vh;
   margin-left: 11%;
   width: 78vw;
-}
-.topDetail{
-  height: 220px;
-  width: 100%;
-  position: relative;
-  background: #f8f8f8;
-}
-.img{
-  position: absolute;
-  height: 319px;
-  width: 220px;
-  top: -50%;
-  left: 11%;
-  border-radius: 6px
-}
-.xx{
-  font-size: 16px;
-  position: absolute;
-  left: 25.5%;
-  top: 6%;
-}
-.state{
-  margin-top: 5%;
-}
-.actor{
-  margin-top: 5%;
-}
-.dy{
-  margin-top: 5%;
-}
-
-
-.left{
-  float: left;
-  width: 70%;
-}
-.right{
-  float: left;
-  width: 30%;
-}
-.ant-rate-text{
-  line-height: 50px;
-  display: inline;
 }
 </style>

@@ -7,11 +7,14 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { BarrageAddRequest } from './models/BarrageAddRequest';
+export type { BarrageVO } from './models/BarrageVO';
 export type { BaseResponse } from './models/BaseResponse';
 export type { BaseResponse_boolean_ } from './models/BaseResponse_boolean_';
 export type { BaseResponse_ConcurrentHashMap_int_List_Movie_ } from './models/BaseResponse_ConcurrentHashMap_int_List_Movie_';
 export type { BaseResponse_Favorites_ } from './models/BaseResponse_Favorites_';
 export type { BaseResponse_int_ } from './models/BaseResponse_int_';
+export type { BaseResponse_List_BarrageVO_ } from './models/BaseResponse_List_BarrageVO_';
 export type { BaseResponse_List_ChatMsg_ } from './models/BaseResponse_List_ChatMsg_';
 export type { BaseResponse_List_Favorites_ } from './models/BaseResponse_List_Favorites_';
 export type { BaseResponse_List_Movie_ } from './models/BaseResponse_List_Movie_';
@@ -65,6 +68,7 @@ export type { UserUpdateRequest } from './models/UserUpdateRequest';
 export type { UserVo } from './models/UserVo';
 export type { View } from './models/View';
 
+export { BarrageControllerService } from './services/BarrageControllerService';
 export { BasicErrorControllerService } from './services/BasicErrorControllerService';
 export { ChatControllerService } from './services/ChatControllerService';
 export { FavoritesControllerService } from './services/FavoritesControllerService';

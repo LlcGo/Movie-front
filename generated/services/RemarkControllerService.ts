@@ -131,8 +131,8 @@ sortOrder?: string,
      * @throws ApiError
      */
     public static listCountUsingGet(
-movieId?: number,
 current?: number,
+movieId?: number,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
@@ -141,8 +141,8 @@ sortOrder?: string,
             method: 'GET',
             url: '/remark/list/count',
             query: {
-                'movieId': movieId,
                 'current': current,
+                'movieId': movieId,
                 'pageSize': pageSize,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
@@ -166,9 +166,8 @@ sortOrder?: string,
      * @throws ApiError
      */
     public static listRemarkByPageUsingGet(
-
-movieId?: number,
 current?: number,
+movieId?: number,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
@@ -177,8 +176,8 @@ sortOrder?: string,
             method: 'GET',
             url: '/remark/list/page',
             query: {
-                'movieId': movieId,
                 'current': current,
+                'movieId': movieId,
                 'pageSize': pageSize,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
