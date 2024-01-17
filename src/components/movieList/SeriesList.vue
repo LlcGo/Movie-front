@@ -4,7 +4,7 @@
     <div class="context">
       <div class="top">
         <div class="topFont">{{ title }}</div>
-        <div class="more">更多</div>
+        <div class="more" @click="moreMovie">更多</div>
       </div>
 
       <div class="warp">
@@ -54,6 +54,16 @@ const toDetail = (movieItem:Movie) => {
     path:'/layout/detail',
     query: {
      currentMovie:JSON.stringify(movieItem)
+    }
+  })
+}
+
+//跳转更多
+const moreMovie = () =>{
+  router.push({
+    path:'/layout/search',
+    query:{
+      type:props.movie[0].type
     }
   })
 }

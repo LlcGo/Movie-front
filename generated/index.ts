@@ -43,6 +43,7 @@ export type { FavoritesUpdateRequest } from './models/FavoritesUpdateRequest';
 export { ModelAndView } from './models/ModelAndView';
 export type { Movie } from './models/Movie';
 export type { MovieAddRequest } from './models/MovieAddRequest';
+export type { MovieQueryRequest } from './models/MovieQueryRequest';
 export type { MovieUpdateRequest } from './models/MovieUpdateRequest';
 export type { Order } from './models/Order';
 export type { OrderAddRequest } from './models/OrderAddRequest';

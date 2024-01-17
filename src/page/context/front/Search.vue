@@ -7,7 +7,7 @@
         分类
       </div>
       <ul>
-        <input type="radio" name="tab" id="qb">
+        <input type="radio"  name="tab" id="qb">
         <input type="radio" name="tab" id="zzp">
         <input type="radio" name="tab" id="qhp">
         <input type="radio" name="tab" id="khp">
@@ -20,18 +20,18 @@
         <input type="radio" name="tab" id="xyp">
         <input type="radio" name="tab" id="jlp">
         <div class="tab"></div>
-        <label for="qb"><li style="margin-left: 4.5%">全部</li></label>
-        <label for="zzp"><li>战争片</li></label>
-        <label for="qhp"><li>奇幻片</li></label>
-        <label for="khp"><li>科幻片</li></label>
-        <label for="jqp"><li>剧情片</li></label>
-        <label for="kbp"><li>恐怖片</li></label>
-        <label for="aqp"><li>爱情片</li></label>
-        <label for="dzp"><li>动作片</li></label>
-        <label for="xjp"><li>喜剧片</li></label>
-        <label for="dhp"><li>动画片</li></label>
-        <label for="xyp"><li>悬疑片</li></label>
-       <label for="jlp"><li>纪录片</li></label>
+        <label for="qb" @click="setMoveType(11)"><li style="margin-left: 4.5%">全部</li></label>
+        <label for="zzp" @click="setMoveType(0)"><li>战争片</li></label>
+        <label for="qhp" @click="setMoveType(1)"><li>奇幻片</li></label>
+        <label for="khp" @click="setMoveType(2)"><li>科幻片</li></label>
+        <label for="jqp" @click="setMoveType(3)"><li>剧情片</li></label>
+        <label for="kbp" @click="setMoveType(4)"><li>恐怖片</li></label>
+        <label for="aqp" @click="setMoveType(5)"><li>爱情片</li></label>
+        <label for="dzp" @click="setMoveType(6)"><li>动作片</li></label>
+        <label for="xjp" @click="setMoveType(7)"><li>喜剧片</li></label>
+        <label for="dhp" @click="setMoveType(8)"><li>动画片</li></label>
+        <label for="xyp" @click="setMoveType(9)"><li>悬疑片</li></label>
+       <label for="jlp" @click="setMoveType(10)"><li>纪录片</li></label>
       </ul>
     </div>
 
@@ -52,17 +52,17 @@
         <input type="radio" name="tab1" id="tg">
         <input type="radio" name="tab1" id="yd">
         <div class="tab"></div>
-        <label for="all"><li style="margin-left: 4.5%">全部</li></label>
-        <label for="zg"><li>中国</li></label>
-        <label for="mg"><li>美国</li></label>
-        <label for="zgxg"><li>中国香港</li></label>
-        <label for="hg"><li>韩国</li></label>
-        <label for="rb"><li>日本</li></label>
-        <label for="fg"><li>法国</li></label>
-        <label for="yg"><li>英国</li></label>
-        <label for="dg"><li>德国</li></label>
-        <label for="tg"><li>泰国</li></label>
-        <label for="yd"><li>印度</li></label>
+        <label for="all" @click="setMoveNation(10)"><li style="margin-left: 4.5%" >全部</li></label>
+        <label for="zg" @click="setMoveNation(0)"><li >中国</li></label>
+        <label for="mg" @click="setMoveNation(1)"><li >美国</li></label>
+        <label for="zgxg" @click="setMoveNation(2)"><li >中国香港</li></label>
+        <label for="hg" @click="setMoveNation(3)"><li >韩国</li></label>
+        <label for="rb" @click="setMoveNation(4)"><li >日本</li></label>
+        <label for="fg" @click="setMoveNation(5)"><li >法国</li></label>
+        <label for="yg" @click="setMoveNation(6)"><li >英国</li></label>
+        <label for="dg" @click="setMoveNation(7)"><li >德国</li></label>
+        <label for="tg" @click="setMoveNation(8)"><li >泰国</li></label>
+        <label for="yd" @click="setMoveNation(9)"><li >印度</li></label>
       </ul>
     </div>
 
@@ -88,36 +88,80 @@
         <input type="radio" name="tab2" id="n10">
         <input type="radio" name="tab2" id="n00">
         <input type="radio" name="tab2" id="n90">
+        <input type="radio" name="tab2" id="n80">
         <div class="tab1"></div>
-        <label for="all2"><li style="margin-left: 4.5%">全部</li></label>
-        <label for="n23"><li>2023</li></label>
-        <label for="n22"><li>2022</li></label>
-        <label for="n21"><li>2021</li></label>
-        <label for="n20"><li>2020</li></label>
-        <label for="n19"><li>2019</li></label>
-        <label for="n18"><li>2018</li></label>
-        <label for="n17"><li>2017</li></label>
-        <label for="n16"><li>2016</li></label>
-        <label for="n15"><li>2015</li></label>
-        <label for="n14"><li>2014</li></label>
-        <label for="n13"><li>2013</li></label>
-        <label for="n12"><li>2012</li></label>
-        <label for="n11"><li>2011</li></label>
-        <label for="n10"><li>2010</li></label>
-        <label for="n00"><li>00年代</li></label>
-        <label for="n90"><li>90年代</li></label>
+        <label for="all2" @click="setMoveYear(17)" ><li style="margin-left: 4.5%">全部</li></label>
+        <label for="n23" @click="setMoveYear(0)"><li>2023</li></label>
+        <label for="n22" @click="setMoveYear(1)"><li>2022</li></label>
+        <label for="n21" @click="setMoveYear(2)"><li>2021</li></label>
+        <label for="n20" @click="setMoveYear(3)"><li>2020</li></label>
+        <label for="n19" @click="setMoveYear(4)"><li>2019</li></label>
+        <label for="n18" @click="setMoveYear(5)"><li>2018</li></label>
+        <label for="n17" @click="setMoveYear(6)"><li>2017</li></label>
+        <label for="n16" @click="setMoveYear(7)"><li>2016</li></label>
+        <label for="n15" @click="setMoveYear(8)"><li>2015</li></label>
+        <label for="n14" @click="setMoveYear(9)"><li>2014</li></label>
+        <label for="n13" @click="setMoveYear(10)"><li>2013</li></label>
+        <label for="n12" @click="setMoveYear(11)"><li>2012</li></label>
+        <label for="n11" @click="setMoveYear(12)"><li>2011</li></label>
+        <label for="n10" @click="setMoveYear(13)"><li>2010</li></label>
+        <label for="n00" @click="setMoveYear(14)"><li>00年代</li></label>
+        <label for="n90" @click="setMoveYear(15)"><li>90年代</li></label>
+        <label for="n80" @click="setMoveYear(16)"><li>更早</li></label>
       </ul>
     </div>
   </div>
+
+<!-- 查询到的电影 -->
+  <div class="warp2">
+    <div v-for="movieItem in movieList" class="movieWarp">
+      <div class="imgClass">
+        <img :src="movieItem.img">
+      </div>
+      <div class="fontBox">
+        <div class="imgName">
+          {{movieItem.movieName}}
+        </div>
+        <div v-html="movieItem.actorsName" class="imgAc">
+        </div>
+      </div>
+    </div>
+    <div ref="pageClass" class="leftPage">
+      <a-pagination v-model:current="current" :total="50" show-less-items />
+    </div>
+    <div style="height: 100px;position: relative"></div>
+  </div>
+
+
+
+
 </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {onMounted, ref, watch} from "vue";
+import {Movie, MovieControllerService} from "../../../../generated";
+import {useRoute} from "vue-router";
+const moveType = ref(11)
+const moveNation = ref(10)
+const moveYear = ref(17)
+const {query} = useRoute();
+//当前查到的所有影视
+const movieList = ref<Movie>([]);
+//page dom元素
+const pageClass = ref();
+const current = ref(2);
 
 onMounted(()=>{
-  setCheck('jlp')
+  console.log('接收到的type',query.type);
+  if(query.type!=null){
+    search(query.type,10,17)
+    return;
+  }
+  // setCheck('jlp')
+  search(11,10,17)
 })
+
 
 
 
@@ -126,6 +170,43 @@ const setCheck = (type:string) => {
   console.log(seasonNodes)
   seasonNodes.setAttribute("checked",true)
 }
+const setMoveType = (type:number) => {
+   moveType.value = type;
+}
+
+const setMoveNation = (nation:number) => {
+  moveNation.value = nation;
+}
+
+const setMoveYear = (year:number) => {
+  moveYear.value = year;
+}
+
+const search = async (type:any = null,nation:any = null,year:any = null) => {
+
+   let data = {
+     type:type,
+     nation:nation,
+     year:year
+   }
+   console.log(data)
+   const res = await MovieControllerService.listMovieByPageUsingPost(data)
+   movieList.value = res.data.records
+  if(res.data.records.length < 6){
+    pageClass.value.classList.remove('leftPage')
+    pageClass.value.classList.add('page')
+  }else {
+    pageClass.value.classList.remove('page')
+  }
+
+  console.log(movieList.value)
+}
+
+watch([moveType,moveNation,moveYear],()=>{
+  search(moveType.value,moveNation.value,moveYear.value)
+},{deep : true})
+
+
 
 </script>
 
@@ -233,4 +314,63 @@ input[type="radio"] {
 #n10:checked ~ .tab1{left: 93.7%}
 #n00:checked ~ .tab1{top:58%;left: 5.5%}
 #n90:checked ~ .tab1{top:58%;left: 13%}
+#n80:checked ~ .tab1{top:58%;left: 19.5%}
+
+.warp2{
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 0;
+  position: relative;
+  top: 10%;
+  height: 100%;
+  width: 95%;
+  left: 3%;
+}
+.movieWarp{
+  position: relative;
+  top: 0;
+  width: 16.66%;
+  height: 360px;
+}
+.imgClass{
+  padding: 10px;
+  width: 100%;
+  height: 300px;
+}
+
+.fontBox{
+  width: 97%;
+  padding: 5px;
+}
+.imgName{
+  margin-top: -1%;
+  margin-left: 2.5%;
+  font-size: 1.2em;
+}
+.imgAc{
+  margin-left: 2%;
+  margin-top: 3%;
+  font-size: 0.9em;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  color: #999;
+}
+
+img{
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.page{
+  position: relative;
+  top:100%;
+  left: 25%;
+}
+.leftPage{
+  position: relative;
+  top: 10%;
+  left: 40%;
+}
 </style>
