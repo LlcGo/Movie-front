@@ -90,24 +90,24 @@
         <input type="radio" name="tab2" id="n90">
         <input type="radio" name="tab2" id="n80">
         <div class="tab1"></div>
-        <label for="all2" @click="setMoveYear(17)" ><li style="margin-left: 4.5%">全部</li></label>
-        <label for="n23" @click="setMoveYear(0)"><li>2023</li></label>
-        <label for="n22" @click="setMoveYear(1)"><li>2022</li></label>
-        <label for="n21" @click="setMoveYear(2)"><li>2021</li></label>
-        <label for="n20" @click="setMoveYear(3)"><li>2020</li></label>
-        <label for="n19" @click="setMoveYear(4)"><li>2019</li></label>
-        <label for="n18" @click="setMoveYear(5)"><li>2018</li></label>
-        <label for="n17" @click="setMoveYear(6)"><li>2017</li></label>
-        <label for="n16" @click="setMoveYear(7)"><li>2016</li></label>
-        <label for="n15" @click="setMoveYear(8)"><li>2015</li></label>
-        <label for="n14" @click="setMoveYear(9)"><li>2014</li></label>
-        <label for="n13" @click="setMoveYear(10)"><li>2013</li></label>
-        <label for="n12" @click="setMoveYear(11)"><li>2012</li></label>
-        <label for="n11" @click="setMoveYear(12)"><li>2011</li></label>
-        <label for="n10" @click="setMoveYear(13)"><li>2010</li></label>
-        <label for="n00" @click="setMoveYear(14)"><li>00年代</li></label>
-        <label for="n90" @click="setMoveYear(15)"><li>90年代</li></label>
-        <label for="n80" @click="setMoveYear(16)"><li>更早</li></label>
+        <label for="all2" @click="setMoveYear('17')" ><li style="margin-left: 4.5%">全部</li></label>
+        <label for="n23" @click="setMoveYear('0')"><li>2023</li></label>
+        <label for="n22" @click="setMoveYear('1')"><li>2022</li></label>
+        <label for="n21" @click="setMoveYear('2')"><li>2021</li></label>
+        <label for="n20" @click="setMoveYear('3')"><li>2020</li></label>
+        <label for="n19" @click="setMoveYear('4')"><li>2019</li></label>
+        <label for="n18" @click="setMoveYear('5')"><li>2018</li></label>
+        <label for="n17" @click="setMoveYear('6')"><li>2017</li></label>
+        <label for="n16" @click="setMoveYear('7')"><li>2016</li></label>
+        <label for="n15" @click="setMoveYear('8')"><li>2015</li></label>
+        <label for="n14" @click="setMoveYear('9')"><li>2014</li></label>
+        <label for="n13" @click="setMoveYear('10')"><li>2013</li></label>
+        <label for="n12" @click="setMoveYear('11')"><li>2012</li></label>
+        <label for="n11" @click="setMoveYear('12')"><li>2011</li></label>
+        <label for="n10" @click="setMoveYear('13')"><li>2010</li></label>
+        <label for="n00" @click="setMoveYear('14')"><li>00年代</li></label>
+        <label for="n90" @click="setMoveYear('15')"><li>90年代</li></label>
+        <label for="n80" @click="setMoveYear('16')"><li>更早</li></label>
       </ul>
     </div>
   </div>
@@ -115,24 +115,42 @@
 <!-- 查询到的电影 -->
   <div class="warp2">
     <div v-for="movieItem in movieList" class="movieWarp">
-      <div class="imgClass">
-        <img :src="movieItem.img">
+      <div class="imgClass" >
+        <img :src="movieItem.img" @click="toDetail(movieItem)">
       </div>
       <div class="fontBox">
-        <div class="imgName">
+        <div class="imgName" @click="toDetail(movieItem)">
           {{movieItem.movieName}}
         </div>
         <div v-html="movieItem.actorsName" class="imgAc">
         </div>
       </div>
     </div>
-    <div ref="pageClass" class="leftPage">
-      <a-pagination v-model:current="current" :total="50" show-less-items />
+    <div ref="pageClass" class="leftPage" >
+      <a-pagination v-if="total > 36"
+                    v-model:current="current"
+                    v-model:pageSize="pageSize"
+                    :total="total"
+                    @change="search"
+                    show-less-items />
     </div>
     <div style="height: 100px;position: relative"></div>
   </div>
 
-
+  <a-empty
+      v-if="movieList.length == 0"
+      style="position: relative;top: -80%"
+      image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+      :image-style="{
+      height: '300px',
+    }"
+  >
+    <template #description>
+      <span>
+        暂无相关影片
+      </span>
+    </template>
+  </a-empty>
 
 
 </div>
@@ -140,29 +158,41 @@
 
 <script setup lang="ts">
 import {onMounted, ref, watch} from "vue";
-import {Movie, MovieControllerService} from "../../../../generated";
-import {useRoute} from "vue-router";
+import {Movie, MovieControllerService, MovieQueryRequest} from "../../../../generated";
+import {useRoute, useRouter} from "vue-router";
 const moveType = ref(11)
 const moveNation = ref(10)
-const moveYear = ref(17)
+const moveYear = ref('17')
 const {query} = useRoute();
 //当前查到的所有影视
 const movieList = ref<Movie>([]);
 //page dom元素
 const pageClass = ref();
-const current = ref(2);
+const current = ref(1);
+const total = ref();
+const pageSize = ref(36)
+const router = useRouter();
 
 onMounted(()=>{
   console.log('接收到的type',query.type);
   if(query.type!=null){
-    search(query.type,10,17)
+    search()
     return;
   }
   // setCheck('jlp')
-  search(11,10,17)
+  search()
 })
 
 
+const toDetail = (movieItem:Movie) => {
+  // alert(movieItem.id)
+  router.push({
+    path:'/layout/detail',
+    query: {
+      currentMovie:JSON.stringify(movieItem)
+    }
+  })
+}
 
 
 const setCheck = (type:string) => {
@@ -178,18 +208,20 @@ const setMoveNation = (nation:number) => {
   moveNation.value = nation;
 }
 
-const setMoveYear = (year:number) => {
+const setMoveYear = (year:string) => {
   moveYear.value = year;
 }
 
-const search = async (type:any = null,nation:any = null,year:any = null) => {
-
-   let data = {
-     type:type,
-     nation:nation,
-     year:year
+const search = async () => {
+   let data : MovieQueryRequest= {
+     type:moveType.value,
+     nation:moveNation.value,
+     year:moveYear.value,
+     pageSize : pageSize.value,
+     current:current.value
    }
    console.log(data)
+  // return;
    const res = await MovieControllerService.listMovieByPageUsingPost(data)
    movieList.value = res.data.records
   if(res.data.records.length < 6){
@@ -197,9 +229,10 @@ const search = async (type:any = null,nation:any = null,year:any = null) => {
     pageClass.value.classList.add('page')
   }else {
     pageClass.value.classList.remove('page')
+    pageClass.value.classList.add('leftPage')
   }
-
-  console.log(movieList.value)
+  total.value = Number(res.data.total)
+  console.log(total.value)
 }
 
 watch([moveType,moveNation,moveYear],()=>{
@@ -343,9 +376,13 @@ input[type="radio"] {
   padding: 5px;
 }
 .imgName{
+  cursor:pointer;
   margin-top: -1%;
   margin-left: 2.5%;
   font-size: 1.2em;
+}
+.imgName:hover{
+  color: skyblue;
 }
 .imgAc{
   margin-left: 2%;
@@ -371,6 +408,6 @@ img{
 .leftPage{
   position: relative;
   top: 10%;
-  left: 40%;
+  left: 43%;
 }
 </style>

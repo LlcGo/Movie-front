@@ -15,7 +15,7 @@
             </div>
             <div class="fontBox">
 
-              <div class="imgName">
+              <div class="imgName"  @click="toDetail(movieItem)">
                 {{movieItem.movieName}}
               </div>
               <div v-html="movieItem.actorsName" class="imgAc">
@@ -145,10 +145,16 @@ const getType = () => {
   font-size: 22px;
 }
 .more{
+  cursor:pointer;
   position: absolute;
   top: 18px;
   left: 8%;
 }
+
+.more:hover {
+  color: skyblue;
+}
+
 
 .warp{
   display: flex;
@@ -176,9 +182,13 @@ const getType = () => {
   padding: 5px;
 }
 .imgName{
+  cursor:pointer;
   margin-top: -1%;
   margin-left: 2.5%;
   font-size: 1.2em;
+}
+.imgName:hover{
+  color: skyblue;
 }
 .imgAc{
   margin-left: 2%;
