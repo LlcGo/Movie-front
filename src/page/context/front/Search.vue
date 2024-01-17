@@ -1,0 +1,236 @@
+
+<template>
+<div class="content">
+  <div class="topSearch">
+    <div class="warp">
+      <div class="title">
+        分类
+      </div>
+      <ul>
+        <input type="radio" name="tab" id="qb">
+        <input type="radio" name="tab" id="zzp">
+        <input type="radio" name="tab" id="qhp">
+        <input type="radio" name="tab" id="khp">
+        <input type="radio" name="tab" id="jqp">
+        <input type="radio" name="tab" id="kbp">
+        <input type="radio" name="tab" id="aqp">
+        <input type="radio" name="tab" id="dzp">
+        <input type="radio" name="tab" id="xjp">
+        <input type="radio" name="tab" id="dhp">
+        <input type="radio" name="tab" id="xyp">
+        <input type="radio" name="tab" id="jlp">
+        <div class="tab"></div>
+        <label for="qb"><li style="margin-left: 4.5%">全部</li></label>
+        <label for="zzp"><li>战争片</li></label>
+        <label for="qhp"><li>奇幻片</li></label>
+        <label for="khp"><li>科幻片</li></label>
+        <label for="jqp"><li>剧情片</li></label>
+        <label for="kbp"><li>恐怖片</li></label>
+        <label for="aqp"><li>爱情片</li></label>
+        <label for="dzp"><li>动作片</li></label>
+        <label for="xjp"><li>喜剧片</li></label>
+        <label for="dhp"><li>动画片</li></label>
+        <label for="xyp"><li>悬疑片</li></label>
+       <label for="jlp"><li>纪录片</li></label>
+      </ul>
+    </div>
+
+    <div class="warp">
+      <div class="title">
+        地区
+      </div>
+      <ul>
+        <input type="radio" name="tab1" id="all">
+        <input type="radio" name="tab1" id="zg">
+        <input type="radio" name="tab1" id="mg">
+        <input type="radio" name="tab1" id="zgxg">
+        <input type="radio" name="tab1" id="hg">
+        <input type="radio" name="tab1" id="rb">
+        <input type="radio" name="tab1" id="fg">
+        <input type="radio" name="tab1" id="yg">
+        <input type="radio" name="tab1" id="dg">
+        <input type="radio" name="tab1" id="tg">
+        <input type="radio" name="tab1" id="yd">
+        <div class="tab"></div>
+        <label for="all"><li style="margin-left: 4.5%">全部</li></label>
+        <label for="zg"><li>中国</li></label>
+        <label for="mg"><li>美国</li></label>
+        <label for="zgxg"><li>中国香港</li></label>
+        <label for="hg"><li>韩国</li></label>
+        <label for="rb"><li>日本</li></label>
+        <label for="fg"><li>法国</li></label>
+        <label for="yg"><li>英国</li></label>
+        <label for="dg"><li>德国</li></label>
+        <label for="tg"><li>泰国</li></label>
+        <label for="yd"><li>印度</li></label>
+      </ul>
+    </div>
+
+    <div class="warp">
+      <div class="title">
+      年份
+      </div>
+      <ul>
+        <input type="radio" name="tab2" id="all2">
+        <input type="radio" name="tab2" id="n23">
+        <input type="radio" name="tab2" id="n22">
+        <input type="radio" name="tab2" id="n21">
+        <input type="radio" name="tab2" id="n20">
+        <input type="radio" name="tab2" id="n19">
+        <input type="radio" name="tab2" id="n18">
+        <input type="radio" name="tab2" id="n17">
+        <input type="radio" name="tab2" id="n16">
+        <input type="radio" name="tab2" id="n15">
+        <input type="radio" name="tab2" id="n14">
+        <input type="radio" name="tab2" id="n13">
+        <input type="radio" name="tab2" id="n12">
+        <input type="radio" name="tab2" id="n11">
+        <input type="radio" name="tab2" id="n10">
+        <input type="radio" name="tab2" id="n00">
+        <input type="radio" name="tab2" id="n90">
+        <div class="tab1"></div>
+        <label for="all2"><li style="margin-left: 4.5%">全部</li></label>
+        <label for="n23"><li>2023</li></label>
+        <label for="n22"><li>2022</li></label>
+        <label for="n21"><li>2021</li></label>
+        <label for="n20"><li>2020</li></label>
+        <label for="n19"><li>2019</li></label>
+        <label for="n18"><li>2018</li></label>
+        <label for="n17"><li>2017</li></label>
+        <label for="n16"><li>2016</li></label>
+        <label for="n15"><li>2015</li></label>
+        <label for="n14"><li>2014</li></label>
+        <label for="n13"><li>2013</li></label>
+        <label for="n12"><li>2012</li></label>
+        <label for="n11"><li>2011</li></label>
+        <label for="n10"><li>2010</li></label>
+        <label for="n00"><li>00年代</li></label>
+        <label for="n90"><li>90年代</li></label>
+      </ul>
+    </div>
+  </div>
+</div>
+</template>
+
+<script setup lang="ts">
+import {onMounted} from "vue";
+
+onMounted(()=>{
+  setCheck('jlp')
+})
+
+
+
+const setCheck = (type:string) => {
+  var seasonNodes = document.getElementById(type);
+  console.log(seasonNodes)
+  seasonNodes.setAttribute("checked",true)
+}
+
+</script>
+
+<style scoped>
+.title{
+  top: 10px;
+  left: 5px;
+  line-height: 40px;
+  width: 60px;
+  text-align: center;
+  position: absolute;
+  background: #7f7f8b;
+  border-radius: 16px 0 16px 16px;
+}
+ul li{
+  position: relative;
+  float: left;
+  list-style-type: none;
+  color: #999;
+  line-height: 60px;
+  margin-left: 3.5%;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+}
+
+.warp{
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  border-top: 1px solid #f1f1f1;
+}
+
+
+.content{
+  margin-top: 3.5%;
+  height: 45vh;
+  margin-left: 11%;
+  width: 78vw;
+}
+.topSearch{
+  margin-top: 10%;
+  background:  #f8f8f8
+}
+.tab{
+  top: 10px;
+  width: 5.5%;
+  position: absolute;
+  height: 66%;
+  background: linear-gradient(45deg,#fc6076 0%,#ff9a44 100%);
+  border-radius: 50px;
+  transition: .6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  left: 6%;
+}
+
+.tab1{
+  top: 10px;
+  width: 5.5%;
+  position: absolute;
+  height: 33%;
+  background: linear-gradient(45deg,#fc6076 0%,#ff9a44 100%);
+  border-radius: 50px;
+  transition: .6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  left: 6%;
+}
+#zzp:checked ~ .tab{left: 12.5%}
+#qhp:checked ~ .tab{left: 19.5%}
+#khp:checked ~ .tab{left: 26.5%}
+#jqp:checked ~ .tab{left: 33.5%}
+#kbp:checked ~ .tab{left: 40.5%}
+#aqp:checked ~ .tab{left: 47.8%}
+#dzp:checked ~ .tab{left: 54.8%}
+#xjp:checked ~ .tab{left: 61.9%}
+#dhp:checked ~ .tab{left: 68.9%}
+#xyp:checked ~ .tab{left: 76%}
+#jlp:checked ~ .tab{left: 83.5%}
+
+
+#zg:checked ~ .tab{left: 12%}
+#mg:checked ~ .tab{left: 17.5%}
+#zgxg:checked ~ .tab{left: 25%}
+#hg:checked ~ .tab{left: 32%}
+#rb:checked ~ .tab{left: 37.8%}
+#fg:checked ~ .tab{left: 43.7%}
+#yg:checked ~ .tab{left: 49.5%}
+#dg:checked ~ .tab{left: 55.4%}
+#tg:checked ~ .tab{left: 61%}
+#yd:checked ~ .tab{left: 67%}
+
+#n23:checked ~ .tab1{left: 12%}
+#n22:checked ~ .tab1{left: 18.4%}
+#n21:checked ~ .tab1{left: 24.5%}
+#n20:checked ~ .tab1{left: 31%}
+#n19:checked ~ .tab1{left: 37%}
+#n18:checked ~ .tab1{left: 43.5%}
+#n17:checked ~ .tab1{left: 49.5%}
+#n16:checked ~ .tab1{left: 56%}
+#n15:checked ~ .tab1{left: 62.3%}
+#n14:checked ~ .tab1{left: 68.5%}
+#n13:checked ~ .tab1{left: 75%}
+#n12:checked ~ .tab1{left: 81.3%}
+#n11:checked ~ .tab1{left: 87.3%}
+#n10:checked ~ .tab1{left: 93.7%}
+#n00:checked ~ .tab1{top:58%;left: 5.5%}
+#n90:checked ~ .tab1{top:58%;left: 13%}
+</style>

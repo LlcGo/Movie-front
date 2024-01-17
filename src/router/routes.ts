@@ -9,6 +9,7 @@ import TestHeader from "../components/TestHeader.vue";
 import Index from "../page/context/front/Index.vue";
 import MovieDetails from "../page/context/front/MovieDetails.vue";
 import Details from "../page/context/front/Details.vue";
+import Search from "../page/context/front/Search.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -37,6 +38,10 @@ const routes: Array<RouteRecordRaw> = [
                 name: '详情',
                 component : Details
             }]
+        },{
+            path:'search',
+            name:'sc',
+            component:Search,
         }]
     },
     {

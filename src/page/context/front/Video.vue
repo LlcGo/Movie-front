@@ -2,12 +2,32 @@
   <div>
     <div class="top">
       <div class="warp">
-        <div class="videoLeft" v-if="true">
+        <div class="videoLeft" >
           <div id="nPlayer" ref="nPlayer"/>
+        </div>
+        <div  v-if="!flag" >
+          <div >
+            <img class="loadingImg" :src="loading">
+            <a-spin class="loading" size="large" />
+          </div>
         </div>
         <div class="videoRight">
           <div class="show father" >
-            <table style="text-align: left" >
+            <!--          暂无弹幕-->
+            <a-empty v-if="showBarrage.length <= 0"
+                class="emptyRight"
+                :image="empty"
+                :image-style="{height: '180px',}"
+            >
+              <template #description>
+                  <span>
+                    暂无弹幕
+                  </span>
+              </template>
+            </a-empty>
+
+
+            <table style="text-align: left" v-if="showBarrage.length > 0" >
               <tr>
                 <th style="width: 50px; border-bottom-left-radius: 10%;border-top-left-radius: 10%;">时间</th>
                 <th style="width: 160px">弹幕内容</th>
@@ -19,13 +39,6 @@
                   <td>{{ barrage.createTime }}</td>
                 </tr>
             </table>
-            <!--          弹幕显示-->
-<!--            <a-table :columns="columns"-->
-<!--                     :data-source="showBarrage"-->
-<!--                     :pagination="false"-->
-<!--                     :scroll="{  y: 544 }"-->
-<!--                     size="small">-->
-<!--            </a-table>-->
           </div>
         </div>
       </div>
@@ -50,7 +63,8 @@ import Player from 'nplayer'
 import Danmaku from "@nplayer/danmaku";
 import {BarrageAddRequest, BarrageControllerService, Movie} from "../../../../generated";
 import dayjs from "dayjs";
-
+import empty from '../../../assets/empty.png'
+import loading from '../../../assets/loading.png'
 
 const videoUrl = ref();
 const videoId = ref();
@@ -64,30 +78,8 @@ const showBarrage = ref<any>([]);
 
 onMounted(async () => {
   init()
-  // playVideo(query.currentMovie.videoId,query.currentMovie.videoId);
+  playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
 })
-
-
-const columns = [
-  {
-    title: '时间',
-    dataIndex: 'time',
-    key: 'time',
-  },
-  {
-    title: '弹幕内容',
-    dataIndex: 'text',
-    key: 'text',
-  },
-  {
-    title: '发布时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-  },
-];
-
-
-
 
 
 const init = () => {
@@ -120,7 +112,6 @@ const getBarrage = async () => {
   currentBarrage.value = {items: res.data}
   // console.log('获得的弹幕------------->', currentBarrage.value)
 
-  nPlayer()
 }
 
 
@@ -128,23 +119,17 @@ const getBarrage = async () => {
  * 播放器初始化
  */
 const nPlayer = () => {
-  // const danmakuOptions = {
-  //   items: [
-  //     { time: 5, text: '弹幕1～', color: '#FE0302' },
-  //     { time: 5, text: '是我是我', color: '#75ffcd' },
-  //     { time: 5, text: '弹幕2～', color: '#A0EE00' },
-  //     { time: 5, text: '弹幕3～', color: '#019899' },
-  //     { time: 5, text: '弹幕4～', color: '#CC0273' }
-  //   ]
-  // }
   console.log('开始赋值----------------------->', currentBarrage.value)
+  console.log(videoUrl.value)
   const player = new Player({
-    src: 'https://mpv.videocc.net/e785b2c81c/5/e785b2c81c9e018296671a1287e99615_2.mp4', // 视频地址
+    src: videoUrl.value, // 视频地址
     contextMenus: ['loop', 'pip'], // 右键菜单设置项
-    plugins: [new Danmaku(currentBarrage.value)] // 弹幕配置项
+    plugins: [new Danmaku(currentBarrage.value)],// 弹幕配置项
     // controls: [['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'], [], ['spacer', 'settings']]
   })
   player.mount('#nPlayer')
+
+
   // 链接服务器
   // var ws = new WebSocket('ws://10.10.8.223:9283/lbh')
   // ws.onopen = function () {
@@ -162,7 +147,6 @@ const nPlayer = () => {
   // }
   player.on('DanmakuSend', opts => {
     console.log('发送前信息-----------》', opts)
-
     let data: BarrageAddRequest = {
       appTime: opts.time,
       color: opts.color,
@@ -236,6 +220,7 @@ const playVideo = async (i: any, val: any) => {
       videoUrl.value = combinVideoUrl;
       console.log('合并---->', videoUrl.value)
       flag.value = true;
+      nPlayer()
     }).catch(error => {
       console.error('Failed to load video:', error);
     });
@@ -261,6 +246,33 @@ const playVideo = async (i: any, val: any) => {
 </script>
 
 <style scoped>
+
+.loadingWarp{
+  position: relative;
+  left: 20%;
+  top: 25%;
+}
+
+.loadingImg{
+  position: absolute;
+  top: 25%;
+  left: 25%;
+}
+
+.loading{
+  position: absolute;
+  top: 18%;
+  left: 35%;
+}
+
+
+.emptyRight{
+  position: absolute;
+  top: 20%;
+  color: #F1F2F3;
+}
+
+
 
 table {
   table-layout: fixed;
@@ -341,7 +353,6 @@ th:first-child {
 
 .videoLeft {
   float: left;
-  background: #80b9f2;
   height: 600px;
   width: 70%
 }
@@ -359,6 +370,7 @@ th:first-child {
   top: 15%;
   margin-left: 11%;
 }
+
 
 
 :deep(:where(.css-dev-only-do-not-override-3m4nqy).ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody tr td){

@@ -1,54 +1,125 @@
 <template>
-  <div id="nPlayer" ref="nPlayer" />
+  <header class="wrapper">
+    <nav>
+      <input type="radio" name="tab" id="home" checked>
+      <input type="radio" name="tab" id="user">
+      <input type="radio" name="tab" id="message">
+      <input type="radio" name="tab" id="collect">
+      <input type="radio" name="tab" id="create">
+      <div class="tab"></div>
+      <label @click="()=>{console.log(1)}" for="home" class="home">
+        <a href="#">
+          <i class="fa fa-home"></i>
+          首页</a>
+      </label>
+      <label for="user" class="user">
+        <a href="#">
+          <i class="fa fa-user"></i>
+          用户
+        </a>
+      </label>
+      <label for="message" class="message">
+        <a href="#">
+          <i class="fa fa-bell"></i>
+          消息</a>
+      </label>
+      <label for="collect" class="collect">
+        <a href="#">
+          <i class="fa fa-star"></i>
+          收藏
+        </a>
+      </label>
+      <label for="create" class="create">
+        <a href="#">
+          <i class="fa fa-pencil"></i>
+          创作
+        </a>
+      </label>
+    </nav>
+  </header>
 </template>
-
-
 <script setup lang="ts">
-import Player from 'nplayer'
-import Danmaku from "@nplayer/danmaku";
-import {onMounted} from "vue";
 
-onMounted(()=>{
-  nPlayer()
-})
-  const nPlayer = () => {
-  const danmakuOptions = {
-  items: [
-      { time: 5, text: '弹幕1～', color: '#FE0302' },
-      { time: 10, text: '是我是我', color: '#75ffcd' },
-      { time: 17, text: '弹幕2～', color: '#A0EE00' },
-      { time: 18, text: '弹幕3～', color: '#019899' },
-      { time: 20, text: '弹幕4～', color: '#CC0273' }
-  ]
-}
-  const player = new Player({
-  src: 'https://mpv.videocc.net/e785b2c81c/5/e785b2c81c9e018296671a1287e99615_2.mp4', // 视频地址
-  contextMenus: ['loop', 'pip'], // 右键菜单设置项
-  plugins: [new Danmaku(danmakuOptions)] // 弹幕配置项
-  // controls: [['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'], [], ['spacer', 'settings']]
-})
-  player.mount('#nPlayer')
-  // 链接服务器
-  // var ws = new WebSocket('ws://10.10.8.223:9283/lbh')
-  // ws.onopen = function () {
-  //   console.log('数据发送中...')
-  // }
-  // ws.onmessage = function (e) {
-  //   this.isMeDanmu = e.data
-  //   console.log('接受到消息:' + e.data)
-  // }
-  // ws.onclose = function () {
-  //   console.log('连接已关闭...')
-  // }
-  // function sendMsg(msg) {
-  //   ws.send(msg)
-  // }
-  // player.on('DanmakuSend', opts => {
-  // sendMsg(opts)
-  // console.log('用户当前发送的弹幕信息', opts)
-}
+
 
 </script>
-
 <style scoped>
+
+
+
+:root {
+  --navheight: 40px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 14px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.wrapper {
+  height: var(--navheight);
+  line-height: var(--navheight);
+  border-radius: var(--navheight);
+  width: 55vw;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.wrapper nav {
+  display: flex;
+  position: relative;
+}
+
+.wrapper nav label {
+  position: relative;
+  flex: 1;
+  text-align: center;
+  z-index: 2;
+  color: #666;
+}
+
+.wrapper nav label i {
+  margin: 0 5px;
+}
+
+.wrapper nav label a {
+  color: #666;
+  pointer-events: none;
+  text-decoration: none;
+  transition: 0.6s;
+}
+
+
+
+.wrapper nav .tab {
+  position: absolute;
+  height: 100%;
+  width: 20%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(45deg, #fc6076 0%, #ff9a44 100%);
+  border-radius: var(--navheight);
+  transition: .6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+#user:checked ~ .tab { left: 20% }
+#message:checked ~ .tab { left: 40% }
+#collect:checked ~ .tab { left: 60% }
+#create:checked ~ .tab { left: 80% }
+
+
+.wrapper nav input {
+  display: none;
+}
 </style>
