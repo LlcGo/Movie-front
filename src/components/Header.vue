@@ -14,7 +14,7 @@
         @search="search"
     />
 
-    <img class="messageImg" :src="message">
+    <img class="messageImg" :src="emessage">
     <div class="xxFont">信息</div>
     <img class="favImg" :src="fav">
     <div class="scFont">收藏</div>
@@ -25,10 +25,12 @@
 
 <script setup lang="ts">
 import logo from "../assets/logo.png";
-import message from '../assets/message.png'
+import emessage from '../assets/message.png'
 import fav from '../assets/favour.png'
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
+import useMessage from "ant-design-vue/es/message/useMessage";
+import {message} from "ant-design-vue";
 const router = useRouter();
 const value = ref();
 
@@ -36,9 +38,17 @@ onMounted(()=>{
 })
 
 const search = () => {
+  if(value.value === undefined){
+    message.warn('请输入搜索内容')
+    return;
+  }
   router.push({
-    path:'/layout/tSearch'
+    path:'/layout/tSearch',
+    query:{
+      moveName:value.value
+    }
   })
+  value.value = null
 }
 function resizeHeaderOnScroll() {
   const scroll = getCurrentScroll(),
@@ -135,8 +145,10 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   transition: all 0.5s;
 }
 
-
-
+:deep(.anticon svg) {
+  color: blue;
+  display: inline-block;
+}
 
 
 

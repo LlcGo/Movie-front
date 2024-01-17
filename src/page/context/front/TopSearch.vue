@@ -5,65 +5,60 @@
      <div class="top">
        <div class="topContent">
          <div class="title">搜索到与"</div>
-         <div class="title1">电影</div>
+         <div class="title1">{{ moveName }}</div>
          <div class="title">"相关的</div>
-         <div class="title1">158</div>
-         <div class="title"> 条结果</div>
+         <div class="title1">{{total}}</div>
+         <div class="title">条结果</div>
        </div>
 
      </div>
      <div style="height: 50px"></div>
-     <div class="movieContext">
+     <div class="movieContext" v-for="movie in moveList">
        <div class="movieWarp">
           <div class="imgDetail">
-             <img :src="xtf">
+             <img :src="movie.img">
           </div>
           <div class="titleDetail">
-            <div class="movieName">电影名字阿八八八</div>
-            <div class="ct">主演: 未知</div>
-            <div class="ct">导演: 未知</div>
-            <div class="ct">简介: 6666666666666666666666666666666666666666666666666666666666666666666666666</div>
-            <div class="cb">查看详情</div>
+            <div class="movieName" @click="toDetail(movie)">{{movie.movieName}}</div>
+            <div class="ct">主演: {{movie.actorsName}}</div>
+            <div class="ct">导演: {{movie.directorName}}</div>
+            <div class="ct">简介: {{movie.movieProfile}}</div>
+            <div class="cb" @click="toDetail(movie)">查看详情</div>
           </div>
        </div>
      </div>
-
-     <div class="movieContext">
-       <div class="movieWarp">
-         <div class="imgDetail">
-           <img :src="xtf">
-         </div>
-         <div class="titleDetail">
-           <div class="movieName">电影名字阿八八八</div>
-           <div class="ct">主演: 未知</div>
-           <div class="ct">导演: 未知</div>
-           <div class="ct">简介: 6666666666666666666666666666666666666666666666666666666666666666666666666</div>
-           <div class="cb">查看详情</div>
-         </div>
-       </div>
+     <div style="height: 100px;
+               margin-top: 2%;">
+       <a-pagination v-if="total > 6"
+                     v-model:current="current"
+                     v-model:pageSize="pageSize"
+                     :total="total"
+                     @change="search"
+                     show-less-items />
      </div>
 
-     <div class="movieContext">
-       <div class="movieWarp">
-         <div class="imgDetail">
-           <img :src="xtf">
-         </div>
-         <div class="titleDetail">
-           <div class="movieName">电影名字阿八八八</div>
-           <div class="ct">主演: 未知</div>
-           <div class="ct">导演: 未知</div>
-           <div class="ct">简介: 6666666666666666666666666666666666666666666666666666666666666666666666666</div>
-           <div class="cb">查看详情</div>
-         </div>
-       </div>
-     </div>
+     <a-empty
+         v-if="moveList.length == 0"
+         :image="zw"
+         :image-style="{
+      height: '100px',
+    }"
+     >
+       <template #description>
+      <span>
+        暂无相关影视
+      </span>
+       </template>
+     </a-empty>
+
+
    </div>
    <div class="right">
      <div class="topHot">
         热播电影
      </div>
      <div style="height: 50px; border-bottom: 1px solid #f8f8f8;"></div>
-     <div class="hotContext">
+     <div class="hotContext" >
        <div class="mt"> </div>
          <div class="t part_num1 ">1</div>
          <div class="hotTitle">
@@ -169,6 +164,53 @@
 
 <script setup lang="ts">
 import xtf from '../../../assets/xtf.jpg'
+import zw from '../../../assets/zw.png'
+import {useRoute, useRouter} from "vue-router";
+import {onMounted, ref, watch} from "vue";
+import {Movie, MovieControllerService, MovieQueryRequest} from "../../../../generated";
+
+const moveList = ref<Array<Movie>>();
+const total = ref();
+const current = ref(1);
+const pageSize = ref(6);
+const moveName = ref<string>()
+const route = useRoute();
+const router = useRouter();
+
+onMounted(()=>{
+  moveName.value = route.query.moveName.toString()
+  search();
+})
+
+watch(route,()=>{
+  moveName.value = route.query.moveName.toString()
+  search()
+},{deep:true})
+
+const toDetail = (movieItem:Movie) => {
+  // alert(movieItem.id)
+  router.push({
+    path:'/layout/detail',
+    query: {
+      currentMovie:JSON.stringify(movieItem)
+    }
+  })
+}
+
+
+const search = async () => {
+  let data : MovieQueryRequest = {
+    movieName:moveName.value,
+    current:current.value,
+    pageSize:pageSize.value
+  }
+    const res = await MovieControllerService.listMovieByPageUsingPost(data);
+
+    total.value = res.data.total
+    moveList.value = res.data.records
+  console.log('获得的数据',moveList.value)
+}
+
 </script>
 
 <style scoped>
