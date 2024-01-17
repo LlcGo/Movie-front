@@ -11,6 +11,7 @@
         v-model:value="value"
         placeholder="根据影片名搜索影片"
         enter-button
+        @search="search"
     />
 
     <img class="messageImg" :src="message">
@@ -27,12 +28,18 @@ import logo from "../assets/logo.png";
 import message from '../assets/message.png'
 import fav from '../assets/favour.png'
 import {onMounted, ref} from "vue";
-
+import {useRouter} from "vue-router";
+const router = useRouter();
 const value = ref();
 
 onMounted(()=>{
 })
 
+const search = () => {
+  router.push({
+    path:'/layout/tSearch'
+  })
+}
 function resizeHeaderOnScroll() {
   const scroll = getCurrentScroll(),
       shrinkOn = 200,
@@ -85,6 +92,7 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   transition: all 0.5s;
 }
 .topInput{
+  color: #111111;
   top: 13%;
   max-width: 50%;
   position: absolute;
@@ -116,6 +124,7 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   transition: all 0.5s;
 }
 .shrink .topInput{
+  color: #111111;
   top: 13%;
   max-width: 60%;
   position: absolute;
@@ -185,7 +194,7 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 :deep(:where(.css-dev-only-do-not-override-3m4nqy).ant-input){
   background:transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  color: black;
 }
 :deep(:where(.css-dev-only-do-not-override-3m4nqy).ant-btn-primary){
   background-color: transparent;

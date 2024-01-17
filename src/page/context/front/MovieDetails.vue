@@ -85,7 +85,7 @@
         </a-comment>
       </div>
 
-      <div v-if="currentComment.length == 0" class="noClass">
+      <div v-if="currentComment" class="noClass">
         <a-empty
             :image="noMessage"
         >

@@ -10,6 +10,7 @@ import Index from "../page/context/front/Index.vue";
 import MovieDetails from "../page/context/front/MovieDetails.vue";
 import Details from "../page/context/front/Details.vue";
 import Search from "../page/context/front/Search.vue";
+import TopSearch from "../page/context/front/TopSearch.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -42,6 +43,10 @@ const routes: Array<RouteRecordRaw> = [
             path:'search',
             name:'sc',
             component:Search,
+        },{
+            path:'tSearch',
+            name:"tos",
+            component: TopSearch
         }]
     },
     {
