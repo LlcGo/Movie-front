@@ -14,10 +14,23 @@
         @search="search"
     />
 
-    <img class="messageImg" :src="emessage">
-    <div class="xxFont">信息</div>
-    <img class="favImg" :src="fav">
-    <div class="scFont">收藏</div>
+    <div class="imgContent">
+      <div>
+        <img class="messageImg" :src="emessage">
+        <div class="scFont">信息</div>
+      </div>
+      <div>
+        <img class="favImg" :src="fav">
+        <div class="scFont">收藏</div>
+      </div>
+      <div>
+        <img class="homeImg" @click="toHome" :src="home">
+        <div class="scFont" @click="toHome">主页</div>
+      </div>
+
+
+    </div>
+
   </div>
   <div class="content">
   </div>
@@ -29,13 +42,19 @@ import emessage from '../assets/message.png'
 import fav from '../assets/favour.png'
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
-import useMessage from "ant-design-vue/es/message/useMessage";
+import home from '../assets/home.png'
 import {message} from "ant-design-vue";
 const router = useRouter();
 const value = ref();
 
 onMounted(()=>{
 })
+
+const toHome = () => {
+  router.push({
+    path:'/layout'
+  })
+}
 
 const search = () => {
   if(value.value === undefined){
@@ -69,6 +88,18 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 </script>
 
 <style scoped >
+.imgContent{
+  display: flex;
+  position: absolute;
+  right: 8%;
+  top: 16%;
+  height: 50px;
+  width: 150px;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: center;
+}
+
 #header {
   position: fixed;
   top: 0;
@@ -82,7 +113,6 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   -moz-transition: height 0.5s;
   transition: height 0.5s;
   text-align:center;
-  line-height:100px;
 }
 
 #header h1#logo{
@@ -157,39 +187,28 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 }
 
 .messageImg{
-  width: 31px;
-  position: absolute;
-  height: 31px;
-  left: 82%;
-  top: 15.5%;
+  width: 20px;
+  height: 20px;
   cursor:pointer;
 }
 
 .favImg{
-  width: 38px;
-  position: absolute;
-  height: 38px;
-  left: 87%;
-  top: 10%;
+  width: 23px;
+  height: 23px;
   cursor:pointer;
 }
 
-.xxFont{
-  position: absolute;
-  font-size: 14px;
-  font-weight: 700;
-  left: 82.1%;
-  top: 11%;
+.homeImg{
+  width: 20px;
+  height: 20px;
   cursor:pointer;
 }
+
+
 .scFont{
-  cursor:pointer;
-  position: absolute;
-  font-weight: 700;
-  font-size: 14px;
-  left: 87.3%;
-  top: 10%;
+  font-size: 10px;
 }
+
 
 
 

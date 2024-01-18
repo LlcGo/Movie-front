@@ -85,7 +85,7 @@
         </a-comment>
       </div>
 
-      <div v-if="currentComment" class="noClass">
+      <div v-if="currentComment.length == 0" class="noClass">
         <a-empty
             :image="noMessage"
         >
@@ -240,7 +240,7 @@ const {query} = useRoute();
 //当前的电影
 const currentMovie = ref<Movie>();
 //存储当前的评论
-const currentComment = ref<Array<Remark>>();
+const currentComment = ref<Array<Remark>>([]);
 //评分
 const score = ref();
 

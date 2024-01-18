@@ -5,7 +5,7 @@
      <div class="top">
        <div class="topContent">
          <div class="title">搜索到与"</div>
-         <div class="title1">{{ moveName }}</div>
+         <div class="title1">{{moveName}}</div>
          <div class="title">"相关的</div>
          <div class="title1">{{total}}</div>
          <div class="title">条结果</div>
@@ -169,7 +169,7 @@ import {useRoute, useRouter} from "vue-router";
 import {onMounted, ref, watch} from "vue";
 import {Movie, MovieControllerService, MovieQueryRequest} from "../../../../generated";
 
-const moveList = ref<Array<Movie>>();
+const moveList = ref<Array<Movie>>([]);
 const total = ref();
 const current = ref(1);
 const pageSize = ref(6);
@@ -178,12 +178,12 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(()=>{
-  moveName.value = route.query.moveName.toString()
+  moveName.value = route.query.moveName
   search();
 })
 
 watch(route,()=>{
-  moveName.value = route.query.moveName.toString()
+  moveName.value = route.query.moveName
   search()
 },{deep:true})
 
