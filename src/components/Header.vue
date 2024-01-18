@@ -14,6 +14,7 @@
         @search="search"
     />
 
+<!--    主页 收藏 信息-->
     <div class="imgContent">
       <div>
         <img class="messageImg" :src="emessage">
@@ -27,10 +28,48 @@
         <img class="homeImg" @click="toHome" :src="home">
         <div class="scFont" @click="toHome">主页</div>
       </div>
-
-
+      <div>
+        <img class="homeImg" :src="vip">
+        <div class="scFont">vip充值</div>
+      </div>
     </div>
-
+<!--用户头像以及下拉框-->
+    <div class="userContent" v-if="currentUser">
+      <div class="userName">
+        {{currentUser.username}}
+      </div>
+      <div>(用户)</div>
+      <a-dropdown>
+        <a class="ant-dropdown-link" @click.prevent>
+          <a-avatar size="large">
+            <template #icon>
+              <img :src="ava">
+            </template>
+          </a-avatar>
+        </a>
+        <template #overlay>
+          <a-menu @click="handleMenuClick">
+            <a-menu-item key="1">
+              <a href="javascript:;">个人中心</a>
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a href="javascript:;">好友</a>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a href="javascript:;" @click="loginOut">退出</a>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
+    </div>
+    <div class="userContent" v-if="!currentUser">
+      <div class="noLogin">
+        <img :src="login">
+      </div>
+      <div class="noLoginFont" @click="toLogin">
+        登录
+      </div>
+    </div>
   </div>
   <div class="content">
   </div>
@@ -43,18 +82,52 @@ import fav from '../assets/favour.png'
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import home from '../assets/home.png'
-import {message} from "ant-design-vue";
+import {MenuProps, message} from "ant-design-vue";
+import ava from '../assets/empty.png'
+import {UserControllerService, Users} from "../../generated";
+import login from '../assets/qLogin.png'
+import vip from '../assets/vip.png'
+
+const currentUser = ref<Users>();
 const router = useRouter();
 const value = ref();
 
 onMounted(()=>{
+  getUser();
 })
 
+
+const getUser = async () => {
+  const res = await UserControllerService.getLoginUserUsingGet()
+  if(!res.data){
+    currentUser.value = null;
+    console.log(currentUser.value)
+    return;
+  }
+  currentUser.value = res.data;
+  console.log(currentUser.value)
+}
+
+//退出
+const loginOut = async () => {
+  const res = await UserControllerService.userLogoutUsingPost();
+  console.log(res)
+}
 const toHome = () => {
   router.push({
     path:'/layout'
   })
 }
+
+//登录
+const toLogin = () => {
+  router.push({
+    path: '/'
+  })
+}
+const handleMenuClick: MenuProps['onClick'] = e => {
+  console.log('click', e);
+};
 
 const search = () => {
   if(value.value === undefined){
@@ -88,10 +161,49 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 </script>
 
 <style scoped >
+.noLoginFont{
+  cursor: pointer;
+  position: absolute;
+  left: 25%;
+}
+.noLoginFont:hover{
+  color: skyblue;
+}
+.noLogin{
+  width: 25px;
+  height: 25px;
+  margin-right: 30%;
+}
+
+.userName{
+  color: #111111;
+  width: 30%;
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+.userContent{
+  color: #111111;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  background-color: #80b9f2;
+  position: absolute;
+  right: 1%;
+  top: 16%;
+  height: 50px;
+  width: 145px;
+}
+
+.demo-dropdown-wrap :deep(.ant-dropdown-button) {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
 .imgContent{
+  background: rebeccapurple;
   display: flex;
   position: absolute;
-  right: 8%;
+  right: 10%;
   top: 16%;
   height: 50px;
   width: 150px;
@@ -180,6 +292,11 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   display: inline-block;
 }
 
+img{
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
 
 
 .content {
