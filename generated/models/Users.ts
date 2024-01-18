@@ -4,15 +4,16 @@
 /* eslint-disable */
 
 export type Users = {
-    cid?: string;
     createTime?: string;
     faceImage?: string;
-    faceImageBig?: string;
     id?: string;
     isDelete?: number;
+    likeType?: string;
     nickname?: string;
     password?: string;
-    qrcode?: string;
+    sex?: string;
+    signature?: string;
     updateTime?: string;
+    userRole?: string;
     username?: string;
 };

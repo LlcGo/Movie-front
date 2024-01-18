@@ -50,7 +50,7 @@
         <template #overlay>
           <a-menu @click="handleMenuClick">
             <a-menu-item key="1">
-              <a href="javascript:;">个人中心</a>
+              <a  @click="toAccount">个人中心</a>
             </a-menu-item>
             <a-menu-item key="2">
               <a href="javascript:;">好友</a>
@@ -96,6 +96,12 @@ onMounted(()=>{
   getUser();
 })
 
+//用户中心
+const toAccount = () => {
+  router.push({
+    path:'/layout/account'
+  })
+}
 
 const getUser = async () => {
   const res = await UserControllerService.getLoginUserUsingGet()
@@ -186,7 +192,6 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
   display: flex;
   justify-content: end;
   align-items: center;
-  background-color: #80b9f2;
   position: absolute;
   right: 1%;
   top: 16%;
@@ -200,7 +205,6 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 }
 
 .imgContent{
-  background: rebeccapurple;
   display: flex;
   position: absolute;
   right: 10%;

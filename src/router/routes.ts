@@ -11,6 +11,12 @@ import MovieDetails from "../page/context/front/MovieDetails.vue";
 import Details from "../page/context/front/Details.vue";
 import Search from "../page/context/front/Search.vue";
 import TopSearch from "../page/context/front/TopSearch.vue";
+import UserIndex from "../page/context/front/userCenter/UserIndex.vue";
+import MyDetail from "../page/context/front/userCenter/MyDetail.vue";
+import UpdatePassword from "../page/context/front/userCenter/UpdatePassword.vue";
+import MyFavour from "../page/context/front/userCenter/MyFavour.vue";
+import MyMovie from "../page/context/front/userCenter/MyMovie.vue";
+import MyOrder from "../page/context/front/userCenter/MyOrder.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -47,6 +53,31 @@ const routes: Array<RouteRecordRaw> = [
             path:'tSearch',
             name:"tos",
             component: TopSearch
+        },{
+            path:'account',
+            name:"ac",
+            component: UserIndex,
+            children:[{
+                path: "",
+                name: "我的信息",
+                component: MyDetail,
+            },{
+                path: 'favour',
+                name: '我的收藏',
+                component : MyFavour
+            },{
+                path: 'upPass',
+                name: '修改密码',
+                component : UpdatePassword
+            },{
+                path: 'myOrder',
+                name: '我的订单',
+                component : MyOrder
+            },{
+                path: 'movie',
+                name: '我的影视',
+                component : MyMovie
+            }]
         }]
     },
     {

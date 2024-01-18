@@ -11,6 +11,7 @@ import type { BaseResponse_Users_ } from '../models/BaseResponse_Users_';
 import type { BaseResponse_UserVo_ } from '../models/BaseResponse_UserVo_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { QCCode } from '../models/QCCode';
+import type { UpdatePassWord } from '../models/UpdatePassWord';
 import type { UserAddRequest } from '../models/UserAddRequest';
 import type { UserLoginRequest } from '../models/UserLoginRequest';
 import type { UserRegisterRequest } from '../models/UserRegisterRequest';
@@ -287,13 +288,35 @@ userRegisterRequest: UserRegisterRequest,
      * @returns any Created
      * @throws ApiError
      */
-    public static updateUserUsingPost(
+    public static updateUserUsingPost1(
 userUpdateRequest: UserUpdateRequest,
 ): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/user/update',
             body: userUpdateRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * updateUser
+     * @param updatePassWord updatePassWord
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static updateUserUsingPost(
+updatePassWord: UpdatePassWord,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/updatePassWord',
+            body: updatePassWord,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

@@ -4,11 +4,11 @@
 /* eslint-disable */
 
 export type UserUpdateRequest = {
-    gender?: number;
-    id?: number;
-    userAccount?: string;
-    userAvatar?: string;
-    userName?: string;
-    userPassword?: string;
-    userRole?: string;
+    faceImage?: string;
+    id?: string;
+    likeType?: string;
+    nickname?: string;
+    sex?: string;
+    signature?: string;
+    username?: string;
 };

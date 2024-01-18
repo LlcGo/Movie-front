@@ -5,9 +5,10 @@
 
 export type UserVo = {
     faceImage?: string;
-    faceImageBig?: string;
     id?: string;
+    likeType?: string;
     nickname?: string;
-    qrcode?: string;
+    sex?: string;
+    signature?: string;
     username?: string;
 };

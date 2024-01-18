@@ -61,6 +61,7 @@ export type { RemarkAddRequest } from './models/RemarkAddRequest';
 export type { RemarkDeleteRequest } from './models/RemarkDeleteRequest';
 export type { RemarkUserAddQuery } from './models/RemarkUserAddQuery';
 export type { RemarkVo } from './models/RemarkVo';
+export type { UpdatePassWord } from './models/UpdatePassWord';
 export type { UserAddRequest } from './models/UserAddRequest';
 export type { UserLoginRequest } from './models/UserLoginRequest';
 export type { UserRegisterRequest } from './models/UserRegisterRequest';
