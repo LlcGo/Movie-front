@@ -6,4 +6,5 @@
 export type OrderAddRequest = {
     movieId?: number;
     state?: number;
+    vipType?: string;
 };

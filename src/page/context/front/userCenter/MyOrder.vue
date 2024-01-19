@@ -6,17 +6,26 @@
       <template v-if="column.key === 'name'">
         <div class="content">
           <div class="left">
-            <div class="leftWarp">
+            <div class="leftWarp" v-if="record.movie">
               <img :src="record.movie.img">
+            </div>
+            <div class="leftWarp2" v-if="!record.movie">
+              <img :src="orderVip">
             </div>
           </div>
           <div class="right">
             <div class="rightWarp">
-              <div class="movieNameFont">
+              <div class="movieNameFont" v-if="record.movie">
                 电影：{{record.movie.movieName}}
               </div>
-              <div class="font">
+              <div class="font" v-if="record.movie">
                 价格:${{record.movie.price}}
+              </div>
+              <div class="movieNameFont" v-if="!record.movie">
+                会员：{{getVip(record.vipType)}}
+              </div>
+              <div class="font" v-if="!record.movie">
+                价格:${{getPrice(record.vipType)}}
               </div>
             </div>
           </div>
@@ -24,12 +33,15 @@
       </template>
 
       <template v-if="column.key === 'action'">
-        <div class="button" v-if="record.orderState !==1">
+        <div class="button" v-if="record.orderState == 0">
           <a-button @click="toBuy(record)">购买</a-button>
           <a-button>取消订单</a-button>
         </div>
-        <div  v-else>
+        <div  v-if="record.orderState == 1">
           <a-tag  color="blue">已购买</a-tag>
+        </div>
+        <div  v-if="record.orderState == 2">
+          <a-tag  color="orange">已取消</a-tag>
         </div>
       </template>
     </template>
@@ -46,6 +58,10 @@ import {
 import xtf from '../../../../assets/xtf.jpg'
 import {message} from "ant-design-vue";
 import {useRouter} from "vue-router";
+import orderVip from '../../../../assets/Ordervip.png'
+import getPrice from "../../../typeEnum/getPrice.ts";
+import getVip from "../../../typeEnum/getVip.ts";
+import getVipType from "../../../typeEnum/getVipType.ts";
 const current = ref(1);
 const pageSize = ref(6);
 const total = ref();
@@ -81,7 +97,12 @@ const toBuy = async (order:OrderVO) => {
   console.log(order)
   let data :OrderByRequest = null;
   if(order.state == 0){
-    alert(0)
+    data = {
+      date: getVipType(order.vipType),
+      orderId: order.id,
+      state: order.state,
+      userId:order.userId
+    }
   }else {
      data = {
       movieId: order.movie?.id,
@@ -91,6 +112,7 @@ const toBuy = async (order:OrderVO) => {
     }
   }
   console.log(data)
+  // return;
   // let data : OrderByRequest = {
   //   date?: string;
   //   movieId?: number;
@@ -111,6 +133,12 @@ const toBuy = async (order:OrderVO) => {
 .leftWarp{
   width: 130px;
   height: 180px;
+}
+.leftWarp2{
+  position: absolute;
+  top: 20%;
+  width: 130px;
+  height: 130px;
 }
 img{
   width: 100%;

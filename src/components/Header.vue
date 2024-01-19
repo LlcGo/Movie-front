@@ -28,11 +28,59 @@
         <img class="homeImg" @click="toHome" :src="home">
         <div class="scFont" @click="toHome">主页</div>
       </div>
-      <div>
+      <div @click="()=>{open = true}">
         <img class="homeImg" :src="vip">
         <div class="scFont">vip充值</div>
       </div>
     </div>
+
+<!--    会员充值弹框-->
+    <a-modal v-model:open="open"
+             @ok="nowBuy"
+             width="400px"
+             cancelText="取消"
+             style="position: relative"
+             okText="购买">
+      <a-tabs v-model:activeKey="activeKey">
+        <a-tab-pane key="1"  tab="月卡">
+          <div class="fontWarp">
+            <div class="nameClass">
+             会员充值:一个月
+            </div>
+            <div class="priceClass">
+              价格:${{price}}
+            </div>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="季卡" force-render>
+          <div class="fontWarp">
+            <div class="nameClass">
+              会员充值:一季度
+            </div>
+            <div class="priceClass">
+              价格:${{price}}
+            </div>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="3" tab="年卡">
+          <div class="fontWarp">
+            <div class="nameClass">
+              会员充值：一年
+            </div>
+            <div class="priceClass">
+              价格: ${{price}}
+            </div>
+          </div>
+        </a-tab-pane>
+      </a-tabs>
+      <div class="orderButton">
+        <a-button @click="toOrder">提交订单稍后购买</a-button>
+      </div>
+      <div class="ewm">
+        <img :src="m"/>
+      </div>
+    </a-modal>
+
 <!--用户头像以及下拉框-->
     <div class="userContent" v-if="currentUser">
       <div class="userName">
@@ -79,22 +127,27 @@
 import logo from "../assets/logo.png";
 import emessage from '../assets/message.png'
 import fav from '../assets/favour.png'
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import home from '../assets/home.png'
 import {MenuProps, message} from "ant-design-vue";
 import ava from '../assets/empty.png'
-import {UserControllerService, Users} from "../../generated";
+import {OrderAddRequest, OrderByRequest, OrderControllerService, UserControllerService, Users} from "../../generated";
 import login from '../assets/qLogin.png'
 import vip from '../assets/vip.png'
+import m from "../assets/erweima.png";
 
 const currentUser = ref<Users>();
 const router = useRouter();
 const value = ref();
-
+const open = ref<boolean>(false)
+const price = ref(15)
+const date = ref('月');
 onMounted(()=>{
   getUser();
 })
+
+const activeKey = ref('1');
 
 //用户中心
 const toAccount = () => {
@@ -102,6 +155,24 @@ const toAccount = () => {
     path:'/layout/account'
   })
 }
+
+watch(activeKey,()=>{
+  if (activeKey.value == '1'){
+    price.value = 15
+    date.value ='月'
+    return;
+  }
+  if(activeKey.value == '2'){
+    price.value = 50
+    date.value = '季度'
+    return;
+  }
+  if(activeKey.value == '3'){
+    price.value = 148
+    date.value = '年'
+    return;
+  }
+})
 
 const getUser = async () => {
   const res = await UserControllerService.getLoginUserUsingGet()
@@ -125,6 +196,18 @@ const toHome = () => {
   })
 }
 
+const toOrder = async () => {
+  let data : OrderAddRequest = {
+    vipType: date.value,
+    state : 0
+  }
+  const res = await OrderControllerService.addOrderUsingPost(data);
+  if(res.data){
+    message.success('已成功下单,15分钟后自动取消,可在个人中心查看')
+    open.value = false;
+  }
+}
+
 //登录
 const toLogin = () => {
   router.push({
@@ -135,6 +218,19 @@ const handleMenuClick: MenuProps['onClick'] = e => {
   console.log('click', e);
 };
 
+//现在买
+const nowBuy = async () => {
+  let data = {
+    date: date.value,
+    state: 0,
+  }
+  const res = await OrderControllerService.toBuyUsingPost(data);
+  console.log(res)
+  if(res.data){
+    open.value = false;
+    message.success('恭喜您已经成为本站会员')
+  }
+}
 const search = () => {
   if(value.value === undefined){
     message.warn('请输入搜索内容')
@@ -330,6 +426,47 @@ img{
   font-size: 10px;
 }
 
+.nameClass{
+  margin-bottom: 5%;
+  font-size: 20px;
+}
+.priceClass{
+  font-size: 18px;
+}
+.fontWarp{
+  position: absolute;
+  width: 50%;
+  left: 50%;
+  top: 50px;
+}
+.ewm{
+  margin-left: 2%;
+  width: 200px;
+  height: 200px;
+}
+img{
+  width: 80%;
+  height: 80%;
+}
+.orderButton{
+  position: absolute;
+  top: 85%;
+  left: 23%;
+}
+.ff{
+  position: absolute;
+  top: 82%;
+  left: 85%;
+}
+.sc{
+  cursor: pointer;
+  position: absolute;
+  top: 82%;
+  left: 50%;
+  width: 25px;
+  height: 25px;
+  z-index: 100;
+}
 
 
 

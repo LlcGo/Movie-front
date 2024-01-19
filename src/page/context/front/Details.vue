@@ -43,16 +43,19 @@
 
       </div>
       <!--      <div class="jj">简介:{{ currentMovie?.movieProfile }}</div>-->
-      <a-button  style="margin-top: 10%" type="primary" @click="toWatch">立即播放</a-button>
+     <div class="warp2">
+       <a-button   type="primary" @click="toWatch">立即播放</a-button>
 
-      <a-button  style="margin-top: 10%;margin-left: 10%" type="primary" v-if="!isSc" @click="toFavour">我要收藏</a-button>
-      <a-button  style="margin-top: 10%;margin-left: 10%" type="primary"  v-if="isSc" @click="toFavour">已收藏</a-button>
-      <a-button  class="ff" type="primary" v-if="currentMovie?.state===3"  @click="showModal">购买正片</a-button>
+       <a-button   type="primary" v-if="!isSc" @click="toFavour">我要收藏</a-button>
+       <a-button   type="primary"  v-if="isSc" @click="toFavour">已收藏</a-button>
+       <a-button  type="primary" v-if="currentMovie?.state===3"  @click="showModal">购买正片</a-button>
+     </div>
+
     </div>
   </div>
   <div>
     <a-modal v-model:open="open"
-             @ok="handleOk"
+             @ok="nowBuy"
              width="400px"
              cancelText="取消"
              okText="购买">
@@ -64,7 +67,6 @@
     价格：${{currentMovie.price}}
   </div>
 </div>
-
       <div class="orderButton">
         <a-button @click="addOrder">提交订单稍后购买</a-button>
       </div>
@@ -72,7 +74,7 @@
         <img :src="m"/>
       </div>
       <template #title>
-        <div ref="modalTitleRef" style="width: 100%; cursor: move">购买</div>
+        <div ref="modalTitleRef" style="width: 100%; cursor: move" >购买</div>
       </template>
     </a-modal>
   </div>
@@ -92,7 +94,7 @@ import {
   FavoritesControllerService,
   Movie,
   MovieControllerService,
-  OrderAddRequest, OrderControllerService
+  OrderAddRequest, OrderByRequest, OrderControllerService
 } from "../../../../generated";
 import {onMounted, ref, watch} from "vue";
 import {message} from "ant-design-vue";
@@ -136,6 +138,19 @@ const handleOk = (e: MouseEvent) => {
   open.value = false;
 };
 
+//现在购买
+const nowBuy = async () => {
+  alert(1)
+  let data : OrderByRequest = {
+    movieId: currentMovie.value.id,
+    state : 1,
+  }
+  const res = await OrderControllerService.toBuyUsingPost(data);
+  if(res.data){
+    message.success('购买成功,可在我个人中心查看')
+    open.value=false;
+  }
+}
 //收藏
 const toFavour = async () => {
 
@@ -180,6 +195,13 @@ const getMovieDetail = async (id:any) => {
 </script>
 
 <style scoped>
+.warp2{
+  position: relative;
+  top: 20px;
+  display: flex;
+  width: 350px;
+  justify-content: space-between;
+}
 .nameClass{
   margin-bottom: 5%;
   font-size: 20px;

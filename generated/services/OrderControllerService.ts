@@ -238,6 +238,28 @@ userRole?: string,
     }
 
     /**
+     * toBuy
+     * @param orderByRequest orderByRequest
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static toBuyUsingPost(
+orderByRequest: OrderByRequest,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/tobuy',
+            body: orderByRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * updateOrder
      * @param orderUpdateRequest orderUpdateRequest
      * @returns BaseResponse_boolean_ OK
