@@ -17,11 +17,11 @@
 <!--    主页 收藏 信息-->
     <div class="imgContent">
       <div>
-        <img class="messageImg" :src="emessage">
+        <img class="messageImg" @click="toChat" :src="emessage">
         <div class="scFont">信息</div>
       </div>
-      <div>
-        <img class="favImg" :src="fav">
+      <div >
+        <img class="favImg" @click="toFavour" :src="fav">
         <div class="scFont">收藏</div>
       </div>
       <div>
@@ -147,12 +147,25 @@ onMounted(()=>{
   getUser();
 })
 
+const toChat = () => {
+  router.push({
+    path:'/layout/chat'
+  })
+}
+
 const activeKey = ref('1');
 
 //用户中心
 const toAccount = () => {
   router.push({
     path:'/layout/account'
+  })
+}
+
+//去我的收藏
+const toFavour = () => {
+  router.push({
+    path:"/layout/account/favour"
   })
 }
 

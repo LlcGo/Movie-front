@@ -1,7 +1,7 @@
 import {RouteRecordRaw} from "vue-router";
 import Demo from "../page/demo/demo.vue";
 import Vedio from "../page/context/front/Video.vue";
-import Chat from "../page/demo/Chat.vue";
+import Chat from "../page/context/front/chat/Chat.vue";
 import Login from "../page/user/login.vue";
 import Chat2 from "../page/demo/Chat2.vue";
 import Layout from "../components/Layout.vue";
@@ -17,6 +17,7 @@ import UpdatePassword from "../page/context/front/userCenter/UpdatePassword.vue"
 import MyFavour from "../page/context/front/userCenter/MyFavour.vue";
 import MyMovie from "../page/context/front/userCenter/MyMovie.vue";
 import MyOrder from "../page/context/front/userCenter/MyOrder.vue";
+import MyFriends from "../page/context/front/chat/MyFriends.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -78,7 +79,16 @@ const routes: Array<RouteRecordRaw> = [
                 name: '我的影视',
                 component : MyMovie
             }]
-        }]
+        },{
+            path: "chat",
+            name: "聊天",
+            component: Chat,
+            children:[{
+                path: '',
+                name: '我的好友',
+                component: MyFriends
+            }]
+        },]
     },
     {
         path: "/test",
@@ -91,11 +101,7 @@ const routes: Array<RouteRecordRaw> = [
         component: Demo,
     },
 
-    {
-        path: "/chat",
-        name: "聊天",
-        component: Chat,
-    },
+
     {
         path: "/chat2",
         name: "聊天2",

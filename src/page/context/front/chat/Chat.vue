@@ -1,56 +1,91 @@
 <template>
-  <div class="box">
+  <div class="bg">
+    <div class="boxWarp">
+      <div class="boxLeft">
 
-  <div class="left">
-    <div v-for="friend in myFriends">
-      <FriendTag :friend="friend" :unRead="unRead" :currentSendMessage="currentSendMessage"  @getFriendId="currentAccptUserId"  />
-    </div>
-
-  </div>
-  <div class="right">
-
-      <div class="lt">
-        <a-textarea
-            :auto-size="{ minRows: 5, maxRows: 10 }"
-            v-model:value="currentChatMsg"/>
-      </div>
-    <!--        占位-->
-    <div style="top: 0;position: relative; height: 2%"></div>
-      <div class="scroll" ref="scrollRef">
-
-        <!--      <div v-if="flag">-->
-        <div v-for="item in chats">
-          <!--      如果当前的id是自己的id就再右边-->
-          <div v-if="item.sendUserId == currentUser.id">
-            <MyChat :msg="item.msg"/>
+        <div class="titleWarp">
+<!--          聊天中心 左上半部分-->
+          <div class="ltzx">
+            <div class="ltContent">
+              <div class="fj">
+                <img :src="fj">
+              </div>
+              <div class="titleFont">
+                聊天中心
+              </div>
+            </div>
           </div>
-          <!--      如果当前的id是不是自己的id就再右边-->
-          <div v-if="item.sendUserId !== currentUser.id">
-            <OtherChat :msg="item.msg"/>
+
+          <div class="select">
+            <ul class="list">
+              <li class="item"><a>我的好友</a></li>
+              <li class="item"><a>消息</a></li>
+            </ul>
           </div>
         </div>
-
       </div>
+      <div class="boxRight">
+          <div class="rightTop">
+            <div class="fontClass">
+              我的好友
+            </div>
 
-
-      <a-button class="chatButton" type="primary" @click="sendMessage()">发送</a-button>
-
+          </div>
+          <div class="rightContent">
+            <!--改为路由-->
+           <router-view/>
+          </div>
+      </div>
     </div>
+<!--    <div class="box">-->
+<!--      <div class="left">-->
+<!--        <div v-for="friend in myFriends">-->
+<!--          <FriendTag :friend="friend" :unRead="unRead" :currentSendMessage="currentSendMessage"  @getFriendId="currentAccptUserId"  />-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--      <div class="right">-->
+
+<!--        <div class="lt">-->
+<!--          <a-textarea-->
+<!--              :auto-size="{ minRows: 5, maxRows: 10 }"-->
+<!--              v-model:value="currentChatMsg"/>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;        占位&ndash;&gt;-->
+<!--        <div style="top: 0;position: relative; height: 2%"></div>-->
+<!--        <div class="scroll" ref="scrollRef">-->
+<!--          &lt;!&ndash;      <div v-if="flag">&ndash;&gt;-->
+<!--          <div v-for="item in chats">-->
+<!--            &lt;!&ndash;      如果当前的id是自己的id就再右边&ndash;&gt;-->
+<!--            <div v-if="item.sendUserId == currentUser.id">-->
+<!--              <MyChat :msg="item.msg"/>-->
+<!--            </div>-->
+<!--            &lt;!&ndash;      如果当前的id是不是自己的id就再右边&ndash;&gt;-->
+<!--            <div v-if="item.sendUserId !== currentUser.id">-->
+<!--              <OtherChat :msg="item.msg"/>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <a-button class="chatButton" type="primary" @click="sendMessage()">发送</a-button>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
+
 
 </template>
 
 <script setup lang="ts">
+import fj from '../../../../assets/chatfj.png'
 import {inject, nextTick, onMounted, reactive, ref, watchEffect} from "vue";
-import {useUserStore} from "../../store/user.ts";
+import {useUserStore} from "../../../../store/user.ts";
 import {storeToRefs} from "pinia";
-
-import {ChatMsg} from "../../../generated/models/ChatMsg.ts";
-import MyChat from "../../components/chat/MyChat.vue";
-import OtherChat from "../../components/chat/OtherChat.vue";
-import {ChatControllerService, FriendsControllerService} from "../../../generated";
-import {DataContent} from "../../service/DataContent.ts";
-import FriendTag from "../../components/chat/FriendTag.vue";
+import bg from '../../../../assets/chatBg.png'
+import {ChatMsg} from "../../../../../generated/models/ChatMsg.ts";
+import MyChat from "../../../../components/chat/MyChat.vue";
+import OtherChat from "../../../../components/chat/OtherChat.vue";
+import {ChatControllerService, FriendsControllerService} from "../../../../../generated";
+import {DataContent} from "../../../../service/DataContent.ts";
+import FriendTag from "../../../../components/chat/FriendTag.vue";
 import {message} from "ant-design-vue";
 import {watch} from "fs";
 import {state} from "vue-tsc/out/shared";
@@ -301,9 +336,144 @@ socket.onerror = function(error) {
   console.error('WebSocket连接错误:', error);
 };
 
+
+
+
+
+
+
+//之后路由
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <style scoped>
+.fontClass{
+  margin-left: 2%;
+  color:#666;
+  font-size: 15px;
+}
+.rightContent{
+  height: 92%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px 0 rgba(121,146,185,0.54);
+}
+.rightTop{
+  line-height: 35px;
+  width: 100%;
+  height: 5%;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(121,146,185,0.54);
+}
+
+.bg{
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("../../../../assets/chatBg.png");
+}
+
+.boxWarp {
+  position: absolute;
+  left: 15%;
+  height: 100vh;
+  width: 70vw;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 rgba(121,146,185,0.54);
+}
+.boxLeft{
+  color: #666;
+  float: left;
+  height: 100%;
+  border-radius: 4px;
+  width: 140px;
+  min-width: 140px;
+  background-color: rgba(255,255,255,0.8);
+}
+.boxRight{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+ /* background:rebeccapurple;*/
+  float: right;
+  position: absolute;
+  top: 8%;
+  left: 13%;
+  width: 85%;
+  height: 92%;
+  border-radius: 4px;
+}
+.titleWarp{
+  /*background: #80b9f2;*/
+  height: 50%;
+}
+.ltzx{
+ /* background: #7f7f8b;*/
+  height: 35%;
+}
+.ltContent{
+  color: #333;
+  font-weight: 600;
+  /*background-color: #1677ff;*/
+  top: 10%;
+  left: 1%;
+  position: absolute;
+  width: 13%;
+ display: flex;
+}
+img{
+  width: 100%;
+  height: 100%;
+}
+.fj{
+  height: 25px;
+  width: 25px;
+}
+.titleFont{
+  font-size: 18px;
+  margin-left: 10%;
+}
+.list{
+
+}
+
+.item{
+  height: 40px;
+  -webkit-box-align: center;
+  align-items: center;
+  position: relative;
+  color: #6b757b;
+}
+
+li {
+  cursor: pointer;
+  list-style-type: disc;
+  font-size: 18px;
+}
+li:hover{
+  color: #2faee3;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 .box {

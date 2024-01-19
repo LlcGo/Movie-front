@@ -200,7 +200,8 @@ const getMovieDetail = async (id:any) => {
   top: 20px;
   display: flex;
   width: 350px;
-  justify-content: space-between;
+  left: -7%;
+  justify-content: space-evenly;
 }
 .nameClass{
   margin-bottom: 5%;
