@@ -6,7 +6,7 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_ConcurrentHashMap_int_List_Movie_ } from '../models/BaseResponse_ConcurrentHashMap_int_List_Movie_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Movie_ } from '../models/BaseResponse_List_Movie_';
-import type { BaseResponse_Movie_ } from '../models/BaseResponse_Movie_';
+import type { BaseResponse_MovieVo_ } from '../models/BaseResponse_MovieVo_';
 import type { BaseResponse_Page_Movie_ } from '../models/BaseResponse_Page_Movie_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { MovieAddRequest } from '../models/MovieAddRequest';
@@ -66,12 +66,12 @@ deleteRequest: DeleteRequest,
     /**
      * getMovieById
      * @param id id
-     * @returns BaseResponse_Movie_ OK
+     * @returns BaseResponse_MovieVo_ OK
      * @throws ApiError
      */
     public static getMovieByIdUsingGet(
 id?: number,
-): CancelablePromise<BaseResponse_Movie_> {
+): CancelablePromise<BaseResponse_MovieVo_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/movie/get',

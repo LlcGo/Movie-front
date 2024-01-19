@@ -14,6 +14,7 @@ export type Movie = {
     movieName?: string;
     movieProfile?: string;
     nation?: string;
+    price?: number;
     score?: number;
     state?: number;
     type?: number;

@@ -53,7 +53,7 @@ const toDetail = (movieItem:Movie) => {
   router.push({
     path:'/layout/detail',
     query: {
-     currentMovie:JSON.stringify(movieItem)
+     currentMovieId:movieItem.id
     }
   })
 }

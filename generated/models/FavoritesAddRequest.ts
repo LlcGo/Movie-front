@@ -4,10 +4,5 @@
 /* eslint-disable */
 
 export type FavoritesAddRequest = {
-    gender?: number;
-    userAccount?: string;
-    userAvatar?: string;
-    userName?: string;
-    userPassword?: string;
-    userRole?: string;
+    movieId?: number;
 };

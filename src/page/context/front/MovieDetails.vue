@@ -245,8 +245,7 @@ const currentComment = ref<Array<Remark>>([]);
 const score = ref();
 
 onMounted(() => {
-  currentMovie.value = JSON.parse(query.currentMovie)
-  console.log(currentMovie.value)
+  console.log(query.currentMovieId)
   getComment();
   document.documentElement.scrollTop = 0
   // getCount();
@@ -255,7 +254,7 @@ onMounted(() => {
 //设置是否观影
 
 const getComment = async () => {
-  const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, currentMovie.value.id, pageSize.value);
+  const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, Number(query.currentMovieId), pageSize.value);
   total.value = res.data?.total
   // alert(total.value)
   currentComment.value = res.data.records
@@ -273,7 +272,7 @@ const getComment = async () => {
 const pushComment = async () => {
   let data: RemarkAddRequest = {
     content: content.value,
-    movieId: currentMovie.value.id,
+    movieId: Number(query.currentMovieId),
   }
   const res = await RemarkControllerService.addRemarkUsingPost(data);
   content.value = '';
@@ -546,4 +545,5 @@ const toScore = async () => {
 .noClass{
   margin-top: 10%;
 }
+
 </style>

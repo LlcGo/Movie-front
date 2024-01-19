@@ -36,8 +36,9 @@
 import {onMounted, ref} from 'vue'
 import SeriesList from "../../../components/movieList/SeriesList.vue";
 import {Movie, MovieControllerService} from "../../../../generated";
+import {useRouter} from "vue-router";
 defineProps<{ msg: string }>()
-
+const router = useRouter();
 const movieList = ref<Map<number, Array<Movie>>>([]);
 
 
@@ -51,6 +52,9 @@ const init = async () => {
   movieList.value = res.data
   // console.log(res.data)
 }
+
+
+
 
 //轮播图函数
 function slideshow() {

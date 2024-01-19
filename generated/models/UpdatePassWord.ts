@@ -4,6 +4,6 @@
 /* eslint-disable */
 
 export type UpdatePassWord = {
-    newPassWord?: string;
+    newPassword?: string;
     oldPassword?: string;
 };

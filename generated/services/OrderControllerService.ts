@@ -5,6 +5,7 @@
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Order_ } from '../models/BaseResponse_List_Order_';
+import type { BaseResponse_List_OrderVO_ } from '../models/BaseResponse_List_OrderVO_';
 import type { BaseResponse_Order_ } from '../models/BaseResponse_Order_';
 import type { BaseResponse_Page_Order_ } from '../models/BaseResponse_Page_Order_';
 import type { DeleteRequest } from '../models/DeleteRequest';
@@ -99,6 +100,23 @@ id?: number,
             query: {
                 'id': id,
             },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getOrderByUserId
+     * @returns BaseResponse_List_OrderVO_ OK
+     * @throws ApiError
+     */
+    public static getOrderByUserIdUsingGet(): CancelablePromise<BaseResponse_List_OrderVO_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/order/get/myOrder',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
