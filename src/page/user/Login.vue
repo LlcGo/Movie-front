@@ -131,6 +131,7 @@ const login = async () => {
     message.warn(res.message)
     return;
   }
+  sessionStorage.setItem('user', JSON.stringify(res.data));
   router.push('/layout')
   // console.log(res)
 }

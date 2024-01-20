@@ -49,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import fj from '../../../../assets/chatfj.png'
 import {onMounted, ref} from "vue";
 import {ChatMsg} from "../../../../../generated/models/ChatMsg.ts";
 import MyChat from "../../../../components/chat/MyChat.vue";
@@ -57,6 +56,10 @@ import OtherChat from "../../../../components/chat/OtherChat.vue";
 import {ChatControllerService, FriendsControllerService, UserControllerService} from "../../../../../generated";
 import FriendTag from "../../../../components/chat/FriendTag.vue";
 import {message} from "ant-design-vue";
+import socket from "../../../../utils/websocket.ts";
+import ACTION from "../../../typeEnum/chatType/SednActionEnum.ts";
+import {SendChat} from "../../../typeEnum/chatType/SendChat.ts";
+import {chatMsg} from "../../../typeEnum/chatType/chatMsg.ts";
 
 
 const currentChatMsg = ref();
@@ -72,10 +75,6 @@ const currentUser = ref()
 const unRead = ref();
 //页面显示发送的消息
 let currentSendMessage = ref();
-
-
-
-
 
 //封装的websocket信息
 //CONNECT(1, "第一次(或重连)初始化连接"),
@@ -99,8 +98,6 @@ let currentSendMessage = ref();
 
 
 
-// 创建WebSocket连接
-const socket = new WebSocket('ws://localhost:7530/chat');
 const scrollRef = ref();
 onMounted( async () => {
   await getCurrentUser()
@@ -112,29 +109,11 @@ onMounted( async () => {
 })
 
 
+//获取当前用户 可以删除
 const getCurrentUser = async () => {
   const res =await UserControllerService.getLoginUserUsingGet()
   currentUser.value = res.data;
 }
-
-
-
-// const handleScroll = () => {
-//   // console.log(scrollRef.value.scrollTop, '到头部的距离-------------------')
-//   // console.log(scrollRef.value.scrollHeight, '滚动条的总高度-------------------')
-// }
-
-// watch(chats.value, () => {
-//   refresh()
-// }, {immediate: true, deep: true})
-
-// watch(() => chats.value,() => {
-//   refresh()
-//   console.log('监听的obj.brand.name改变了')
-// },{
-//   deep:true,
-//   immediate:true,
-// })
 
 
 const refreshScroll = () => {
@@ -207,38 +186,34 @@ const initConnect = () => {
     chatMsg: sendMsg,
     extand: currentUser.value.id + ":" + currentOtherUserId.value,
   }
-  socket.send(JSON.stringify(sendChat))
+  socket.send(sendChat)
 }
 
+
+
 const setCurrent = () => {
-  let sendMsg = {
+  let msg : chatMsg= {
     sendUserId: currentUser.value.id,
     acceptUserId: currentOtherUserId.value,
     msg: '',
     signFlag : 0,
   }
-  let sendChat = {
-    action: 3,
-    chatMsg: sendMsg,
+  let sendChat : SendChat = {
+    action: ACTION.SET_CURRENT_CHAT,
+    chatMsg: msg,
     extand: currentUser.value.id + ":" + currentOtherUserId.value,
   }
-  socket.send(JSON.stringify(sendChat))
+  socket.send(sendChat)
 }
 
-
-
-
-
-
-socket.onopen = function() {
-  console.log('WebSocket连接已建立');
-};
 
 const write =(sendMsg:any)=>{
   chats.value.push(sendMsg);
   console.log('push--->',chats.value)
 }
 
+
+//发送聊天信息 封装
 const getSendMessgae = () => {
   let sendMsg = {
     sendUserId: currentUser.value.id,
@@ -246,13 +221,15 @@ const getSendMessgae = () => {
     msg: currentChatMsg.value,
     signFlag : 0,
   }
-  let sendChat = {
-    action: 2,
+  return {
+    action: ACTION.CHAT,
     chatMsg: sendMsg,
     extand: '',
-  }
-  return sendChat;
+  };
 }
+
+//发送消息
+
 
 const sendMessage =() => {
   // console.log('输入的消息---->',currentChatMsg.value)
@@ -260,8 +237,7 @@ const sendMessage =() => {
   // console.log('对方用户id---->',currentOtherUserId.value)
   const sendChat = getSendMessgae();
   // 向服务器发送消息
-  console.log('发送的消息---》',sendChat)
-  socket.send(JSON.stringify(sendChat));
+  socket.send(sendChat);
   let send = {
     acceptUserId: currentOtherUserId.value,
     createTime: new Date(),
@@ -278,13 +254,13 @@ const sendMessage =() => {
 
 
 // 监听接收到服务器消息的事件
-socket.onmessage = function(event) {
+socket.websocket.onmessage = function(event:any) {
   const message = event.data;
-
   let rMsg = JSON.parse(message);
   console.log('接收到服务器消息:', rMsg);
   console.log('当前用户id:', currentUser.value.id);
-  console.log('标记消息为',rMsg.action)
+  // console.log('标记消息为',rMsg.action)
+  //如果是未读消息 直接设置唯独属性
   if(rMsg.action == 6){
     unRead.value = rMsg.chatMsgList
     console.log('未读的信息',unRead.value)
@@ -299,6 +275,7 @@ socket.onmessage = function(event) {
     sendUserId: rMsg.chatMsg.sendUserId,
     signFlag:0
   }
+  //如果是对面的
   if(rMsg.chatMsg.sendUserId == currentOtherUserId.value){
     write(send)
     refreshScroll()
@@ -308,21 +285,24 @@ socket.onmessage = function(event) {
   }
 };
 
-// 监听连接关闭事件
-socket.onclose = function() {
-  console.log('WebSocket连接已关闭');
-};
-
-// 监听连接错误事件
-socket.onerror = function(error) {
-  console.error('WebSocket连接错误:', error);
-};
 
 
+// const handleScroll = () => {
+//   // console.log(scrollRef.value.scrollTop, '到头部的距离-------------------')
+//   // console.log(scrollRef.value.scrollHeight, '滚动条的总高度-------------------')
+// }
 
+// watch(chats.value, () => {
+//   refresh()
+// }, {immediate: true, deep: true})
 
-
-
+// watch(() => chats.value,() => {
+//   refresh()
+//   console.log('监听的obj.brand.name改变了')
+// },{
+//   deep:true,
+//   immediate:true,
+// })
 
 </script>
 

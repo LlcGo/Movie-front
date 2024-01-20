@@ -136,6 +136,7 @@ import {OrderAddRequest, OrderByRequest, OrderControllerService, UserControllerS
 import login from '../assets/qLogin.png'
 import vip from '../assets/vip.png'
 import m from "../assets/erweima.png";
+import socket, {getMessage} from "../utils/websocket.ts";
 
 const currentUser = ref<Users>();
 const router = useRouter();
@@ -143,6 +144,8 @@ const value = ref();
 const open = ref<boolean>(false)
 const price = ref(15)
 const date = ref('月');
+//未读消息数量
+const unReadTotal = ref();
 onMounted(()=>{
   getUser();
 })
@@ -195,12 +198,36 @@ const getUser = async () => {
     return;
   }
   currentUser.value = res.data;
-  console.log(currentUser.value)
+  // console.log(currentUser.value)
+  initConnect();
 }
+//初次连接如果用户登录就返回消息
+const initConnect = () => {
+  let sendMsg = {
+    sendUserId: currentUser.value.id,
+    msg: '',
+    signFlag : 0,
+  }
+  let sendChat = {
+    action: 1,
+    chatMsg: sendMsg,
+  }
+  socket.send(sendChat)
+}
+
+socket.websocket.onmessage = (e:any) => {
+  let data = JSON.parse(e.data);
+  // console.log(data)
+  unReadTotal.value = data.chatMsgList.length;
+  console.log('未读消息',unReadTotal.value,'条')
+}
+
+
 
 //退出
 const loginOut = async () => {
   const res = await UserControllerService.userLogoutUsingPost();
+  sessionStorage.removeItem('user');
   console.log(res)
 }
 const toHome = () => {

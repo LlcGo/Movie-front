@@ -4,7 +4,7 @@
       <div class="icon-car-count" >{{unReadSize}}</div>
     </div>
     <div class="img">
-      <a-avatar :size="50">
+      <a-avatar :size="40">
         <template #icon>
           <UserOutlined/>
         </template>
@@ -98,15 +98,16 @@ const getFriendId = () => {
   top: 7%;
   left: 128%;
   color: #333;
-  font-size: 17px;
+  font-size: 14px;
   min-height: 16px;
   line-height: 1;
 }
 .newMessage{
   position: absolute;
   font-size: 12px;
+  color: #999;
   top: 52%;
-  left: 36%;
+  left: 32%;
   max-width: 110px;
   overflow: hidden;
   text-overflow: ellipsis;
