@@ -1,10 +1,10 @@
 <template>
-  <div class="friendBox" @click="getFriendId">
+  <div  ref="friendCs" class="friendBox" @click="getFriendId">
     <div v-if="unReadSize">
       <div class="icon-car-count" >{{unReadSize}}</div>
     </div>
     <div class="img">
-      <a-avatar  :size="50">
+      <a-avatar :size="50">
         <template #icon>
           <UserOutlined/>
         </template>
@@ -19,15 +19,14 @@
 <script setup lang="ts">
 import {onMounted, ref,watch} from "vue";
 
-
-
 const props = defineProps(["friend","unRead","currentSendMessage"])
 const unReadSize = ref(0);
-
+const friendCs = ref();
 onMounted(()=>{
   console.log('左侧好友框子--->',props.unRead)
   // getUnReadSize()
 })
+
 
 watch(props,(value, oldValue, onCleanup) => {
   //监听消息，如果当前的聊天框不是现在的聊天框那么+1
@@ -65,6 +64,7 @@ const getUnReadSize = () => {
 
 const emits = defineEmits(["getFriendId"]);
 const getFriendId = () => {
+
   emits('getFriendId', props.friend.id,unReadSize.value)
   unReadSize.value = 0;
   // alert('点击之后'+ JSON.stringify(unReadSize.value) )
@@ -81,12 +81,13 @@ const getFriendId = () => {
   position: relative;
   background: white;
   height: 78px;
-  border-radius: 4px;
+  border-right: 1px solid #e9eaec;
 }
 
 .friendBox:hover {
-  background: #C0C0C0;
+  background: #e4e5e6;
 }
+
 .img{
   position: absolute;
   top: 20%;
@@ -120,7 +121,6 @@ const getFriendId = () => {
   top: -1px;
   background: red;
   color: #fff;
-  border-radius: 999px;
   padding: 0 .5em;
   min-width: 30px;
   height: 30px;
