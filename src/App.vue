@@ -10,7 +10,6 @@ import {useRoute} from "vue-router";
 const userStore = useUserStore();
 const user = ref();
 const route = useRoute();
-
 onMounted(async ()=>{
   console.log(route.path)
   const res = await userStore.setUser()

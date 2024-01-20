@@ -336,6 +336,11 @@ socket.onerror = function(error) {
   width: 100%;
   height: 100%;
 }
+.friendLeftScroll{
+  overflow-y: scroll;
+  position: relative;
+  height: 95%;
+}
 .topTitle{
   position: absolute;
   line-height: 36px;

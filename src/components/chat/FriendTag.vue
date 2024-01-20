@@ -10,7 +10,7 @@
         </template>
       </a-avatar>
       <div class="nameClass">
-        {{props.friend.username}}
+        {{props.friend.nickname}}
       </div>
     </div>
     <div class="newMessage">最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息</div>
