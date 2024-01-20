@@ -1,23 +1,31 @@
 <template>
-  <div  ref="friendCs" class="friendBox" @click="getFriendId">
+  <div  ref="friendCs" class="friendBox" >
     <div v-if="unReadSize">
       <div class="icon-car-count" >{{unReadSize}}</div>
     </div>
     <div class="img">
-      <a-avatar :size="40">
-        <template #icon>
-          <UserOutlined/>
-        </template>
-      </a-avatar>
-      <div class="nameClass">
+      <a-popconfirm
+          title="确认删除该聊天框?"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="toDelete">
+        <a-avatar :size="40">
+          <template #icon>
+
+          </template>
+        </a-avatar>
+      </a-popconfirm>
+
+      <div class="nameClass" @click="getFriendId">
         {{props.friend.nickname}}
       </div>
-    </div>
-    <div class="newMessage">最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息</div>
+    </div >
+    <div @click="getFriendId" class="newMessage">最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息最近的消息</div>
   </div>
 </template>
 <script setup lang="ts">
 import {onMounted, ref,watch} from "vue";
+import {RecentChatControllerService} from "../../../generated";
 
 const props = defineProps(["friend","unRead","currentSendMessage"])
 const unReadSize = ref(0);
@@ -40,6 +48,7 @@ watch(props,(value, oldValue, onCleanup) => {
     }
     return;
   }
+  console.log('watch--->',props)
   //最初的时候显示有多少聊天记录
   if(value.unRead){
     getUnReadSize()
@@ -47,11 +56,11 @@ watch(props,(value, oldValue, onCleanup) => {
   // alert(1)
   // console.log('watch------->',value.unRead,oldValue)
   // getUnReadSize();
-},{immediate : true,deep : true})
+},)
 
 const getUnReadSize = () => {
   let size = 0;
-  props.unRead.forEach(item=>{
+  props.unRead.forEach( item=>{
     console.log('接收方---》',item.acceptUserId )
     console.log('聊天对象的id---》',props.friend.id )
      if(item.sendUserId == props.friend.id){
@@ -61,11 +70,17 @@ const getUnReadSize = () => {
   unReadSize.value = size;
 }
 
+//删除该聊天框
+const toDelete = async () => {
+  const res = await RecentChatControllerService.deleteRecentChatUsingGet(props.friend.id)
+  if(res.data){
+    emits('getFriendId', props.friend.id,unReadSize.value,true)
+  }
+}
 
 const emits = defineEmits(["getFriendId"]);
 const getFriendId = () => {
-
-  emits('getFriendId', props.friend.id,unReadSize.value)
+  emits('getFriendId', props.friend.id,unReadSize.value,false)
   unReadSize.value = 0;
   // alert('点击之后'+ JSON.stringify(unReadSize.value) )
 };
@@ -75,6 +90,7 @@ const getFriendId = () => {
 </script>
 
 <style scoped>
+
 
 .friendBox{
   cursor:pointer;
@@ -91,7 +107,7 @@ const getFriendId = () => {
 .img{
   position: absolute;
   top: 20%;
-  left: 6%;
+  left: 10%;
 }
 .nameClass{
   position: absolute;
@@ -100,6 +116,7 @@ const getFriendId = () => {
   color: #333;
   font-size: 14px;
   min-height: 16px;
+  width: 100px;
   line-height: 1;
 }
 .newMessage{
@@ -107,7 +124,7 @@ const getFriendId = () => {
   font-size: 12px;
   color: #999;
   top: 52%;
-  left: 32%;
+  left: 35%;
   max-width: 110px;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -3,15 +3,14 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Movie } from './Movie';
+import type { Users } from './Users';
 
-export type OrderVO = {
+export type RecentChat = {
+    acceptUserId?: string;
     createTime?: string;
     id?: number;
-    movie?: Movie;
-    orderState?: number;
-    state?: number;
+    isDelete?: number;
+    recentFriends?: Users;
     updateTime?: string;
     userId?: string;
-    vipType?: number;
 };

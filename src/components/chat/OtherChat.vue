@@ -2,7 +2,6 @@
     <div class="otherChat">
       <a-avatar class="other" size="large">
         <template #icon>
-          <UserOutlined/>
         </template>
       </a-avatar>
       <div class="otherLl">

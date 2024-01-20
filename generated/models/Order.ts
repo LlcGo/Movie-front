@@ -12,4 +12,5 @@ export type Order = {
     state?: number;
     updateTime?: string;
     userId?: string;
+    vipType?: number;
 };

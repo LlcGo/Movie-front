@@ -9,7 +9,7 @@
     <div class="leftContent">
       <div v-for="friend in myFriends">
 <!--        根据id设置背景色-->
-        <FriendTag :class="{bc : friend.id == currentOtherUserId}"
+        <friend-tag :class="{bc : friend.id == currentOtherUserId}"
                    :friend="friend"
                    :unRead="unRead"
                    :currentSendMessage="currentSendMessage"
@@ -19,10 +19,15 @@
     </div>
   </div>
   <div class="right">
-   <div class="rightTop">
+    <div class="wlClass" v-if="flag">
+      <img :src="wl">
+      <div class="wlFont">快去找小伙伴聊天吧</div>
+    </div>
+   <div class="rightTop" v-if="!flag">
       <div>人名</div>
    </div>
-    <div class="rightContent">
+
+    <div class="rightContent" v-if="!flag">
               <div class="lt">
                 <a-textarea
                     :auto-size="{ minRows: 5, maxRows: 10 }"
@@ -53,14 +58,22 @@ import {onMounted, ref} from "vue";
 import {ChatMsg} from "../../../../../generated/models/ChatMsg.ts";
 import MyChat from "../../../../components/chat/MyChat.vue";
 import OtherChat from "../../../../components/chat/OtherChat.vue";
-import {ChatControllerService, FriendsControllerService, UserControllerService} from "../../../../../generated";
+import {
+  ChatControllerService,
+  FriendsControllerService,
+  RecentChatControllerService,
+  UserControllerService
+} from "../../../../../generated";
 import FriendTag from "../../../../components/chat/FriendTag.vue";
 import {message} from "ant-design-vue";
 import socket from "../../../../utils/websocket.ts";
 import ACTION from "../../../typeEnum/chatType/SednActionEnum.ts";
 import {SendChat} from "../../../typeEnum/chatType/SendChat.ts";
 import {chatMsg} from "../../../typeEnum/chatType/chatMsg.ts";
+import wl from '../../../../assets/wl.png'
 
+
+const flag = ref(false);
 
 const currentChatMsg = ref();
 //聊天信息
@@ -68,9 +81,9 @@ const chats = ref<Array<ChatMsg>>([]);
 //与谁聊天
 const currentOtherUserId = ref();
 //我所有的朋友
-const myFriends = ref();
+const myFriends = ref([]);
 //当前用户
-const currentUser = ref()
+const currentUser = ref(JSON.parse(sessionStorage.getItem('user')))
 //未读的信息
 const unRead = ref();
 //页面显示发送的消息
@@ -100,20 +113,17 @@ let currentSendMessage = ref();
 
 const scrollRef = ref();
 onMounted( async () => {
-  await getCurrentUser()
   // window.addEventListener('scroll', handleScroll, true);  // 监听（绑定）滚轮滚动事件
-  await getFriends()
-  await init();
-  await initConnect();
+  getFriends()
   refreshScroll()
 })
 
 
 //获取当前用户 可以删除
-const getCurrentUser = async () => {
-  const res =await UserControllerService.getLoginUserUsingGet()
-  currentUser.value = res.data;
-}
+// const getCurrentUser = async () => {
+//   const res =await UserControllerService.getLoginUserUsingGet()
+//   currentUser.value = res.data;
+// }
 
 
 const refreshScroll = () => {
@@ -128,20 +138,31 @@ const getFriends = async () =>{
   // console.log('聊天对象的id--->',currentOtherUserId.value)
   // alert(currentUser.value)
   myFriends.value =[];
-  const res = await FriendsControllerService.getMyFriendsUsingGet(currentUser.value.id);
+  const res = await RecentChatControllerService.getRecentChatUsingPost()
+
   if(res.code == 0){
-    myFriends.value = res.data
+    res.data.forEach(item =>{
+      myFriends.value.push(item .recentFriends)
+    })
   }else {
     message.warn(res.message);
   }
   // console.log('伙伴----》',myFriends.value)
+  if(myFriends.value.length == 0){
+    flag.value = true
+    return;
+  }
+  // console.log('现在的好友------------->',myFriends.value)
   currentOtherUserId.value = myFriends.value[0].id;
+  console.log( '现在的好友------------->',myFriends.value[0])
+  //获取朋友信息之后获得聊天信息
+  initChat()
 }
 
 
 
 //初始化聊天信息
-const init = async () => {
+const initChat = async () => {
   const res = await ChatControllerService.getChatUsingGet(currentOtherUserId.value,currentUser.value.id);
   // chats.value = res.data.
   if(res.data){
@@ -154,13 +175,21 @@ const init = async () => {
     // console.log('存入的数据----->',chats.value)
   }
   // console.log('返回的数据----->',res.data)
+
+  //获取聊天信息之后再连接websocket
+  initConnect
   refreshScroll()
 }
 
 //获得当前聊天对象id 并且清空 所有未读消息
-const currentAccptUserId = async (id:any,unReadSize:any) => {
+const currentAccptUserId = async (id:any,unReadSize:any,isDelete:boolean) => {
+
   // console.log('当前用户id',currentUser.value.id)
-  currentOtherUserId.value = id
+  if(!isDelete){
+    currentOtherUserId.value = id
+  }else {
+    getFriends();
+  }
   // console.log('对方用户id',currentOtherUserId.value)
   // alert(unReadSize)
   if(unReadSize > 0){
@@ -169,8 +198,11 @@ const currentAccptUserId = async (id:any,unReadSize:any) => {
     const res = await ChatControllerService.readMessageUsingGet(currentOtherUserId.value,currentUser.value.id)
     // console.log('清除聊天记录---》',res)
   }
+  //设置当前聊天对象
   setCurrent()
-  init()
+  if(!isDelete){
+    initChat()
+  }
 }
 
 //连接websocket
@@ -262,8 +294,13 @@ socket.websocket.onmessage = function(event:any) {
   // console.log('标记消息为',rMsg.action)
   //如果是未读消息 直接设置唯独属性
   if(rMsg.action == 6){
-    unRead.value = rMsg.chatMsgList
-    console.log('未读的信息',unRead.value)
+    if(rMsg.chatMsgList.length == 0){
+      unRead.value = [];
+    }else {
+      unRead.value = rMsg.chatMsgList
+    }
+
+    console.log('未读的信息',unRead.value.length)
     return;
   }
   //如果是当前界面就直接显示
@@ -308,6 +345,18 @@ socket.websocket.onmessage = function(event:any) {
 
 
 <style scoped>
+.wlFont{
+  position: relative;
+  left: 35%;
+  top: 10%;
+  color: #8896b8;;
+}
+.wlClass{
+  height: 300px;
+  position: absolute;
+  top: 25%;
+  left: 35%;
+}
 .bc{
   background:#e4e5e6;
 }
@@ -353,7 +402,7 @@ socket.websocket.onmessage = function(event:any) {
   float: left;
   width: 20%;
   height: 100%;
-  background: #9499a0;
+  background: white;
 }
 .right{
  /* background: #80b9f2;*/

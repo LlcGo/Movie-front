@@ -2,7 +2,7 @@
       <div class="myContain">
           <a-avatar class="my" size="large">
             <template #icon>
-              <UserOutlined/>
+
             </template>
           </a-avatar>
           <div class="ll">
