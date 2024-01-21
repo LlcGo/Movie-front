@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
+import type { BaseResponse_List_Users_ } from '../models/BaseResponse_List_Users_';
 import type { BaseResponse_List_UserVo_ } from '../models/BaseResponse_List_UserVo_';
 import type { BaseResponse_object_ } from '../models/BaseResponse_object_';
 import type { BaseResponse_Page_UserVo_ } from '../models/BaseResponse_Page_UserVo_';
@@ -14,6 +15,7 @@ import type { QCCode } from '../models/QCCode';
 import type { UpdatePassWord } from '../models/UpdatePassWord';
 import type { UserAddRequest } from '../models/UserAddRequest';
 import type { UserLoginRequest } from '../models/UserLoginRequest';
+import type { UserQueryRequest } from '../models/UserQueryRequest';
 import type { UserRegisterRequest } from '../models/UserRegisterRequest';
 import type { UserUpdateRequest } from '../models/UserUpdateRequest';
 
@@ -111,15 +113,19 @@ id?: number,
      * listUser
      * @param createTime 
      * @param current 
-     * @param gender 
+     * @param faceImage 
      * @param id 
+     * @param isDelete 
+     * @param likeType 
+     * @param nickname 
      * @param pageSize 
+     * @param password 
+     * @param sex 
+     * @param signature 
      * @param sortField 
      * @param sortOrder 
      * @param updateTime 
-     * @param userAccount 
-     * @param userAvatar 
-     * @param userName 
+     * @param username 
      * @param userRole 
      * @returns BaseResponse_List_UserVo_ OK
      * @throws ApiError
@@ -127,15 +133,19 @@ id?: number,
     public static listUserUsingGet(
 createTime?: string,
 current?: number,
-gender?: number,
-id?: number,
+faceImage?: string,
+id?: string,
+isDelete?: number,
+likeType?: string,
+nickname?: string,
 pageSize?: number,
+password?: string,
+sex?: string,
+signature?: string,
 sortField?: string,
 sortOrder?: string,
 updateTime?: string,
-userAccount?: string,
-userAvatar?: string,
-userName?: string,
+username?: string,
 userRole?: string,
 ): CancelablePromise<BaseResponse_List_UserVo_> {
         return __request(OpenAPI, {
@@ -144,15 +154,19 @@ userRole?: string,
             query: {
                 'createTime': createTime,
                 'current': current,
-                'gender': gender,
+                'faceImage': faceImage,
                 'id': id,
+                'isDelete': isDelete,
+                'likeType': likeType,
+                'nickname': nickname,
                 'pageSize': pageSize,
+                'password': password,
+                'sex': sex,
+                'signature': signature,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
                 'updateTime': updateTime,
-                'userAccount': userAccount,
-                'userAvatar': userAvatar,
-                'userName': userName,
+                'username': username,
                 'userRole': userRole,
             },
             errors: {
@@ -167,15 +181,19 @@ userRole?: string,
      * listUserByPage
      * @param createTime 
      * @param current 
-     * @param gender 
+     * @param faceImage 
      * @param id 
+     * @param isDelete 
+     * @param likeType 
+     * @param nickname 
      * @param pageSize 
+     * @param password 
+     * @param sex 
+     * @param signature 
      * @param sortField 
      * @param sortOrder 
      * @param updateTime 
-     * @param userAccount 
-     * @param userAvatar 
-     * @param userName 
+     * @param username 
      * @param userRole 
      * @returns BaseResponse_Page_UserVo_ OK
      * @throws ApiError
@@ -183,15 +201,19 @@ userRole?: string,
     public static listUserByPageUsingGet(
 createTime?: string,
 current?: number,
-gender?: number,
-id?: number,
+faceImage?: string,
+id?: string,
+isDelete?: number,
+likeType?: string,
+nickname?: string,
 pageSize?: number,
+password?: string,
+sex?: string,
+signature?: string,
 sortField?: string,
 sortOrder?: string,
 updateTime?: string,
-userAccount?: string,
-userAvatar?: string,
-userName?: string,
+username?: string,
 userRole?: string,
 ): CancelablePromise<BaseResponse_Page_UserVo_> {
         return __request(OpenAPI, {
@@ -200,15 +222,19 @@ userRole?: string,
             query: {
                 'createTime': createTime,
                 'current': current,
-                'gender': gender,
+                'faceImage': faceImage,
                 'id': id,
+                'isDelete': isDelete,
+                'likeType': likeType,
+                'nickname': nickname,
                 'pageSize': pageSize,
+                'password': password,
+                'sex': sex,
+                'signature': signature,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
                 'updateTime': updateTime,
-                'userAccount': userAccount,
-                'userAvatar': userAvatar,
-                'userName': userName,
+                'username': username,
                 'userRole': userRole,
             },
             errors: {
@@ -273,6 +299,28 @@ userRegisterRequest: UserRegisterRequest,
             method: 'POST',
             url: '/user/register',
             body: userRegisterRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * searchFriends
+     * @param userQueryRequest userQueryRequest
+     * @returns BaseResponse_List_Users_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static searchFriendsUsingPost(
+userQueryRequest: UserQueryRequest,
+): CancelablePromise<BaseResponse_List_Users_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/search/friend',
+            body: userQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

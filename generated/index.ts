@@ -72,6 +72,7 @@ export type { RemarkVo } from './models/RemarkVo';
 export type { UpdatePassWord } from './models/UpdatePassWord';
 export type { UserAddRequest } from './models/UserAddRequest';
 export type { UserLoginRequest } from './models/UserLoginRequest';
+export type { UserQueryRequest } from './models/UserQueryRequest';
 export type { UserRegisterRequest } from './models/UserRegisterRequest';
 export type { Users } from './models/Users';
 export type { UserUpdateRequest } from './models/UserUpdateRequest';

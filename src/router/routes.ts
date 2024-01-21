@@ -19,6 +19,7 @@ import MyMovie from "../page/context/front/userCenter/MyMovie.vue";
 import MyOrder from "../page/context/front/userCenter/MyOrder.vue";
 import MyFriends from "../page/context/front/chat/MyFriends.vue";
 import GoChat from "../page/context/front/chat/GoChat.vue";
+import SearchFriend from "../page/context/front/chat/SearchFriend.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -92,7 +93,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '',
                 name: '我的消息',
                 component: GoChat
-            }]
+            },{
+                path: 'searchFriends',
+                name: '在线寻友',
+                component: SearchFriend
+            },]
         },]
     },
     {

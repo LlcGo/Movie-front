@@ -51,24 +51,28 @@ import fj from '../../../../assets/chatfj.png'
 import {ref} from "vue";
 const route = useRoute();
 const router = useRouter();
-const items = [{id:1,itemName:'我的好友'},{id:2,itemName:'信息'}]
+const items = [{id:1,itemName:'我的好友'},{id:3,itemName: '在线寻友'},{id:2,itemName:'信息'},]
 const currentItem = ref(1)
 
 const getCurrentId = (item:any) => {
     currentItem.value = item
-   if(item.id == 1){
-     router.push({
-       path: '/layout/chat/myFriends'
-     })
-     return;
-   }
-   if(item.id == 2){
-     router.push({
-       path: '/layout/chat'
-     })
-     return;
-   }
-
+  switch (item.id){
+    case 1:
+      router.push({
+        path: '/layout/chat/myFriends'
+      })
+      return;
+    case 2:
+      router.push({
+        path: '/layout/chat'
+      })
+      return;
+    case 3:
+      router.push({
+        path: '/layout/chat/searchFriends'
+      })
+      return;
+  }
 }
 
 

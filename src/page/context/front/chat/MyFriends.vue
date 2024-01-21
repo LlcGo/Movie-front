@@ -9,7 +9,7 @@
     <template #renderItem="{ item }">
       <a-list-item>
         <template #actions>
-          <a key="list-loadmore-edit">删除好友</a>
+          <a key="list-loadmore-edit" @click="toDelete(item)">删除好友</a>
           <a key="list-loadmore-more" @click="toChat(item)">聊天</a>
         </template>
         <a-skeleton avatar :title="false" :loading="false" active>
@@ -34,6 +34,7 @@
 import { onMounted, ref } from 'vue';
 import {FriendsControllerService, RecentChatControllerService, UserControllerService} from "../../../../../generated";
 import {useRouter} from "vue-router";
+import {message} from "ant-design-vue";
 const count = 3;
 const currentUser = ref();
 const initLoading = ref(true);
@@ -43,6 +44,13 @@ const router = useRouter();
 onMounted(() => {
   getFriends()
 });
+
+const toDelete = async (item : any) => {
+      const res = await FriendsControllerService.deleteMyFriendUsingPost(item.id);
+      if(res.data){
+        message.success('删除好友成功')
+      }
+}
 
 const getFriends = async () =>{
   loading.value = true;
