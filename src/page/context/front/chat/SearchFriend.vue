@@ -41,7 +41,7 @@
                  性别 : {{getSex(friend.sex)}}
               </div>
               <div>
-                <a-button type="primary" style="margin-top: 3%" size="small" >添加好友</a-button>
+                <a-button type="primary" style="margin-top: 3%" size="small" @click="toRequestFriend(friend.id)">添加好友</a-button>
               </div>
             </div>
           </div>
@@ -68,7 +68,13 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {UserControllerService, UserQueryRequest, Users} from "../../../../../generated";
+import {
+  FriendsRequestControllerService,
+  UserControllerService,
+  UserQueryRequest,
+  Users
+} from "../../../../../generated";
+import {message} from "ant-design-vue";
 const searchContent = ref();
 const sex = ref();
 const searchFriend = ref<Array<Users>>([]);
@@ -86,6 +92,16 @@ const search = async () => {
   }
   const res = await UserControllerService.searchFriendsUsingPost(data)
   searchFriend.value = res.data;
+}
+
+const toRequestFriend = async (friendId:string) =>{
+   const res = await FriendsRequestControllerService.requestFriendsUsingGet(friendId);
+   if(res.code === 50001){
+     message.success(res.message)
+   }
+   if (res.data){
+     message.success('已发送请求,请等待对方同意')
+   }
 }
 </script>
 

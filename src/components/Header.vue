@@ -17,6 +17,9 @@
 <!--    主页 收藏 信息-->
     <div class="imgContent">
       <div>
+        <div v-if="unreadStore.unReadSize > 0">
+          <div class="icon-car-count" >{{unreadStore.unReadSize}}</div>
+        </div>
         <img class="messageImg" @click="toChat" :src="emessage">
         <div class="scFont">信息</div>
       </div>
@@ -84,7 +87,7 @@
 <!--用户头像以及下拉框-->
     <div class="userContent" v-if="currentUser">
       <div class="userName">
-        {{currentUser.username}}
+        {{currentUser.nickname}}
       </div>
       <div>(用户)</div>
       <a-dropdown>
@@ -137,6 +140,7 @@ import login from '../assets/qLogin.png'
 import vip from '../assets/vip.png'
 import m from "../assets/erweima.png";
 import socket, {getMessage} from "../utils/websocket.ts";
+import {unReadStore} from "../store/unRead.ts";
 
 const currentUser = ref<Users>();
 const router = useRouter();
@@ -144,6 +148,8 @@ const value = ref();
 const open = ref<boolean>(false)
 const price = ref(15)
 const date = ref('月');
+
+const unreadStore =  unReadStore();
 //未读消息数量
 const unReadTotal = ref();
 onMounted(()=>{
@@ -220,6 +226,8 @@ socket.websocket.onmessage = (e:any) => {
   // console.log(data)
   unReadTotal.value = data.chatMsgList.length;
   console.log('未读消息',unReadTotal.value,'条')
+  unreadStore.addSize(data.chatMsgList.length)
+  // console.log(unreadStore.unReadSize)
 }
 
 
@@ -318,8 +326,9 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 }
 
 .userName{
+  white-space:nowrap;
   color: #111111;
-  width: 30%;
+  width: 40%;;
   text-overflow: ellipsis;
   overflow:hidden;
 }
@@ -508,6 +517,23 @@ img{
   z-index: 100;
 }
 
+.icon-car-count {
+  box-sizing: border-box;
+  text-align: center;
+  position: absolute;
+  left: 88%;
+  top: 2px;
+  background: red;
+  color: #fff;
+  padding: 0 .5em;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 16px;
+  border-radius: 50%;
+  transform: scale(.7);
+  font-family: tahoma!important;
+}
 
 
 :deep(:where(.css-dev-only-do-not-override-3m4nqy).ant-input-group .ant-input){

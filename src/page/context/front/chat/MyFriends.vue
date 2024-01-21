@@ -35,11 +35,13 @@ import { onMounted, ref } from 'vue';
 import {FriendsControllerService, RecentChatControllerService, UserControllerService} from "../../../../../generated";
 import {useRouter} from "vue-router";
 import {message} from "ant-design-vue";
+import socket from "../../../../utils/websocket.ts";
+import {MessageUtils} from "../../../../utils/websocketUtils.ts";
 const count = 3;
 const currentUser = ref();
 const initLoading = ref(true);
 const loading = ref(false);
-const myFriends = ref();
+const myFriends = ref([]);
 const router = useRouter();
 onMounted(() => {
   getFriends()
@@ -49,7 +51,9 @@ const toDelete = async (item : any) => {
       const res = await FriendsControllerService.deleteMyFriendUsingPost(item.id);
       if(res.data){
         message.success('删除好友成功')
+        getFriends()
       }
+
 }
 
 const getFriends = async () =>{
@@ -58,7 +62,9 @@ const getFriends = async () =>{
   currentUser.value = res1.data;
   const res = await FriendsControllerService.getMyFriendsUsingGet(currentUser.value.id);
   if(res.code === 0){
-    myFriends.value =  res.data
+    res.data?.forEach(item => {
+      myFriends.value.push(item.otherUsers)
+    })
   }
   console.log(myFriends.value)
   loading.value = false;
@@ -68,6 +74,7 @@ const getFriends = async () =>{
 //去聊天
 const toChat = async (item:any) => {
    await RecentChatControllerService.addRecentChatUsingPost(item.id)
+   MessageUtils.setCurrent(currentUser.value.id,item.id)
    router.push({
      path:'/layout/chat',
      query : {

@@ -135,8 +135,8 @@ const getFriendId = () => {
   box-sizing: border-box;
   text-align: center;
   position: absolute;
-  left: 49px;
-  top: -1px;
+  left: 46px;
+  top: 2px;
   background: red;
   color: #fff;
   padding: 0 .5em;
@@ -144,6 +144,7 @@ const getFriendId = () => {
   height: 30px;
   line-height: 30px;
   font-size: 16px;
+  border-radius: 50%;
   transform: scale(.7);
   font-family: tahoma!important;
 }

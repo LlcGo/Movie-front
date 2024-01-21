@@ -48,11 +48,17 @@
 <script setup lang="ts">
 import {useRoute, useRouter} from "vue-router";
 import fj from '../../../../assets/chatfj.png'
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 const route = useRoute();
 const router = useRouter();
-const items = [{id:1,itemName:'我的好友'},{id:3,itemName: '在线寻友'},{id:2,itemName:'信息'},]
-const currentItem = ref(1)
+const items = [{id:1,itemName:'我的好友'},{id:3,itemName: '在线寻友'},{id:2,itemName:'聊天'},{id:4,itemName: '信息'}]
+const currentItem = ref({
+  id:1,itemName:'我的好友'
+})
+
+onMounted(()=>{
+  getCurrentId(currentItem.value)
+})
 
 const getCurrentId = (item:any) => {
     currentItem.value = item
@@ -70,6 +76,11 @@ const getCurrentId = (item:any) => {
     case 3:
       router.push({
         path: '/layout/chat/searchFriends'
+      })
+      return;
+    case 4:
+      router.push({
+        path: '/layout/chat/message'
       })
       return;
   }
