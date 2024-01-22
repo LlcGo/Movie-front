@@ -176,7 +176,10 @@ const getFriends = async () =>{
   currentOtherUserId.value = myFriends.value[0].id;
   console.log( '现在选中的好友------------->',myFriends.value[0])
   currentChatFriend.value = myFriends.value[0];
-  MessageUtils.setCurrent(currentUser.value.id,myFriends.value[0].id)
+  if(myFriends.value.length > 0){
+    MessageUtils.setCurrent(currentUser.value.id,myFriends.value[0].id)
+  }
+
   //获取朋友信息之后获得聊天信息
   initChat()
 }
@@ -221,7 +224,6 @@ const currentAccptUserId = async (id:any,unReadSize:any,isDelete:boolean) => {
     // console.log('清除聊天记录---》',res)
   }
   //设置当前聊天对象 到 redis 实现 如果相互都在跟对方聊天就 不用设置离线
-  MessageUtils.setCurrent(currentUser.value.id,currentOtherUserId.value);
   if(!isDelete){
     initChat()
   }
@@ -294,18 +296,20 @@ const sendMessage =() => {
 
 // 监听接收到服务器消息的事件
 socket.websocket.onmessage = function(event:any) {
+  // alert('gochat')
   const message = event.data;
   let rMsg = JSON.parse(message);
   console.log('接收到服务器消息:', rMsg);
-  console.log('当前用户id:', currentUser.value.id);
+
   // console.log('标记消息为',rMsg.action)
   //如果是未读消息 直接设置唯独属性
-  if(rMsg.action == 6){
+  if(rMsg?.action == 6){
     //等于0
-    if(rMsg.chatMsgList.length == 0){
+    if(rMsg?.chatMsgList?.length == 0){
       if(rMsg?.extand != null){
        let a = rMsg.extand.split(":");
         unreadStore.redSize(Number(a[1]))
+        unreadStore.setTotal();
       }
       unRead.value = [];
     }else {
@@ -314,6 +318,13 @@ socket.websocket.onmessage = function(event:any) {
     console.log('未读的信息',unRead.value.length)
     return;
   }
+  //代表未签收的数据
+  if(rMsg.chatMsg.signFlag == 0){
+    unreadStore.addSize(1)
+    unreadStore.setTotal();
+  }
+
+
   //如果是当前界面就直接显示
   let send = {
     acceptUserId:rMsg.chatMsg.acceptUserId,

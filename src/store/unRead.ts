@@ -7,15 +7,26 @@ import {BaseResponse_User_, UserControllerService, UserLoginRequest, UserVo} fro
 export const unReadStore = defineStore('unRead',{
 
     state: () => ({
-        unReadSize : 0
+        unReadSize : 0,
+        unRequest : 0,
+        unReadTotal : 0,
     }),
 
     actions: {
         addSize(size:number){
-            this.unReadSize = this.unReadSize+ size;
+            this.unReadSize = this.unReadSize + size;
         },
         redSize(size:number){
             this.unReadSize = this.unReadSize - size;
+        },
+        addRequestSize(size:number){
+            this.unRequest = this.unRequest+ size;
+        },
+        redRequestSize(size:number){
+            this.unRequest = this.unRequest - size;
+        },
+        setTotal(){
+            this.unReadTotal = this.unReadSize + this.unRequest
         }
     },
 })

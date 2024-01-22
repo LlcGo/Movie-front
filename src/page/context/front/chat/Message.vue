@@ -133,7 +133,8 @@ import {
 } from "../../../../../generated";
 import {useRouter} from "vue-router";
 import {message} from "ant-design-vue";
-
+import {unReadStore} from "../../../../store/unRead.ts";
+const unread = unReadStore();
 const count = 3;
 const currentUser = ref();
 const initLoading = ref(true);
@@ -149,6 +150,8 @@ const toAgree = async (sendUserId: any, requestId: any) => {
   if (res.data) {
     message.success('你们成为了好友')
     getMessage();
+    unread.redRequestSize(1)
+    unread.setTotal();
   }
 }
 
@@ -170,6 +173,8 @@ const toReject = async (requestId: any) => {
   if (res.data) {
     message.success('您已拒绝此次请求');
     getMessage();
+    unread.redRequestSize(1)
+    unread.setTotal()
   }
 }
 

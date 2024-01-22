@@ -26,10 +26,12 @@
 <script setup lang="ts">
 import {onMounted, ref,watch} from "vue";
 import {RecentChatControllerService} from "../../../generated";
+import {unReadStore} from "../../store/unRead.ts";
 
 const props = defineProps(["friend","unRead","currentSendMessage"])
 const unReadSize = ref(0);
 const friendCs = ref();
+const unread = unReadStore()
 onMounted(()=>{
   console.log('左侧好友框子--->',props.unRead)
   // getUnReadSize()

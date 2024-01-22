@@ -19,6 +19,7 @@ export type { BaseResponse_List_ChatMsg_ } from './models/BaseResponse_List_Chat
 export type { BaseResponse_List_Favorites_ } from './models/BaseResponse_List_Favorites_';
 export type { BaseResponse_List_FriendsRequest_ } from './models/BaseResponse_List_FriendsRequest_';
 export type { BaseResponse_List_Movie_ } from './models/BaseResponse_List_Movie_';
+export type { BaseResponse_List_MyFriends_ } from './models/BaseResponse_List_MyFriends_';
 export type { BaseResponse_List_Order_ } from './models/BaseResponse_List_Order_';
 export type { BaseResponse_List_OrderVO_ } from './models/BaseResponse_List_OrderVO_';
 export type { BaseResponse_List_PurchasedVO_ } from './models/BaseResponse_List_PurchasedVO_';
@@ -52,6 +53,7 @@ export type { MovieAddRequest } from './models/MovieAddRequest';
 export type { MovieQueryRequest } from './models/MovieQueryRequest';
 export type { MovieUpdateRequest } from './models/MovieUpdateRequest';
 export type { MovieVo } from './models/MovieVo';
+export type { MyFriends } from './models/MyFriends';
 export type { Order } from './models/Order';
 export type { OrderAddRequest } from './models/OrderAddRequest';
 export type { OrderByRequest } from './models/OrderByRequest';

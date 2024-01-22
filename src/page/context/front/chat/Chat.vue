@@ -17,6 +17,15 @@
           </div>
 
           <div class="select">
+
+
+            <div v-if="unreadStore.unReadSize > 0" class="icon-car-count2">
+              {{unreadStore.unReadSize}}
+            </div>
+
+            <div v-if="unreadStore.unRequest > 0" class="icon-car-count">
+                 {{unreadStore.unRequest}}
+            </div>
             <ul class="list" v-for="item in items" >
               <li class="item"
                   :class="{bgc : item.id == currentItem.id}"
@@ -49,6 +58,8 @@
 import {useRoute, useRouter} from "vue-router";
 import fj from '../../../../assets/chatfj.png'
 import {onMounted, ref} from "vue";
+import {unReadStore} from "../../../../store/unRead.ts";
+import {FriendsControllerService} from "../../../../../generated";
 const route = useRoute();
 const router = useRouter();
 const items = [{id:1,itemName:'我的好友'},{id:3,itemName: '在线寻友'},{id:2,itemName:'聊天'},{id:4,itemName: '信息'}]
@@ -59,21 +70,25 @@ const currentItem = ref({
 onMounted(()=>{
   getCurrentId(currentItem.value)
 })
+const unreadStore = unReadStore()
 
 const getCurrentId = (item:any) => {
     currentItem.value = item
   switch (item.id){
     case 1:
+      FriendsControllerService.removeCurrentUsingPost();
       router.push({
         path: '/layout/chat/myFriends'
       })
       return;
     case 2:
+
       router.push({
         path: '/layout/chat'
       })
       return;
     case 3:
+      FriendsControllerService.removeCurrentUsingPost();
       router.push({
         path: '/layout/chat/searchFriends'
       })
@@ -261,5 +276,39 @@ li:hover{
   border-radius: 4px;
 }
 
+.icon-car-count {
+  box-sizing: border-box;
+  text-align: center;
+  position: absolute;
+  left: 6.5%;
+  top: 37.7%;
+  background: red;
+  color: #fff;
+  padding: 0 .5em;
+  min-width: 15px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 16px;
+  border-radius: 50%;
+  transform: scale(.7);
+  font-family: tahoma!important;
+}
+.icon-car-count2{
+  box-sizing: border-box;
+  text-align: center;
+  position: absolute;
+  left: 6.5%;
+  top: 30.7%;
+  background: red;
+  color: #fff;
+  padding: 0 .5em;
+  min-width: 15px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 16px;
+  border-radius: 50%;
+  transform: scale(.7);
+  font-family: tahoma!important;
+}
 
 </style>

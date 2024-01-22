@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
-import type { BaseResponse_List_Users_ } from '../models/BaseResponse_List_Users_';
+import type { BaseResponse_List_MyFriends_ } from '../models/BaseResponse_List_MyFriends_';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -38,18 +38,35 @@ acceptUserId?: string,
     /**
      * getMyFriends
      * @param userId userId
-     * @returns BaseResponse_List_Users_ OK
+     * @returns BaseResponse_List_MyFriends_ OK
      * @throws ApiError
      */
     public static getMyFriendsUsingGet(
 userId: string,
-): CancelablePromise<BaseResponse_List_Users_> {
+): CancelablePromise<BaseResponse_List_MyFriends_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/get/myFriends',
             query: {
                 'userId': userId,
             },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * removeCurrent
+     * @returns any OK
+     * @throws ApiError
+     */
+    public static removeCurrentUsingPost(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/removeCurrent',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

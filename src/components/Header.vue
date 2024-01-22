@@ -17,8 +17,8 @@
 <!--    主页 收藏 信息-->
     <div class="imgContent">
       <div>
-        <div v-if="unreadStore.unReadSize > 0">
-          <div class="icon-car-count" >{{unreadStore.unReadSize}}</div>
+        <div v-if="unreadStore.unReadTotal > 0">
+          <div class="icon-car-count" >{{unreadStore.unReadTotal}}</div>
         </div>
         <img class="messageImg" @click="toChat" :src="emessage">
         <div class="scFont">信息</div>
@@ -135,7 +135,14 @@ import {useRouter} from "vue-router";
 import home from '../assets/home.png'
 import {MenuProps, message} from "ant-design-vue";
 import ava from '../assets/empty.png'
-import {OrderAddRequest, OrderByRequest, OrderControllerService, UserControllerService, Users} from "../../generated";
+import {
+  FriendsControllerService,
+  OrderAddRequest,
+  OrderByRequest,
+  OrderControllerService,
+  UserControllerService,
+  Users
+} from "../../generated";
 import login from '../assets/qLogin.png'
 import vip from '../assets/vip.png'
 import m from "../assets/erweima.png";
@@ -166,6 +173,7 @@ const activeKey = ref('1');
 
 //用户中心
 const toAccount = () => {
+  FriendsControllerService.removeCurrentUsingPost();
   router.push({
     path:'/layout/account'
   })
@@ -173,6 +181,7 @@ const toAccount = () => {
 
 //去我的收藏
 const toFavour = () => {
+  FriendsControllerService.removeCurrentUsingPost();
   router.push({
     path:"/layout/account/favour"
   })
@@ -222,11 +231,28 @@ const initConnect = () => {
 }
 
 socket.websocket.onmessage = (e:any) => {
+  // alert('header')
   let data = JSON.parse(e.data);
-  // console.log(data)
-  unReadTotal.value = data.chatMsgList.length;
-  console.log('未读消息',unReadTotal.value,'条')
-  unreadStore.addSize(data.chatMsgList.length)
+  console.log(data.extand)
+  if(data?.extand?.startsWith('对方的好友请求')){
+    let a = data.extand.split(":");
+    unreadStore.addRequestSize(Number(a[1]))
+    unreadStore.setTotal();
+    return;
+  }
+  if(data?.chatMsgList?.length > 0){
+    // console.log(data)
+    unReadTotal.value = data.chatMsgList.length;
+    console.log('未读消息',unReadTotal.value,'条')
+    unreadStore.addSize(data.chatMsgList.length)
+    unreadStore.setTotal();
+    return;
+  }
+  if(data?.chatMsg){
+    unreadStore.addSize(1)
+    unreadStore.setTotal();
+    return;
+  }
   // console.log(unreadStore.unReadSize)
 }
 
@@ -239,6 +265,7 @@ const loginOut = async () => {
   console.log(res)
 }
 const toHome = () => {
+  FriendsControllerService.removeCurrentUsingPost();
   router.push({
     path:'/layout'
   })
