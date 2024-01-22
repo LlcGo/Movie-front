@@ -82,7 +82,6 @@ const getCurrentId = (item:any) => {
       })
       return;
     case 2:
-
       router.push({
         path: '/layout/chat'
       })

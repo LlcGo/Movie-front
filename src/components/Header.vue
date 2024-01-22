@@ -234,12 +234,20 @@ socket.websocket.onmessage = (e:any) => {
   // alert('header')
   let data = JSON.parse(e.data);
   console.log(data.extand)
+  //我们在线有好友请求
   if(data?.extand?.startsWith('对方的好友请求')){
     let a = data.extand.split(":");
     unreadStore.addRequestSize(Number(a[1]))
     unreadStore.setTotal();
     return;
   }
+  // 查看离线时候发送过来的好友请求
+  if (data?.extand?.startsWith('messageRequest')){
+    let a = data.extand.split(":");
+    unreadStore.addRequestSize(Number(a[1]))
+    unreadStore.setTotal();
+  }
+  //查看离线时候发送过来的未读消息
   if(data?.chatMsgList?.length > 0){
     // console.log(data)
     unReadTotal.value = data.chatMsgList.length;
@@ -248,6 +256,7 @@ socket.websocket.onmessage = (e:any) => {
     unreadStore.setTotal();
     return;
   }
+  //在线的时候对方发送过来了消息
   if(data?.chatMsg){
     unreadStore.addSize(1)
     unreadStore.setTotal();

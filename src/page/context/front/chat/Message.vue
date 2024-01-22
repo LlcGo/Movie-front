@@ -24,7 +24,7 @@
           </a-skeleton>
         </a-list-item>
 
-        <a-list-item v-if="item.state == 2">
+        <a-list-item v-if="item.state == 2 || item.state == 4 || item.state == 6">
           <a-skeleton avatar :title="false" :loading="false" active>
             <!--          签名内容-->
             <a-list-item-meta :description="item?.signature ? item?.signature : '此人暂无个性签名'">
@@ -40,7 +40,7 @@
           </a-skeleton>
         </a-list-item>
 
-        <a-list-item v-if="item.state == 1">
+        <a-list-item v-if="item.state == 1 || item.state == 3 || item.state == 5">
           <template #actions>
           </template>
           <a-skeleton avatar :title="false" :loading="false" active>
@@ -83,7 +83,7 @@
 
 
 
-        <a-list-item v-if="item.state == 2">
+        <a-list-item v-if="item.state == 2 || item.state == 4 || item.state == 6">
           <a-skeleton avatar :title="false" :loading="false" active>
             <!--          签名内容-->
             <a-list-item-meta :description="item?.signature ? item?.signature : '此人暂无个性签名'">
@@ -99,7 +99,7 @@
           </a-skeleton>
         </a-list-item>
 
-        <a-list-item v-if="item.state == 1">
+        <a-list-item v-if="item.state == 1 || item.state == 3 || item.state == 5">
           <template #actions>
           </template>
           <a-skeleton avatar :title="false" :loading="false" active>
@@ -142,8 +142,15 @@ const loading = ref(false);
 const myMessage = ref();
 const router = useRouter();
 onMounted(() => {
+  setReadMessage()
   getMessage()
 });
+
+const setReadMessage = async () => {
+   const res = await FriendsRequestControllerService.setReadMessageUsingGet();
+   unread.redRequestSize(res.data);
+   unread.setTotal();
+}
 
 const toAgree = async (sendUserId: any, requestId: any) => {
   const res = await FriendsRequestControllerService.agreeFriendUsingPost(requestId, sendUserId)
