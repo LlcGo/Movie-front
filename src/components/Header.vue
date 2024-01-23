@@ -183,7 +183,10 @@ const toAccount = () => {
 const toFavour = () => {
   FriendsControllerService.removeCurrentUsingPost();
   router.push({
-    path:"/layout/account/favour"
+    path:"/layout/account/favour",
+    query:{
+      key: '1'
+    }
   })
 }
 

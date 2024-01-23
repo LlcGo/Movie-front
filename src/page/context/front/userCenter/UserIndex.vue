@@ -28,7 +28,7 @@
          {{route.name}}
       </div>
     </div>
-    <div class="rightContent">
+    <div class="rightContent" >
        <RouterView/>
     </div>
   </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch, VueElement, h } from 'vue';
+import {reactive, ref, watch, VueElement, h, onMounted} from 'vue';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons-vue';
 import type { MenuProps, ItemType } from 'ant-design-vue';
 import {useRoute, useRouter} from "vue-router";
@@ -46,6 +46,7 @@ const router = useRouter();
 const selectedKeys = ref<string[]>(['0']);
 const openKeys = ref<string[]>(['sub1']);
 const route = useRoute();
+
 function getItem(
     label: VueElement | string,
     key: string,
@@ -61,6 +62,28 @@ function getItem(
     type,
   } as ItemType;
 }
+const {query} = useRoute();
+const currentKey = ref([]);
+
+onMounted(()=>{
+  setKey()
+})
+
+const setKey = () => {
+  console.log(query?.key)
+  if (query?.key){
+    selectedKeys.value = [query?.key];
+    return;
+  }
+  if(currentKey.value.length > 0){
+    selectedKeys.value = currentKey.value;
+    return;
+  }
+  router.push({
+    path:'/layout/account'
+  })
+
+}
 
 const items: ItemType[] = reactive([
   getItem('我的信息', '0', h(AppstoreOutlined)),
@@ -72,6 +95,8 @@ const items: ItemType[] = reactive([
 
 const handleClick: MenuProps['onClick'] = e => {
   console.log(route.name)
+  currentKey.value = [e.key];
+  console.log(currentKey.value)
   switch (Number(e.key)){
     case 0 :
       router.push({

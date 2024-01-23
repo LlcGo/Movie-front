@@ -1,5 +1,5 @@
 import {RouteRecordRaw} from "vue-router";
-import Demo from "../page/demo/demo.vue";
+import Demo from "../page/demo/CountDown.vue";
 import Vedio from "../page/context/front/Video.vue";
 import Chat from "../page/context/front/chat/Chat.vue";
 import Login from "../page/user/login.vue";

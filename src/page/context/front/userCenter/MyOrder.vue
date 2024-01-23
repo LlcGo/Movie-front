@@ -34,6 +34,9 @@
 
       <template v-if="column.key === 'action'">
         <div class="button" v-if="record.orderState == 0">
+<!--          {{record.end}}自动取消订单-->
+<!--          {{countdown}}-->
+          <count-down class="countClass" :order="record" @setOrderState="setState"/>
           <a-button @click="toBuy(record)">购买</a-button>
           <a-button>取消订单</a-button>
         </div>
@@ -62,11 +65,15 @@ import orderVip from '../../../../assets/Ordervip.png'
 import getPrice from "../../../typeEnum/getPrice.ts";
 import getVip from "../../../typeEnum/getVip.ts";
 import getVipType from "../../../typeEnum/getVipType.ts";
+import dayjs from "dayjs";
+import Demo from "../../../demo/CountDown.vue";
+import CountDown from "../../../demo/CountDown.vue";
 const current = ref(1);
 const pageSize = ref(6);
 const total = ref();
 const orderList = ref<OrderVO>()
 const router = useRouter();
+const countdown = ref();
 const columns = [
   {
     title: '订单信息',
@@ -83,12 +90,45 @@ const columns = [
 ]
 onMounted(() => {
   getMyOrder();
+  // resTime()
 })
+
+// const resTime = () => {
+//   let interval = setInterval(() => {
+//     let orderTime = res.createTime
+//     let setTime = new Date(orderTime)
+//     let nowTime = new Date()
+//     let restTime = nowTime.getTime() - setTime.getTime()
+//     // let hour =  parseInt(restTime/(60*60*1000) % 60)
+//     let minu = parseInt(restTime / (60 * 1000) % 60)
+//     let second = parseInt(restTime / 1000 % 60)
+//     let realmin = 15 - minu
+//     let realsecond = 60 - second
+//     let obj = {
+//       min: that.timeFormat(realmin),
+//       second: that.timeFormat(realsecond),
+//     }
+//     countdown.value = '00:' + obj.min + ':' + obj.second
+//   }, 1000)
+//
+// }
+
+const setState =(record:OrderVO) =>{
+   record.orderState = 2
+}
 
 //获取自己的订单信息
 const getMyOrder = async () => {
    const res = await OrderControllerService.getOrderByUserIdUsingGet()
    console.log(res);
+   res.data?.forEach(item => {
+     if(item.orderState == 0) {
+       let curTime = dayjs(item.createTime).toDate()
+       curTime.setMinutes(curTime.getMinutes() + 15)
+       item.end = curTime.valueOf();
+       console.log(item.end)
+     }
+   })
    orderList.value = res.data;
 }
 
@@ -179,5 +219,9 @@ img{
   flex-direction: column;
   height: 100px;
   justify-content: space-around;
+}
+.countClass{
+  position: absolute;
+  left: -140%;
 }
 </style>
