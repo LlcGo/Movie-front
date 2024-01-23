@@ -83,6 +83,8 @@ const toDelete = async () => {
 const emits = defineEmits(["getFriendId"]);
 const getFriendId = () => {
   emits('getFriendId', props.friend.id,unReadSize.value,false)
+  unread.redSize(unReadSize.value)
+  unread.setTotal()
   unReadSize.value = 0;
   // alert('点击之后'+ JSON.stringify(unReadSize.value) )
 };

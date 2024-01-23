@@ -43,7 +43,7 @@ import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/ico
 import type { MenuProps, ItemType } from 'ant-design-vue';
 import {useRoute, useRouter} from "vue-router";
 const router = useRouter();
-const selectedKeys = ref<string[]>(['1']);
+const selectedKeys = ref<string[]>(['0']);
 const openKeys = ref<string[]>(['sub1']);
 const route = useRoute();
 function getItem(

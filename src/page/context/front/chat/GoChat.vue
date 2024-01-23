@@ -307,6 +307,7 @@ socket.websocket.onmessage = function(event:any) {
     //在线的情况下对方发送了好友请求
     if(rMsg?.extand?.startsWith('对方的好友请求')){
       let a = rMsg.extand.split(":");
+      // alert('好友请求')
       unreadStore.addRequestSize(Number(a[1]))
       unreadStore.setTotal();
       return;
@@ -320,6 +321,7 @@ socket.websocket.onmessage = function(event:any) {
         let a = rMsg.extand.split(":");
 
         if(rMsg.extand.startsWith('messageRequest')){
+          // alert('未读的请求消息',Number(a[1]))
           //离线
           //  2.未读的请求消息：action 6     chatMsgList为[]   extand "messageRequest"   开头
           unreadStore.addRequestSize(Number(a[1]))
@@ -328,6 +330,7 @@ socket.websocket.onmessage = function(event:any) {
         }
 
         if(rMsg.extand.startsWith('nowMessageRequest')){
+           // alert('未读的请求消息',Number(a[1]))
           //在线
           //  1.未读取的同意请求：action 6 chatMsgList 为 []   extand "nowMessageRequest"   开头
           // 2.未读取的拒绝请求：action 6 chatMsgList 为 []   extand "nowMessageRequest"   开头
@@ -336,8 +339,9 @@ socket.websocket.onmessage = function(event:any) {
              return;
         }
 
-        unreadStore.addSize(Number(a[1]))
-        unreadStore.setTotal();
+        // alert('不晓得什么情况',Number(a[1]))
+        // unreadStore.addSize(Number(a[1]))
+        // unreadStore.setTotal();
       }
       unRead.value = [];
     }else {
@@ -347,8 +351,9 @@ socket.websocket.onmessage = function(event:any) {
     console.log('未读的信息',unRead.value.length)
     return;
   }
-  //代表未签收的数据
+  //代表未签收的数据,正常未读聊天的情况
   if(rMsg.chatMsg.signFlag == 0){
+    // alert('代表未签收的数据,正常未读聊天的情况',1)
     unreadStore.addSize(1)
     unreadStore.setTotal();
   }

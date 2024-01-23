@@ -271,7 +271,7 @@ socket.websocket.onmessage = (e:any) => {
 const loginOut = async () => {
   const res = await UserControllerService.userLogoutUsingPost();
   sessionStorage.removeItem('user');
-  console.log(res)
+  getUser()
 }
 const toHome = () => {
   FriendsControllerService.removeCurrentUsingPost();

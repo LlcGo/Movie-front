@@ -66,6 +66,7 @@ import {UserControllerService, Users, UserUpdateRequest} from "../../../../../ge
 const currentUser = ref()
 import {computed, reactive} from 'vue';
 import type {UnwrapRef} from 'vue';
+import {message} from "ant-design-vue";
 
 const value = ref<string>('0');
 const like = ref([]);
@@ -84,46 +85,46 @@ const like = ref([]);
  */
 const options = ref([
   {
-    value: '0',
+    value: '战争片',
     label: '战争片',
   },
   {
-    value: '1',
+    value: '奇幻片',
     label: '奇幻片',
   },
   {
-    value: '2',
+    value: '科幻片',
     label: '科幻片',
   },
   {
-    value: '3',
+    value: '剧情片',
     label: '剧情片',
   },
   {
-    value: '4',
+    value: '恐怖片',
     label: '恐怖片',
   },
   {
-    value: '5',
+    value: '爱情片',
     label: '爱情片',
   },
   {
-    value: '6',
+    value: '动作片',
     label: '动作片',
   },
   {
-    value: '7',
+    value: '喜剧片',
     label: '喜剧片',
   },
   {
-    value: '8',
+    value: '动画片',
     label: '动画片',
   },
   {
-    value: '9',
+    value: '悬疑片',
     label: '悬疑片',
   },{
-    value: '10',
+    value: '纪录片',
     label: '纪录片',
   },
 ])
@@ -172,10 +173,20 @@ const handleChange = (value: string[]) => {
 const getCurrentUser = async () => {
   const res = await UserControllerService.getLoginUserUsingGet()
   currentUser.value = res.data
+  console.log('like',currentUser.value.likeType)
   console.log(currentUser.value);
   formState.nickname = currentUser.value.nickname
   formState.username = currentUser.value.username
-  like.value = currentUser.value.likeType.split(",")
+  if(currentUser.value.likeType != null && currentUser.value.likeType != ''){
+    let b = currentUser.value.likeType.replace('[',"");
+    let a = b.replace(']',"")
+    console.log('like2',a)
+    let c =a.split(",")
+    console.log('final',c)
+    // console.log(a.length)
+    // a[0] =
+    like.value = c
+  }
   value.value = currentUser.value.sex
   formState.signature = currentUser.value.signature
 }
@@ -185,14 +196,16 @@ const toUpdate = async () => {
     faceImage: null,
     nickname : formState.nickname,
     sex : value.value,
-    likeType : like.value.toString(),
+    likeType : '[' + like.value.toString() + ']',
     username: formState.username,
     signature: formState.signature,
     id: currentUser.value.id,
   }
-  console.log(data)
   const res = await UserControllerService.updateUserUsingPost1(data)
   console.log(res)
+  if(res.data){
+    message.success('保存成功')
+  }
 }
 </script>
 

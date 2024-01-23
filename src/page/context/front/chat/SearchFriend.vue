@@ -21,11 +21,12 @@
         <div class="an">
           <div class="searchButton">
             <a-button type="primary" style="width: 50%" @click="search">查找</a-button>
+            <a-button type="primary" style="width: 50%;position: relative; left: 3%" @click="matchSearch">匹配</a-button>
           </div>
         </div>
     </div>
  </div>
-  <div class="searchContent searchFriendScroll" v-if="searchFriend.length > 0">
+  <div class="searchContent searchFriendScroll" v-if="searchFriend?.length > 0">
        <div class="showF" v-for="friend in searchFriend">
           <div class="friendWarp">
               <a-avatar :size="55">
@@ -75,6 +76,8 @@ import {
   Users
 } from "../../../../../generated";
 import {message} from "ant-design-vue";
+import {useRouter} from "vue-router";
+const router = useRouter();
 const searchContent = ref();
 const sex = ref();
 const searchFriend = ref<Array<Users>>([]);
@@ -102,6 +105,17 @@ const toRequestFriend = async (friendId:string) =>{
    if (res.data){
      message.success('已发送请求,请等待对方同意')
    }
+}
+
+const matchSearch = async () => {
+ const res0 = await UserControllerService.getLoginUserUsingGet();
+ if(res0.data.likeType == null || res0.data?.likeType == ''){
+   message.warn('请设置您的兴趣爱好')
+   router.push('/layout/account')
+   return;
+ }
+ const res = await UserControllerService.matchFriendUsingGet(10);
+ searchFriend.value = res.data;
 }
 </script>
 

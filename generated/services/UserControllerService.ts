@@ -286,6 +286,29 @@ userLoginRequest: UserLoginRequest,
     }
 
     /**
+     * matchFriend
+     * @param num num
+     * @returns BaseResponse_List_Users_ OK
+     * @throws ApiError
+     */
+    public static matchFriendUsingGet(
+num?: number,
+): CancelablePromise<BaseResponse_List_Users_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/user/matchFriend',
+            query: {
+                'num': num,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * userRegister
      * @param userRegisterRequest userRegisterRequest
      * @returns BaseResponse_string_ OK
