@@ -87,6 +87,29 @@ id?: number,
     }
 
     /**
+     * getHotByType
+     * @param type type
+     * @returns BaseResponse_List_Movie_ OK
+     * @throws ApiError
+     */
+    public static getHotByTypeUsingGet(
+type?: number,
+): CancelablePromise<BaseResponse_List_Movie_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/movie/getHot',
+            query: {
+                'type': type,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * addHot
      * @param movie movie
      * @returns any OK

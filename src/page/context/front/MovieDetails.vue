@@ -12,9 +12,9 @@
         {{ currentMovie?.movieProfile }}
       </div>
       <div v-if="choose == 1" class="pf">
-        <div class="movie">给【致命魔术】打分</div>
+        <div class="movie">给【{{currentMovie?.movieName}}】打分</div>
         <a-rate v-model:value="score" :tooltips="desc" @click="toScore"/>
-        <span class="ant-rate-text">{{ desc[value - 1] }}</span>
+<!--        <span class="ant-rate-text">{{ desc[value - 1] }}</span>-->
       </div>
 
       <div class="comment">
@@ -105,96 +105,22 @@
                     show-less-items
                     style="margin-bottom: 20%;margin-top: 5%"/>
     </div>
+
+
     <div class="right">
-      <div class="rightTitleTop">悬疑片周排行榜</div>
+      <div class="rightTitleTop">{{hotMovies[0]?.movieType.typeName}}热度排行榜</div>
       <div class="rightMoreTop">更多</div>
-
-      <div class="rightContext">
+      <div class="rightContext" v-for="hotMovie in hotMovies">
         <div class="rightContext2">
-          <img class="rightImg" :src="img"/>
+          <img class="rightImg" :src="hotMovie.img"/>
           <div class="rightFont">
-            <div>电影名字</div>
+            <div>{{hotMovie.movieName}}</div>
             <div class="hotContext">
               <img class="hotImg" :src="hot"/>
-              <div class="hotSize">666</div>
+              <div class="hotSize">{{hotMovie.hot}}</div>
             </div>
-            <div class="xx5">时间/国家/电影类型</div>
-            <div class="xx6">状态：正片</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rightContext">
-        <div class="rightContext2">
-          <img class="rightImg" :src="img"/>
-          <div class="rightFont">
-            <div>电影名字</div>
-            <div class="hotContext">
-              <img class="hotImg" :src="hot"/>
-              <div class="hotSize">666</div>
-            </div>
-            <div class="xx5">时间/国家/电影类型</div>
-            <div class="xx6">状态：正片</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rightContext">
-        <div class="rightContext2">
-          <img class="rightImg" :src="img"/>
-          <div class="rightFont">
-            <div>电影名字</div>
-            <div class="hotContext">
-              <img class="hotImg" :src="hot"/>
-              <div class="hotSize">666</div>
-            </div>
-            <div class="xx5">时间/国家/电影类型</div>
-            <div class="xx6">状态：正片</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rightContext">
-        <div class="rightContext2">
-          <img class="rightImg" :src="img"/>
-          <div class="rightFont">
-            <div>电影名字</div>
-            <div class="hotContext">
-              <img class="hotImg" :src="hot"/>
-              <div class="hotSize">666</div>
-            </div>
-            <div class="xx5">时间/国家/电影类型</div>
-            <div class="xx6">状态：正片</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rightContext">
-        <div class="rightContext2">
-          <img class="rightImg" :src="img"/>
-          <div class="rightFont">
-            <div>电影名字</div>
-            <div class="hotContext">
-              <img class="hotImg" :src="hot"/>
-              <div class="hotSize">666</div>
-            </div>
-            <div class="xx5">时间/国家/电影类型</div>
-            <div class="xx6">状态：正片</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rightContext">
-        <div class="rightContext2">
-          <img class="rightImg" :src="img"/>
-          <div class="rightFont">
-            <div>电影名字</div>
-            <div class="hotContext">
-              <img class="hotImg" :src="hot"/>
-              <div class="hotSize">666</div>
-            </div>
-            <div class="xx5">时间/国家/电影类型</div>
-            <div class="xx6">状态：正片</div>
+            <div class="xx5">{{getMovieNation(hotMovie.nation)}}/{{hotMovie.movieType.typeName}}</div>
+            <div class="xx6">状态：{{getMovieState(hotMovie.state)}}</div>
           </div>
         </div>
       </div>
@@ -226,12 +152,15 @@ import {
   RemarkControllerService, RemarkUserAddQuery
 } from "../../../../generated";
 import {message} from "ant-design-vue";
+import getMovieNation from "../../typeEnum/MovieNation.ts";
+import getMovieState from "../../typeEnum/MovieState.ts";
 
 
 //当前页码
 const current = ref(1);
 const total = ref();
 const pageSize = ref(6)
+const hotMovies = ref<Array<Movie>>([])
 dayjs.extend(relativeTime);
 
 const {query} = useRoute();
@@ -261,6 +190,10 @@ const getComment = async () => {
   currentComment.value = res.data.records
   // console.log(currentComment.value)
 
+  //获取排行榜数据
+  const reshot = await MovieControllerService.getHotByTypeUsingGet(currentMovie.value.type);
+  console.log('hot value--->',reshot.data)
+  hotMovies.value = reshot.data;
 }
 
 // const getCount = async () => {
@@ -452,7 +385,7 @@ const toScore = async () => {
 
 .hotSize {
   position: absolute;
-  left: 169%;
+  left: 190%;
   top: 17%;
   font-size: 15px;
   color: #999;

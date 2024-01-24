@@ -4,7 +4,7 @@
   </div>
   <div class="topDetail">
     <div class="title">
-      <div class="title1">致命魔术</div>
+      <div class="title1">{{ currentMovie?.movieName }}</div>
       <div class="title2">
         {{currentMovie?.score > 0 ? Math.floor(currentMovie?.score /2) + ".0" : 0}}
         <a-rate class="rate" :value="currentMovie?.score > 0 ? Math.floor(currentMovie?.score /2 ) : 0" disabled />
@@ -24,7 +24,7 @@
           {{ getMovieNation(currentMovie?.nation) }}
         </p></div>
         <div style="font-size: 16px">类型:<p style="display: inline" >
-          {{ getMoveType(currentMovie?.type) }}
+          {{ currentMovie?.movieType?.typeName }}
         </p></div>
       </a-space>
       <div class="state">
@@ -103,7 +103,7 @@ import m from '../../../assets/erweima.png'
 
 const router = useRouter();
 const isSc = ref(false)
-const currentMovie = ref();
+const currentMovie = ref<Movie>();
 
 const {query} = useRoute();
 

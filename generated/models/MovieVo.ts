@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { MovieType } from './MovieType';
+
 export type MovieVo = {
     actorsName?: string;
     creatTime?: string;
@@ -13,6 +15,7 @@ export type MovieVo = {
     isDelete?: number;
     movieName?: string;
     movieProfile?: string;
+    movieType?: MovieType;
     nation?: string;
     price?: number;
     score?: number;

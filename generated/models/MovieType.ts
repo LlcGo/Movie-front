@@ -3,13 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Movie } from './Movie';
-
-export type FavoritesVo = {
+export type MovieType = {
     createTime?: string;
     id?: number;
     isDelete?: number;
-    movie?: Movie;
+    typeName?: string;
     updateTime?: string;
-    userId?: string;
 };

@@ -20,6 +20,7 @@
         <input type="radio" name="tab" id="xyp">
         <input type="radio" name="tab" id="jlp">
         <div class="tab"></div>
+
         <label for="qb" @click="setMoveType(11)"><li style="margin-left: 4.5%">全部</li></label>
         <label for="zzp" @click="setMoveType(0)"><li>战争片</li></label>
         <label for="qhp" @click="setMoveType(1)"><li>奇幻片</li></label>
@@ -182,6 +183,7 @@ onMounted(()=>{
   // setCheck('jlp')
   search()
 })
+
 
 
 const toDetail = (movieItem:Movie) => {

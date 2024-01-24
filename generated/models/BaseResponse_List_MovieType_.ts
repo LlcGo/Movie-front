@@ -3,10 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Page_FavoritesVo_ } from './Page_FavoritesVo_';
+import type { MovieType } from './MovieType';
 
-export type BaseResponse_Page_FavoritesVo_ = {
+export type BaseResponse_List_MovieType_ = {
     code?: number;
-    data?: Page_FavoritesVo_;
+    data?: Array<MovieType>;
     message?: string;
 };

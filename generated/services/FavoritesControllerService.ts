@@ -6,7 +6,6 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_Favorites_ } from '../models/BaseResponse_Favorites_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Favorites_ } from '../models/BaseResponse_List_Favorites_';
-import type { BaseResponse_Page_FavoritesVo_ } from '../models/BaseResponse_Page_FavoritesVo_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { FavoritesAddRequest } from '../models/FavoritesAddRequest';
 import type { FavoritesUpdateRequest } from '../models/FavoritesUpdateRequest';
@@ -126,7 +125,7 @@ userId?: string,
      * @param sortField 
      * @param sortOrder 
      * @param userId 
-     * @returns BaseResponse_Page_FavoritesVo_ OK
+     * @returns BaseResponse_List_Favorites_ OK
      * @throws ApiError
      */
     public static listFavoritesByPageUsingGet(
@@ -135,7 +134,7 @@ pageSize?: number,
 sortField?: string,
 sortOrder?: string,
 userId?: string,
-): CancelablePromise<BaseResponse_Page_FavoritesVo_> {
+): CancelablePromise<BaseResponse_List_Favorites_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/favorites/list/page',
