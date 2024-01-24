@@ -53,7 +53,7 @@ import {useRouter} from "vue-router";
 const current = ref(1);
 const pageSize = ref(6);
 const total = ref();
-const favourList = ref<Favorites>()
+const favourList = ref<Array<Favorites>>([])
 const router = useRouter();
 const columns = [
   {
@@ -85,8 +85,8 @@ const toDetail = (movieItem:Movie) => {
 
 const getFavour = async () => {
   const res = await FavoritesControllerService.listFavoritesByPageUsingGet();
-  favourList.value = res.data?.records;
-  total.value = res.data?.total;
+  favourList.value = res.data;
+  total.value = res.data?.length;
 }
 
 //取消收藏

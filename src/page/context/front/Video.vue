@@ -61,7 +61,7 @@ import myAxios from "../../../MyAxio.ts";
 import {useRoute} from "vue-router";
 import Player from 'nplayer'
 import Danmaku from "@nplayer/danmaku";
-import {BarrageAddRequest, BarrageControllerService, Movie} from "../../../../generated";
+import {BarrageAddRequest, BarrageControllerService, Movie, MovieControllerService} from "../../../../generated";
 import dayjs from "dayjs";
 import empty from '../../../assets/empty.png'
 import loading from '../../../assets/loading.png'
@@ -78,13 +78,15 @@ const showBarrage = ref<any>([]);
 
 onMounted(async () => {
   init()
-  playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
+
 })
 
-
-const init = () => {
-  currentMovie.value = JSON.parse(query.currentMovie)
+//要确认现在传过来什么
+const init = async () => {
+  const res  = await MovieControllerService.getMovieByIdUsingGet(query.currentMovieId) ;
+  currentMovie.value = res.data;
   getBarrage();
+  playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
 }
 
 const getBarrage = async () => {

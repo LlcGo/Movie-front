@@ -5,13 +5,12 @@
 
 import type { Movie } from './Movie';
 
-export type OrderVO = {
+export type Purchased = {
     createTime?: string;
     id?: number;
+    isDelete?: number;
     movie?: Movie;
-    orderState?: number;
-    state?: number;
+    movieId?: number;
     updateTime?: string;
     userId?: string;
-    vipType?: number;
 };

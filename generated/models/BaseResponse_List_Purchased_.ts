@@ -3,10 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { OrderVO } from './OrderVO';
+import type { Purchased } from './Purchased';
 
-export type BaseResponse_List_OrderVO_ = {
+export type BaseResponse_List_Purchased_ = {
     code?: number;
-    data?: Array<OrderVO>;
+    data?: Array<Purchased>;
     message?: string;
 };

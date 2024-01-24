@@ -219,7 +219,7 @@ import {LikeFilled, LikeOutlined, DislikeFilled, DislikeOutlined} from '@ant-des
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {useRoute} from "vue-router";
 import {
-  Movie,
+  Movie, MovieControllerService,
   Remark,
   RemarkAddRequest,
   RemarkAndUserControllerService,
@@ -245,7 +245,6 @@ const currentComment = ref<Array<Remark>>([]);
 const score = ref();
 
 onMounted(() => {
-  console.log(query.currentMovieId)
   getComment();
   document.documentElement.scrollTop = 0
   // getCount();
@@ -254,11 +253,14 @@ onMounted(() => {
 //设置是否观影
 
 const getComment = async () => {
+  const res1 = await MovieControllerService.getMovieByIdUsingGet(query.currentMovieId);
+  currentMovie.value = res1.data;
   const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, Number(query.currentMovieId), pageSize.value);
   total.value = res.data?.total
   // alert(total.value)
   currentComment.value = res.data.records
   // console.log(currentComment.value)
+
 }
 
 // const getCount = async () => {

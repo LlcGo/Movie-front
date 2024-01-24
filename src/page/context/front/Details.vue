@@ -42,7 +42,7 @@
         </div>
 
       </div>
-      <!--      <div class="jj">简介:{{ currentMovie?.movieProfile }}</div>-->
+<!--            <div class="jj">简介:{{ currentMovie?.movieProfile }}</div>-->
      <div class="warp2">
        <a-button   type="primary" @click="toWatch">立即播放</a-button>
 
@@ -140,7 +140,7 @@ const handleOk = (e: MouseEvent) => {
 
 //现在购买
 const nowBuy = async () => {
-  alert(1)
+  // alert(1)
   let data : OrderByRequest = {
     movieId: currentMovie.value.id,
     state : 1,

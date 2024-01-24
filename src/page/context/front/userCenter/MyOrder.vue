@@ -6,25 +6,25 @@
       <template v-if="column.key === 'name'">
         <div class="content">
           <div class="left">
-            <div class="leftWarp" v-if="record.movie">
+            <div class="leftWarp" v-if="record.movie.id">
               <img :src="record.movie.img">
             </div>
-            <div class="leftWarp2" v-if="!record.movie">
+            <div class="leftWarp2" v-if="!record.movie.id">
               <img :src="orderVip">
             </div>
           </div>
           <div class="right">
             <div class="rightWarp">
-              <div class="movieNameFont" v-if="record.movie">
+              <div class="movieNameFont" v-if="record.movie.id">
                 电影：{{record.movie.movieName}}
               </div>
-              <div class="font" v-if="record.movie">
+              <div class="font" v-if="record.movie.id">
                 价格:${{record.movie.price}}
               </div>
-              <div class="movieNameFont" v-if="!record.movie">
+              <div class="movieNameFont" v-if="!record.movie.id">
                 会员：{{getVip(record.vipType)}}
               </div>
-              <div class="font" v-if="!record.movie">
+              <div class="font" v-if="!record.movie.id">
                 价格:${{getPrice(record.vipType)}}
               </div>
             </div>
@@ -56,7 +56,7 @@
 import {onMounted, ref} from "vue";
 import {
   Movie, Order, OrderByRequest,
-  OrderControllerService, OrderVO
+  OrderControllerService
 } from "../../../../../generated";
 import xtf from '../../../../assets/xtf.jpg'
 import {message} from "ant-design-vue";
@@ -71,7 +71,7 @@ import CountDown from "../../../demo/CountDown.vue";
 const current = ref(1);
 const pageSize = ref(6);
 const total = ref();
-const orderList = ref<OrderVO>()
+const orderList = ref<Order>()
 const router = useRouter();
 const countdown = ref();
 const columns = [
@@ -113,7 +113,7 @@ onMounted(() => {
 //
 // }
 
-const setState =(record:OrderVO) =>{
+const setState =(record:Order) =>{
    record.orderState = 2
 }
 
@@ -133,7 +133,7 @@ const getMyOrder = async () => {
 }
 
 //购买电影
-const toBuy = async (order:OrderVO) => {
+const toBuy = async (order:Order) => {
   console.log(order)
   let data :OrderByRequest = null;
   if(order.state == 0){

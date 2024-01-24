@@ -185,11 +185,11 @@ onMounted(()=>{
 
 
 const toDetail = (movieItem:Movie) => {
-  // alert(movieItem.id)
+  // alert(JSON.stringify(movieItem))
   router.push({
     path:'/layout/detail',
     query: {
-      currentMovie:JSON.stringify(movieItem)
+      currentMovieId: movieItem.id
     }
   })
 }
