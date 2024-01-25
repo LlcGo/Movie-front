@@ -2,23 +2,23 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse_List_MovieType_ } from '../models/BaseResponse_List_MovieType_';
+import type { BaseResponse_List_MovieYear_ } from '../models/BaseResponse_List_MovieYear_';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class MovieTyepControllerService {
+export class MovieYearControllerService {
 
     /**
-     * getMovieNation
-     * @returns BaseResponse_List_MovieType_ OK
+     * getMovieType
+     * @returns BaseResponse_List_MovieYear_ OK
      * @throws ApiError
      */
-    public static getMovieNationUsingGet(): CancelablePromise<BaseResponse_List_MovieType_> {
+    public static getMovieTypeUsingGet1(): CancelablePromise<BaseResponse_List_MovieYear_> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/getMovieType',
+            url: '/getMovieYear',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

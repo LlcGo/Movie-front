@@ -119,7 +119,7 @@
               <img class="hotImg" :src="hot"/>
               <div class="hotSize">{{hotMovie.hot}}</div>
             </div>
-            <div class="xx5">{{getMovieNation(hotMovie.nation)}}/{{hotMovie.movieType.typeName}}</div>
+            <div class="xx5">{{hotMovie?.movieNation?.nationName }}/{{ hotMovie.movieType.typeName }}</div>
             <div class="xx6">状态：{{getMovieState(hotMovie.state)}}</div>
           </div>
         </div>
