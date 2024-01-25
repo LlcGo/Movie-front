@@ -6,6 +6,13 @@
     <a-form-item label="用户名">
       <a-tag color="skyblue" >{{formState.username}}</a-tag>
     </a-form-item>
+    <a-form-item label="用户头像">
+     <a-avatar @click="showModal">
+       <template #icon>
+         <img :src="avaImg">
+       </template>
+     </a-avatar>
+    </a-form-item>
     <a-form-item label="我的签名">
       <a-textarea
           v-model:value="formState.signature"
@@ -36,6 +43,34 @@
       <a-button type="primary" @click="toUpdate">保存</a-button>
     </a-form-item>
   </a-form>
+
+  <div>
+    <a-modal v-model:open="open"
+             title="修改头像"
+             @ok="handleOk"
+             width="260px"
+             @cancel="closeModal"
+             cancelText="取消"
+             okText="确认修改"
+    >
+      <a-upload
+          v-model:file-list="fileList"
+          name="avatar"
+          list-type="picture-card"
+          class="avatar-uploader"
+          :show-upload-list="false"
+          :custom-request="uploadUserImg"
+          :before-upload="beforeUpload"
+      >
+        <img v-if="currentImgURI" class="uploadImgClass" :src="currentImgURI" alt="avatar" />
+        <div v-else>
+          <loading-outlined v-if="loading"></loading-outlined>
+          <plus-outlined v-else></plus-outlined>
+          <div class="ant-upload-text">Upload</div>
+        </div>
+      </a-upload>
+    </a-modal>
+  </div>
 </template>
 
 
@@ -61,15 +96,82 @@
  * "lc666"
  */
 import {onMounted, ref} from "vue";
-import {UserControllerService, Users, UserUpdateRequest} from "../../../../../generated";
+import {FileControllerService, UserControllerService, Users, UserUpdateRequest} from "../../../../../generated";
 
 const currentUser = ref()
 import {computed, reactive} from 'vue';
 import type {UnwrapRef} from 'vue';
 import {message} from "ant-design-vue";
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 
+import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
+import {useUserStore} from "../../../../store/user.ts";
+const userChange = useUserStore();
 const value = ref<string>('0');
 const like = ref([]);
+
+const open = ref<boolean>(false);
+
+
+const fileList = ref([]);
+const loading = ref<boolean>(false);
+const currentImgURI = ref();
+
+const handleChangeFile = (info: UploadChangeParam) => {
+  console.log('handleChangeFile',info)
+  if (info.file.status === 'uploading') {
+    loading.value = true;
+    return;
+  }
+  if (info.file.status === 'error') {
+    loading.value = false;
+    message.error('upload error');
+  }
+};
+
+const beforeUpload = (file: UploadProps['fileList'][number]) => {
+  console.log(file)
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('必须是jpeg 或者 png 类型图片!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('图片必须小于 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+};
+
+const uploadUserImg = async (data:any) => {
+  // const blob =  new Blob(data.file);
+  // console.log(data)
+  // // console.log(blob)
+  // return;
+  const formdata = new FormData();
+  formdata.append("file",data.file)
+  const res = await FileControllerService.uploadUserImgUsingPost(formdata);
+  currentImgURI.value = res.data;
+  console.log(currentImgURI.value)
+}
+
+const showModal = () => {
+  open.value = true;
+};
+
+const handleOk = async () => {
+    if(currentImgURI.value == null){
+      message.warn('请上传头像')
+    }
+   const res = await UserControllerService.updateUserImgUsingPost(currentImgURI.value);
+   if(res.data){
+     message.success('头像修改成功')
+     open.value = false;
+     currentImgURI.value = null;
+     getCurrentUser()
+     userChange.setChange();
+   }
+};
+
 /**
  * 0 战争片
  1 奇幻片
@@ -129,12 +231,24 @@ const options = ref([
   },
 ])
 
+
+
 interface FormState {
   layout: 'horizontal'
   username: string;
   nickname: string;
   signature:string;
 }
+//头像
+const avaImg = ref();
+
+
+
+
+
+
+
+
 
 const formState: UnwrapRef<FormState> = reactive({
   layout: 'horizontal',
@@ -187,13 +301,14 @@ const getCurrentUser = async () => {
     // a[0] =
     like.value = c
   }
+  avaImg.value = currentUser.value.faceImage
   value.value = currentUser.value.sex
   formState.signature = currentUser.value.signature
 }
 
 const toUpdate = async () => {
   let data : UserUpdateRequest = {
-    faceImage: null,
+    faceImage: avaImg.value,
     nickname : formState.nickname,
     sex : value.value,
     likeType : '[' + like.value.toString() + ']',
@@ -207,8 +322,16 @@ const toUpdate = async () => {
     message.success('保存成功')
   }
 }
+
+const closeModal = () => {
+  open.value = false;
+  currentImgURI.value = null;
+}
 </script>
 
 <style scoped>
-
+.uploadImgClass{
+  width: 100%;
+  height: 100%;;
+}
 </style>

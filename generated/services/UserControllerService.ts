@@ -397,6 +397,30 @@ updatePassWord: UpdatePassWord,
     }
 
     /**
+     * updateUserImg
+     * @param imgUrI imgUrI
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static updateUserImgUsingPost(
+imgUrI?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/updateUserImg',
+            query: {
+                'imgUrI': imgUrI,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * comparePicCode
      * @param codeTypeEnum codeTypeEnum
      * @param qcCode qcCode

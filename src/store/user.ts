@@ -15,7 +15,8 @@ const apiLogin =   async(user: UserLoginRequest ):Promise<BaseResponse_User_> =>
 export const useUserStore = defineStore('user',{
 
     state: () => ({
-        currentUser :undefined as UserVo
+        currentUser :undefined as UserVo,
+        change: false
     }),
 
     actions: {
@@ -47,6 +48,14 @@ export const useUserStore = defineStore('user',{
             sessionStorage.setItem('user', JSON.stringify(userData.data));
             return userData.data;
         },
+
+        setChange(){
+            if(this.change){
+                this.change = false;
+            }else {
+                this.change = true;
+            }
+        }
     },
 })
 

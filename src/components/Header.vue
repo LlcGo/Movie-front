@@ -94,7 +94,7 @@
         <a class="ant-dropdown-link" @click.prevent>
           <a-avatar size="large">
             <template #icon>
-              <img :src="currentUser?.faceImage">
+              <img class="imgClass" :src="currentUser?.faceImage">
             </template>
           </a-avatar>
         </a>
@@ -148,6 +148,7 @@ import vip from '../assets/vip.png'
 import m from "../assets/erweima.png";
 import socket, {getMessage} from "../utils/websocket.ts";
 import {unReadStore} from "../store/unRead.ts";
+import {useUserStore} from "../store/user.ts";
 
 const currentUser = ref<Users>();
 const router = useRouter();
@@ -155,13 +156,17 @@ const value = ref();
 const open = ref<boolean>(false)
 const price = ref(15)
 const date = ref('月');
-
+const userStore = useUserStore();
 const unreadStore =  unReadStore();
 //未读消息数量
 const unReadTotal = ref();
 onMounted(()=>{
   getUser();
 })
+
+watch(userStore,(value, oldValue)=>{
+  getUser();
+},)
 
 const toChat = () => {
   router.push({
@@ -350,6 +355,10 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 </script>
 
 <style scoped >
+.imgClass{
+  width: 100%;
+  height: 100%;
+}
 .noLoginFont{
   cursor: pointer;
   position: absolute;
