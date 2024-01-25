@@ -69,12 +69,12 @@ const moreMovie = () =>{
 }
 
 const getType = () => {
-  // console.log('每一个系列里',props.movie)
+  console.log('每一个系列里',props.movie)
   if (props.movie.length > 0){
     props.movie.forEach(item =>{
        item.actorsName = item.actorsName.replace(",",'&nbsp;')
     })
-    title.value = (getMoveType(props.movie[0].type));
+    title.value = (props.movie[0].movieType.typeName);
     return;
   }
   title.value = '暂无';

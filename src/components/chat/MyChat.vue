@@ -2,7 +2,7 @@
       <div class="myContain">
           <a-avatar class="my" size="large">
             <template #icon>
-
+              <img :src="props.img">
             </template>
           </a-avatar>
           <div class="ll">
@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  img:{
+    type: String,
+    default: "",
+  }
 })
 
 </script>

@@ -109,7 +109,7 @@
 
     <div class="right">
       <div class="rightTitleTop">{{hotMovies[0]?.movieType.typeName}}热度排行榜</div>
-      <div class="rightMoreTop">更多</div>
+      <div class="rightMoreTop" @click="moreMovie">更多</div>
       <div class="rightContext" v-for="hotMovie in hotMovies">
         <div class="rightContext2">
           <img class="rightImg" :src="hotMovie.img"/>
@@ -143,7 +143,7 @@ const choose = ref(0);
 import dayjs from 'dayjs';
 import {LikeFilled, LikeOutlined, DislikeFilled, DislikeOutlined} from '@ant-design/icons-vue';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {
   Movie, MovieControllerService,
   Remark,
@@ -160,7 +160,9 @@ import getMovieState from "../../typeEnum/MovieState.ts";
 const current = ref(1);
 const total = ref();
 const pageSize = ref(6)
+//热度电影
 const hotMovies = ref<Array<Movie>>([])
+const router = useRouter();
 dayjs.extend(relativeTime);
 
 const {query} = useRoute();
@@ -178,6 +180,15 @@ onMounted(() => {
   document.documentElement.scrollTop = 0
   // getCount();
 })
+
+const moreMovie = () =>{
+  router.push({
+    path:'/layout/search',
+    query:{
+      type: hotMovies.value[0]?.movieType.id
+    }
+  })
+}
 
 //设置是否观影
 

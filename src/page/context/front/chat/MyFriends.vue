@@ -20,7 +20,11 @@
               <a href="https://www.antdv.com/">{{ item.nickname }}</a>
             </template>
             <template #avatar>
-              <a-avatar  />
+              <a-avatar >
+                <template #icon>
+                  <img :src="item?.faceImage">
+                </template>
+              </a-avatar>
             </template>
           </a-list-item-meta>
 <!--          <div>content</div>-->

@@ -128,6 +128,8 @@ const moveTypes = ref<Array<MovieType>>()
 const moveNations = ref<Array<MovieNation>>()
 const movieYears = ref<Array<MovieYear>>()
 onMounted(() => {
+  getCurrentType();
+  getCurrentNation();
   initMovieType();
   initMovieNation();
   initMovieYear();
@@ -139,6 +141,18 @@ onMounted(() => {
   // setCheck('jlp')
   search()
 })
+
+const getCurrentType = () => {
+   if(query.type != null){
+     moveType.value = Number(query.type)
+   }
+}
+
+const getCurrentNation = () => {
+  if(query.nation != null){
+    moveNation.value = Number(query.nation)
+  }
+}
 
 const initMovieType = async () => {
   const res = await MovieTyepControllerService.getMovieNationUsingGet();

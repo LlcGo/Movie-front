@@ -40,11 +40,11 @@
                 <div v-for="item in chats">
                   <!--      如果当前的id是自己的id就再右边-->
                   <div v-if="item.sendUserId == currentUser.id">
-                    <MyChat :msg="item.msg"/>
+                    <MyChat :msg="item.msg" :img="item?.myUser?.faceImage"/>
                   </div>
                   <!--      如果当前的id是不是自己的id就再右边-->
                   <div v-if="item.sendUserId !== currentUser.id">
-                    <OtherChat :msg="item.msg"/>
+                    <OtherChat :msg="item.msg" :img="item?.otherUser?.faceImage"/>
                   </div>
                 </div>
               </div>
@@ -197,7 +197,7 @@ const initChat = async () => {
     msg.forEach((item)=> {
       chats.value.unshift(item)
     })
-    // console.log('存入的数据----->',chats.value)
+    console.log('存入的数据----->',chats.value)
   }
   // console.log('返回的数据----->',res.data)
 

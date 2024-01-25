@@ -2,6 +2,7 @@
     <div class="otherChat">
       <a-avatar class="other" size="large">
         <template #icon>
+          <img :src="props.img">
         </template>
       </a-avatar>
       <div class="otherLl">
@@ -16,6 +17,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  img:{
+    type: String,
+    default: "",
+  }
 })
 
 </script>

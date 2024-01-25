@@ -94,7 +94,7 @@
         <a class="ant-dropdown-link" @click.prevent>
           <a-avatar size="large">
             <template #icon>
-              <img :src="ava">
+              <img :src="currentUser?.faceImage">
             </template>
           </a-avatar>
         </a>

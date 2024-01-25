@@ -11,7 +11,7 @@
           @confirm="toDelete">
         <a-avatar :size="40">
           <template #icon>
-
+            <img :src="props.friend?.faceImage">
           </template>
         </a-avatar>
       </a-popconfirm>

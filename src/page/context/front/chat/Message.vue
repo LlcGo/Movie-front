@@ -17,7 +17,11 @@
                 <a href="https://www.antdv.com/">{{ item.otherUsers.nickname }}</a>
               </template>
               <template #avatar>
-                <a-avatar/>
+                <a-avatar>
+                  <template #icon>
+                    <img :src="item?.otherUsers?.faceImage">
+                  </template>
+                </a-avatar>
               </template>
             </a-list-item-meta>
             <div>请求已发送</div>
@@ -33,7 +37,11 @@
                 <a href="https://www.antdv.com/">{{ item.otherUsers.nickname }}</a>
               </template>
               <template #avatar>
-                <a-avatar/>
+                <a-avatar>
+                  <template #icon>
+                    <img :src="item?.otherUsers?.faceImage">
+                  </template>
+                </a-avatar>
               </template>
             </a-list-item-meta>
             <div>对方已接受</div>
@@ -51,7 +59,11 @@
                 <a href="https://www.antdv.com/">{{ item.otherUsers.nickname }}</a>
               </template>
               <template #avatar>
-                <a-avatar/>
+                <a-avatar>
+                  <template #icon>
+                    <img :src="item?.otherUsers?.faceImage">
+                  </template>
+                </a-avatar>
               </template>
             </a-list-item-meta>
             <div>对方已拒绝</div>
@@ -75,7 +87,11 @@
                 <a href="https://www.antdv.com/">{{ item.otherUsers.nickname }}</a>
               </template>
               <template #avatar>
-                <a-avatar/>
+                <a-avatar>
+                  <template #icon>
+                    <img :src="item?.otherUsers?.faceImage">
+                  </template>
+                </a-avatar>
               </template>
             </a-list-item-meta>
           </a-skeleton>
@@ -92,7 +108,11 @@
                 <a href="https://www.antdv.com/">{{ item.otherUsers.nickname }}</a>
               </template>
               <template #avatar>
-                <a-avatar/>
+                <a-avatar>
+                  <template #icon>
+                    <img :src="item?.otherUsers?.faceImage">
+                  </template>
+                </a-avatar>
               </template>
             </a-list-item-meta>
             <div>已接受对方消息</div>
@@ -110,7 +130,11 @@
                 <a href="https://www.antdv.com/">{{ item.otherUsers.nickname }}</a>
               </template>
               <template #avatar>
-                <a-avatar/>
+                <a-avatar>
+                  <template #icon>
+                    <img :src="item?.otherUsers?.faceImage">
+                  </template>
+                </a-avatar>
               </template>
             </a-list-item-meta>
             <div>已拒绝对方请求</div>
@@ -169,7 +193,7 @@ const getMessage = async () => {
   loading.value = true;
   const res = await FriendsRequestControllerService.getMyRequestUsingGet()
   myMessage.value = res.data
-  console.log(myMessage.value)
+  console.log('我的信息',myMessage.value)
   loading.value = false;
   initLoading.value = false
 }

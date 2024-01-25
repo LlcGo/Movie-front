@@ -31,7 +31,7 @@
           <div class="friendWarp">
               <a-avatar :size="55">
                 <template #icon>
-
+                <img :src="friend?.faceImage">
                 </template>
               </a-avatar>
             <div class="titleContent">
