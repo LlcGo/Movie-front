@@ -9,6 +9,7 @@ import type { MovieYear } from './MovieYear';
 
 export type MovieVo = {
     actorsName?: string;
+    buy?: boolean;
     creatTime?: string;
     directorName?: string;
     favorite?: boolean;

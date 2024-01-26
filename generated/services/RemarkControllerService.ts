@@ -6,7 +6,6 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Remark_ } from '../models/BaseResponse_List_Remark_';
 import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
-import type { BaseResponse_Page_RemarkVo_ } from '../models/BaseResponse_Page_RemarkVo_';
 import type { BaseResponse_Remark_ } from '../models/BaseResponse_Remark_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { RemarkAddRequest } from '../models/RemarkAddRequest';
@@ -162,7 +161,7 @@ sortOrder?: string,
      * @param pageSize 
      * @param sortField 
      * @param sortOrder 
-     * @returns BaseResponse_Page_RemarkVo_ OK
+     * @returns BaseResponse_List_Remark_ OK
      * @throws ApiError
      */
     public static listRemarkByPageUsingGet(
@@ -171,7 +170,7 @@ movieId?: number,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
-): CancelablePromise<BaseResponse_Page_RemarkVo_> {
+): CancelablePromise<BaseResponse_List_Remark_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/remark/list/page',

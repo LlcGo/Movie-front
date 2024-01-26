@@ -48,7 +48,8 @@
 
        <a-button   type="primary" v-if="!isSc" @click="toFavour">我要收藏</a-button>
        <a-button   type="primary"  v-if="isSc" @click="toFavour">已收藏</a-button>
-       <a-button  type="primary" v-if="currentMovie?.state===3"  @click="showModal">购买正片</a-button>
+       <a-button  type="primary" v-if="currentMovie?.state===3 && !currentMovie?.buy"  @click="showModal">购买正片</a-button>
+       <a-button  type="primary" v-if="currentMovie?.state===3 && currentMovie?.buy"  @click="showModal">已购买</a-button>
      </div>
 
     </div>

@@ -164,6 +164,9 @@ const nPlayer = () => {
 
 const sendBarrage = async (data: BarrageAddRequest) => {
   const res = await BarrageControllerService.addBarrageUsingPost(data)
+  if (res.data){
+    getBarrage();
+  }
   console.log(res);
 }
 

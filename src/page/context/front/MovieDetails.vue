@@ -28,7 +28,7 @@
 
       <div class="commentTextContext">
         <div class="commentUserImg">
-          <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>
+          <a-avatar :src="currentUser?.faceImage" alt="Han Solo"/>
         </div>
         <div class="commentInput">
           <a-input v-model:value="content" size="large" placeholder="电影评论"/>
@@ -37,6 +37,12 @@
           <a-button type="primary" @click="pushComment">发布</a-button>
         </div>
       </div>
+
+
+
+
+
+<!--      喜欢与不喜欢-->
 
       <div v-for="comment in currentComment">
         <a-comment class="commentO">
@@ -56,7 +62,7 @@
       </span>
             <span key="comment-basic-dislike">
         <a-tooltip title="不喜欢">
-          <template v-if="comment.hate">
+          <template v-if="comment?.hate">
             <DislikeFilled @click="dislike(comment?.id)"/>
           </template>
           <template v-else>
@@ -66,11 +72,14 @@
         <span style="padding-left: 8px; cursor: auto">
           {{ comment?.disLiked }}
         </span>
+               <a-button v-if="comment?.user.id == currentUser?.id" type="ghost" size="small" style="position: relative;left: 6px" @click="toDeleteComment(comment)">删除</a-button>
       </span>
           </template>
+
+<!--          评论内容-->
           <template #author><a>{{ comment?.user?.username }}</a></template>
           <template #avatar>
-            <a-avatar src="https://joeschmoe.io/api/v1/random"/>
+            <a-avatar :src="comment?.user?.faceImage"/>
           </template>
           <template #content>
             <p>
@@ -84,6 +93,13 @@
           </template>
         </a-comment>
       </div>
+
+
+
+
+
+
+
 
       <div v-if="currentComment.length == 0" class="noClass">
         <a-empty
@@ -149,7 +165,7 @@ import {
   Remark,
   RemarkAddRequest,
   RemarkAndUserControllerService,
-  RemarkControllerService, RemarkUserAddQuery
+  RemarkControllerService, RemarkDeleteRequest, RemarkUserAddQuery, UserControllerService
 } from "../../../../generated";
 import {message} from "ant-design-vue";
 import getMovieNation from "../../typeEnum/MovieNation.ts";
@@ -164,7 +180,7 @@ const pageSize = ref(6)
 const hotMovies = ref<Array<Movie>>([])
 const router = useRouter();
 dayjs.extend(relativeTime);
-
+const currentUser = ref();
 const {query} = useRoute();
 
 
@@ -176,6 +192,7 @@ const currentComment = ref<Array<Remark>>([]);
 const score = ref();
 
 onMounted(() => {
+  getUserAndHotAndCurrentMovie();
   getComment();
   document.documentElement.scrollTop = 0
   // getCount();
@@ -190,21 +207,41 @@ const moreMovie = () =>{
   })
 }
 
-//设置是否观影
-
-const getComment = async () => {
+const toDeleteComment = async (comment:Remark) => {
+  let data : RemarkDeleteRequest= {
+    id :comment.id,
+    userId: currentUser.value.id
+  }
+  const res = await RemarkControllerService.deleteUserRemarkUsingPost(data);
+  if(res.data){
+    message.success('删除成功');
+    getComment()
+  }
+}
+const getUserAndHotAndCurrentMovie = async () => {
   const res1 = await MovieControllerService.getMovieByIdUsingGet(query.currentMovieId);
   currentMovie.value = res1.data;
-  const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, Number(query.currentMovieId), pageSize.value);
-  total.value = res.data?.total
-  // alert(total.value)
-  currentComment.value = res.data.records
-  // console.log(currentComment.value)
-
+  const res3 = await UserControllerService.getLoginUserUsingGet();
+  currentUser.value = res3.data;
   //获取排行榜数据
   const reshot = await MovieControllerService.getHotByTypeUsingGet(currentMovie.value.type);
   console.log('hot value--->',reshot.data)
   hotMovies.value = reshot.data;
+}
+
+
+
+
+//设置是否观影
+
+const getComment = async () => {
+  const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, Number(query.currentMovieId), pageSize.value);
+  // total.value = res.data?[0].total;
+  // alert(total.value)
+  currentComment.value = res.data;
+  console.log('评论',currentComment.value)
+  total.value = currentComment.value[0].total
+
 }
 
 // const getCount = async () => {
