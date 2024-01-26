@@ -7,6 +7,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { Barrage } from './models/Barrage';
 export type { BarrageAddRequest } from './models/BarrageAddRequest';
 export type { BarrageVO } from './models/BarrageVO';
 export type { BaseResponse } from './models/BaseResponse';
@@ -40,6 +41,7 @@ export type { BaseResponse_Remark_ } from './models/BaseResponse_Remark_';
 export type { BaseResponse_string_ } from './models/BaseResponse_string_';
 export type { BaseResponse_Users_ } from './models/BaseResponse_Users_';
 export type { BaseResponse_UserVo_ } from './models/BaseResponse_UserVo_';
+export type { BaseResponse_VideoUpload_ } from './models/BaseResponse_VideoUpload_';
 export type { ChatMsg } from './models/ChatMsg';
 export type { DeleteRequest } from './models/DeleteRequest';
 export type { Favorites } from './models/Favorites';
@@ -80,6 +82,7 @@ export type { UserRegisterRequest } from './models/UserRegisterRequest';
 export type { Users } from './models/Users';
 export type { UserUpdateRequest } from './models/UserUpdateRequest';
 export type { UserVo } from './models/UserVo';
+export type { VideoUpload } from './models/VideoUpload';
 export type { View } from './models/View';
 
 export { BarrageControllerService } from './services/BarrageControllerService';

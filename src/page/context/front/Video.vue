@@ -5,7 +5,8 @@
         <div class="videoLeft" >
           <div id="nPlayer" ref="nPlayer"/>
         </div>
-        <div  v-if="!flag" >
+<!--        <div  v-if="!flag" >-->
+          <div  v-if="!currentVedio" >
           <div >
             <img class="loadingImg" :src="loading">
             <a-spin class="loading" size="large" />
@@ -30,13 +31,16 @@
             <table style="text-align: left" v-if="showBarrage.length > 0" >
               <tr>
                 <th style="width: 50px; border-bottom-left-radius: 10%;border-top-left-radius: 10%;">时间</th>
-                <th style="width: 160px">弹幕内容</th>
-                <th style="border-bottom-right-radius: 10%;border-top-right-radius: 10%;">发布时间</th>
+                <th style="width: 130px">弹幕内容</th>
+                <th style="width: 80px;">发布时间</th>
+                <th style="border-bottom-right-radius: 10%;border-top-right-radius: 10%;">操作</th>
               </tr>
                 <tr v-for="barrage in showBarrage">
                   <td>{{ barrage.time }}</td>
                   <td>{{ barrage.text }}</td>
                   <td>{{ barrage.createTime }}</td>
+                  <td v-if="currentUser.id == barrage.userId"  class="c" @click="toDelete(barrage)">删除</td>
+                  <td v-else >无权限</td>
                 </tr>
             </table>
           </div>
@@ -61,10 +65,19 @@ import myAxios from "../../../MyAxio.ts";
 import {useRoute} from "vue-router";
 import Player from 'nplayer'
 import Danmaku from "@nplayer/danmaku";
-import {BarrageAddRequest, BarrageControllerService, Movie, MovieControllerService} from "../../../../generated";
+import Hls from 'hls.js'
+import {
+  Barrage,
+  BarrageAddRequest,
+  BarrageControllerService, FileControllerService,
+  Movie,
+  MovieControllerService,
+  UserControllerService, Users, VideoUpload
+} from "../../../../generated";
 import dayjs from "dayjs";
 import empty from '../../../assets/empty.png'
 import loading from '../../../assets/loading.png'
+import {message} from "ant-design-vue";
 
 const videoUrl = ref();
 const videoId = ref();
@@ -72,21 +85,30 @@ const flag = ref(false)
 const {query} = useRoute();
 const currentMovie = ref<Movie>();
 const currentBarrage = ref();
+const currentVedio = ref<VideoUpload>();
 
 //右侧展示的barrage
 const showBarrage = ref<any>([]);
-
+const currentUser = ref<Users>()
 onMounted(async () => {
   init()
+  getUser()
 
 })
+
+const getUser = async () => {
+  const res = await UserControllerService.getLoginUserUsingGet();
+  currentUser.value = res.data;
+}
 
 //要确认现在传过来什么
 const init = async () => {
   const res  = await MovieControllerService.getMovieByIdUsingGet(query.currentMovieId) ;
   currentMovie.value = res.data;
+  console.log('movie',currentMovie.value)
   getBarrage();
-  playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
+  // playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
+  playVideo(currentMovie.value.videoId,currentMovie.value.state,currentMovie.value.id)
 }
 
 const getBarrage = async () => {
@@ -103,9 +125,11 @@ const getBarrage = async () => {
       var rest_seconds = spTime[0]%60;
       // console.log(d)
       let data = {
+        id:item.id,
         time: minute.toString().padStart(2, '0')+":"+rest_seconds.toString().padStart(2, '0'),
         text: item.text,
-        createTime :  d
+        createTime :  d,
+        userId : item.userId
       }
       showBarrage.value.push(data);
     })
@@ -117,18 +141,42 @@ const getBarrage = async () => {
 }
 
 
+const toDelete = async (barrage:any) => {
+  let data :Barrage = {
+    id: barrage.id,
+    userId: currentUser.value.id
+  }
+  console.log(data)
+  // return
+  const res = await BarrageControllerService.deleteUsingPost(data);
+  if(res.data){
+    message.success('删除成功');
+    getBarrage();
+  }
+}
+
 /**
  * 播放器初始化
  */
 const nPlayer = () => {
+
   console.log('开始赋值----------------------->', currentBarrage.value)
   console.log(videoUrl.value)
   const player = new Player({
-    src: videoUrl.value, // 视频地址
+    // src: 'http://localhost:7529/videoSystem/file/video/20240126/9711cac7bfc44add925d08a7095ebc80/meeting_01.m3u8', // 视频地址
     contextMenus: ['loop', 'pip'], // 右键菜单设置项
     plugins: [new Danmaku(currentBarrage.value)],// 弹幕配置项
     // controls: [['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'], [], ['spacer', 'settings']]
   })
+
+  const hls = new Hls()
+
+  hls.attachMedia(player.video)
+
+  hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+    hls.loadSource(currentVedio.value?.videoUrl)
+  })
+
   player.mount('#nPlayer')
 
 
@@ -161,6 +209,13 @@ const nPlayer = () => {
   })
 }
 
+const playVideo = async (videoId:any,state:any,movieId:any) => {
+  const res = await FileControllerService.getVideoUsingGet(movieId,state,videoId)
+
+  currentVedio.value = res.data;
+  console.log('获得的video',currentVedio.value)
+  nPlayer()
+}
 
 const sendBarrage = async (data: BarrageAddRequest) => {
   const res = await BarrageControllerService.addBarrageUsingPost(data)
@@ -170,88 +225,93 @@ const sendBarrage = async (data: BarrageAddRequest) => {
   console.log(res);
 }
 
-const playVideo = async (i: any, val: any) => {
-  // 显示弹框
-  // this.dialogVisible = true;
-  // 保存视频名字
-  // this.videoName = val.videoName;
-  // 保存视频id
-  videoId.value = val;
-  myAxios.get(`/getVideoSizeById/${Number(videoId.value)}`).then(res => {
-    console.log('返回的结果--->', res);
-    const totalSize = res;
-    const chunkSize = Math.ceil(totalSize / 20); //已20为基准取除，看分成的份数
-
-    // 定义分片传输的函数
-    const loadVideoChunk = (startByte: number, endByte: number) => {
-      return new Promise((resolve, reject) => {
-        myAxios.get(`/watchVedio`, {
-          headers: {
-            Range: `bytes=${startByte}-${endByte}`
-          },
-          params: {
-            videoId: videoId.value
-          },
-          responseType: "blob"
-        }).then(response => {
-          console.log('返回的数据--->', response)
-          // 返回获取到的视频分片数据
-          resolve(response);
-        }).catch(error => {
-          reject(error);
-        });
-      });
-    };
 
 
-    // 创建一个数组来保存所有分片的Promise
-    const chunkPromises = [] as any;
-
-    // 获取所有分片的Promise
-    for (let i = 0; i < 20; i++) {
-      const startByte = i * chunkSize;
-      const endByte = Math.min(startByte + chunkSize - 1, totalSize - 1);
-      chunkPromises.push(loadVideoChunk(startByte, endByte));
-    }
-
-
-    // 执行所有分片请求，并在全部请求完成后开始播放视频
-    Promise.all(chunkPromises).then(chunks => {
-      // alert(1)
-      // 将分片数据合并成完整的视频Blob
-      const videoBlob = new Blob(chunks, {type: "video/mp4"});
-      console.log('合并---------->', chunks)
-      const combinVideoUrl = URL.createObjectURL(videoBlob);
-      videoUrl.value = combinVideoUrl;
-      console.log('合并---->', videoUrl.value)
-      flag.value = true;
-      nPlayer()
-    }).catch(error => {
-      console.error('Failed to load video:', error);
-    });
-  })
-
-
-  //   // 执行所有分片请求，并在全部请求完成后开始播放视频
-  //   Promise.all(chunkPromises).then(chunks => {
-  //     // 将分片数据合并成完整的视频Blob
-  //     const videoBlob = new Blob(chunks);
-  //     const combinVideoUrl = URL.createObjectURL(videoBlob);
-  //     videoUrl.value = combinVideoUrl;
-  //   }).catch(error => {
-  //     console.error('Failed to load video:', error);
-  //   });
-  //
-  // }).catch(error => {
-  //   console.error('Failed to get video size:', error);
-  // });
-
-}
+// const playVideo = async (i: any, val: any) => {
+//   // 显示弹框
+//   // this.dialogVisible = true;
+//   // 保存视频名字
+//   // this.videoName = val.videoName;
+//   // 保存视频id
+//   videoId.value = val;
+//   myAxios.get(`/getVideoSizeById/${Number(videoId.value)}`).then(res => {
+//     console.log('返回的结果--->', res);
+//     const totalSize = res;
+//     const chunkSize = Math.ceil(totalSize / 20); //已20为基准取除，看分成的份数
+//
+//     // 定义分片传输的函数
+//     const loadVideoChunk = (startByte: number, endByte: number) => {
+//       return new Promise((resolve, reject) => {
+//         myAxios.get(`/watchVedio`, {
+//           headers: {
+//             Range: `bytes=${startByte}-${endByte}`
+//           },
+//           params: {
+//             videoId: videoId.value
+//           },
+//           responseType: "blob"
+//         }).then(response => {
+//           console.log('返回的数据--->', response)
+//           // 返回获取到的视频分片数据
+//           resolve(response);
+//         }).catch(error => {
+//           reject(error);
+//         });
+//       });
+//     };
+//
+//
+//     // 创建一个数组来保存所有分片的Promise
+//     const chunkPromises = [] as any;
+//
+//     // 获取所有分片的Promise
+//     for (let i = 0; i < 20; i++) {
+//       const startByte = i * chunkSize;
+//       const endByte = Math.min(startByte + chunkSize - 1, totalSize - 1);
+//       chunkPromises.push(loadVideoChunk(startByte, endByte));
+//     }
+//
+//
+//     // 执行所有分片请求，并在全部请求完成后开始播放视频
+//     Promise.all(chunkPromises).then(chunks => {
+//       // alert(1)
+//       // 将分片数据合并成完整的视频Blob
+//       const videoBlob = new Blob(chunks, {type: "video/mp4"});
+//       console.log('合并---------->', chunks)
+//       const combinVideoUrl = URL.createObjectURL(videoBlob);
+//       videoUrl.value = combinVideoUrl;
+//       console.log('合并---->', videoUrl.value)
+//       flag.value = true;
+//       nPlayer()
+//     }).catch(error => {
+//       console.error('Failed to load video:', error);
+//     });
+//   })
+//
+//
+//   //   // 执行所有分片请求，并在全部请求完成后开始播放视频
+//   //   Promise.all(chunkPromises).then(chunks => {
+//   //     // 将分片数据合并成完整的视频Blob
+//   //     const videoBlob = new Blob(chunks);
+//   //     const combinVideoUrl = URL.createObjectURL(videoBlob);
+//   //     videoUrl.value = combinVideoUrl;
+//   //   }).catch(error => {
+//   //     console.error('Failed to load video:', error);
+//   //   });
+//   //
+//   // }).catch(error => {
+//   //   console.error('Failed to get video size:', error);
+//   // });
+//
+// }
 
 </script>
 
 <style scoped>
-
+.c:hover{
+  cursor: pointer;
+  color: skyblue;
+}
 .loadingWarp{
   position: relative;
   left: 20%;

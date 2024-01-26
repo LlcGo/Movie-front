@@ -14,6 +14,7 @@
     "ant-design-vue": "^4.0.8",
     "axios": "^1.6.3",
     "danmaku": "^2.0.6",
+    "hls.js": "^1.5.2",
     "nplayer": "^1.0.15",
     "pinia": "^2.1.7",
     "pinia-plugin-persist": "^1.0.0",

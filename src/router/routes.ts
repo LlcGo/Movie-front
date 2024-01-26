@@ -21,12 +21,18 @@ import MyFriends from "../page/context/front/chat/MyFriends.vue";
 import GoChat from "../page/context/front/chat/GoChat.vue";
 import SearchFriend from "../page/context/front/chat/SearchFriend.vue";
 import Message from "../page/context/front/chat/Message.vue";
+import Ffempgsc from "../components/ffempgsc.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "登录",
         component: Login,
+    },
+    {
+        path: "/testV",
+        name: "p",
+        component: Ffempgsc,
     },
     {
         path: "/layout",
