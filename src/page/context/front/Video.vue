@@ -63,7 +63,7 @@
 import {onMounted, ref} from "vue";
 import myAxios from "../../../MyAxio.ts";
 import {useRoute} from "vue-router";
-import Player from 'nplayer'
+import Player, {Popover} from 'nplayer'
 import Danmaku from "@nplayer/danmaku";
 import Hls from 'hls.js'
 import {
@@ -78,9 +78,8 @@ import dayjs from "dayjs";
 import empty from '../../../assets/empty.png'
 import loading from '../../../assets/loading.png'
 import {message} from "ant-design-vue";
-
+import './style.css';
 const videoUrl = ref();
-const videoId = ref();
 const flag = ref(false)
 const {query} = useRoute();
 const currentMovie = ref<Movie>();
@@ -93,8 +92,13 @@ const currentUser = ref<Users>()
 onMounted(async () => {
   init()
   getUser()
-
 })
+
+
+
+// const popover = ref();
+// const btn = ref()
+
 
 const getUser = async () => {
   const res = await UserControllerService.getLoginUserUsingGet();
@@ -107,8 +111,8 @@ const init = async () => {
   currentMovie.value = res.data;
   console.log('movie',currentMovie.value)
   getBarrage();
-  // playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
-  playVideo(currentMovie.value.videoId,currentMovie.value.state,currentMovie.value.id)
+  playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
+
 }
 
 const getBarrage = async () => {
@@ -155,30 +159,116 @@ const toDelete = async (barrage:any) => {
   }
 }
 
-/**
- * 播放器初始化
- */
+
+
+
 const nPlayer = () => {
 
+  const Quantity = {
+    el: document.createElement("div"),
+    init() {
+      this.btn = document.createElement("div");
+      this.btn.textContent = "画质";
+      this.el.appendChild(this.btn);
+      this.popover = new Popover(this.el);
+      this.btn.addEventListener("click", () => this.popover.show());
+      // 点击按钮的时候展示 popover
+      this.el.style.display = "none";
+      // 默认隐藏
+      this.el.classList.add('quantity');
+    }
+  }
   console.log('开始赋值----------------------->', currentBarrage.value)
   console.log(videoUrl.value)
+  // console.log('1--->',Quantity.el,'2---->',Quantity.btn,'3---->',Quantity.value,'4----->',Quantity.popover)
   const player = new Player({
+
+    /**
+     * 播放器初始化
+     */
     // src: 'http://localhost:7529/videoSystem/file/video/20240126/9711cac7bfc44add925d08a7095ebc80/meeting_01.m3u8', // 视频地址
-    contextMenus: ['loop', 'pip'], // 右键菜单设置项
+    // contextMenus: ['loop', 'pip'], // 右键菜单设置项
     plugins: [new Danmaku(currentBarrage.value)],// 弹幕配置项
-    // controls: [['play', 'progress', 'time', 'web-fullscreen', 'fullscreen'], [], ['spacer', 'settings']]
+    controls: [
+      [
+        "play",
+        "volume",
+        "time",
+        "spacer",
+        Quantity,
+        "airplay",
+        "settings",
+        "web-fullscreen",
+        "fullscreen"
+      ],
+      ["progress"]
+    ],
+    bpControls: {}
   })
 
   const hls = new Hls()
-
-  hls.attachMedia(player.video)
-
+  // flag.value = true;
   hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-    hls.loadSource(currentVedio.value?.videoUrl)
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      console.log('levels',hls.levels)
+      // 4. 给清晰度排序，清晰度越高的排在最前面
+      hls.levels.sort((a, b) => b.height - a.height);
+      const frag = document.createDocumentFragment();
+      // 5. 给与清晰度对应的元素添加，点击切换清晰度功能
+      const listener = (i) => (init) => {
+        if(i == 0){
+         if(currentUser.value == null){
+           message.success("请登录才能切换至1080p")
+           return;
+         }
+        }
+        const last = Quantity.itemElements[Quantity.itemElements.length - 1];
+        const prev = Quantity.itemElements[Quantity.value] || last;
+        const el = Quantity.itemElements[i] || last;
+        prev.classList.remove("quantity_item-active");
+        el.classList.add("quantity_item-active");
+        Quantity.btn.textContent = el.textContent;
+        if (init !== true && player.paused)
+          setTimeout(() => player.play());
+        // 因为 HLS 切换清晰度会使正在播放的视频暂停，我们这里让它再自动恢复播放
+        Quantity.value = hls.currentLevel = hls.loadLevel = i;
+        Quantity.popover.hide();
+      };
+      // 6. 添加清晰度对应元素
+      Quantity.itemElements = hls.levels.map((l, i) => {
+        const el = document.createElement("div");
+        el.textContent = l.height + "P";
+        // alert(l.height)
+        if (l.height === 1080) el.textContent += " 超清";
+        if (l.height === 720) el.textContent += " 高清";
+        if (l.height === 480) el.textContent += " 清晰";
+        el.classList.add("quantity_item");
+        el.addEventListener("click", listener(i));
+        frag.appendChild(el);
+        return el;
+      });
+
+      const el = document.createElement("div");
+      el.textContent = "自动";
+      el.addEventListener("click", listener(-1));
+      el.classList.add("quantity_item");
+      frag.appendChild(el);
+      Quantity.itemElements.push(el);
+      // 这里再添加一个 `自动` 选项，HLS 默认是根据网速自动切换清晰度
+
+      Quantity.popover.panelEl.appendChild(frag);
+      Quantity.el.style.display = "block";
+
+      listener(hls.currentLevel)(true);
+      console.log(Quantity)
+      // 初始化当前清晰度
+    });
+
+    hls.loadSource(currentVedio.value.videoUrl)
   })
-
+  // Quantity.el.classList.add('ll')
+  hls.attachMedia(player.video)
   player.mount('#nPlayer')
-
 
   // 链接服务器
   // var ws = new WebSocket('ws://10.10.8.223:9283/lbh')
@@ -308,6 +398,12 @@ const sendBarrage = async (data: BarrageAddRequest) => {
 </script>
 
 <style scoped>
+body {
+  font-family: sans-serif;
+}
+
+
+
 .c:hover{
   cursor: pointer;
   color: skyblue;

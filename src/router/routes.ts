@@ -22,6 +22,7 @@ import GoChat from "../page/context/front/chat/GoChat.vue";
 import SearchFriend from "../page/context/front/chat/SearchFriend.vue";
 import Message from "../page/context/front/chat/Message.vue";
 import Ffempgsc from "../components/ffempgsc.vue";
+import Test2 from "../components/test2.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -33,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/testV",
         name: "p",
         component: Ffempgsc,
+    },
+    {
+        path: "/test2",
+        name: "p2",
+        component: Test2,
     },
     {
         path: "/layout",
