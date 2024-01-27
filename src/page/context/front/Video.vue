@@ -4,6 +4,8 @@
       <div class="warp">
         <div class="videoLeft" >
           <div id="nPlayer" ref="nPlayer"/>
+          <a-button v-if="currentMovie?.state == 3 && currentVedio?.videoSixUrl == currentVedio?.videoUrl" style="position: relative; color: skyblue; top: 3%;" type="ghost" @click="showModal" >购买影视即可观看全片</a-button>
+          <a-button v-if="currentMovie?.state == 2 && currentUser?.userRole != 'vip'" style="position: relative; color: skyblue; top: 3%;" type="ghost">点击右上角开通会员即可观看全片</a-button>
         </div>
 <!--        <div  v-if="!flag" >-->
           <div  v-if="!currentVedio" >
@@ -39,11 +41,12 @@
                   <td>{{ barrage.time }}</td>
                   <td>{{ barrage.text }}</td>
                   <td>{{ barrage.createTime }}</td>
-                  <td v-if="currentUser.id == barrage.userId"  class="c" @click="toDelete(barrage)">删除</td>
+                  <td v-if="currentUser?.id == barrage?.userId"  class="c" @click="toDelete(barrage)">删除</td>
                   <td v-else >无权限</td>
                 </tr>
             </table>
           </div>
+
         </div>
       </div>
 
@@ -54,6 +57,31 @@
     <!--        :options="{ src: videoUrl }"-->
     <!--    />-->
 
+    <div>
+      <a-modal v-model:open="open"
+               @ok="nowBuy"
+               width="400px"
+               cancelText="取消"
+               okText="购买">
+        <div class="fontWarp">
+          <div class="nameClass">
+            {{currentMovie.movieName}}
+          </div>
+          <div class="priceClass">
+            价格：${{currentMovie.price}}
+          </div>
+        </div>
+        <div class="orderButton">
+          <a-button @click="addOrder">提交订单稍后购买</a-button>
+        </div>
+        <div class="ewm">
+          <img class="img2" :src="m"/>
+        </div>
+        <template #title>
+          <div ref="modalTitleRef" style="width: 100%; cursor: move" >购买</div>
+        </template>
+      </a-modal>
+    </div>
 
   </div>
 </template>
@@ -71,7 +99,7 @@ import {
   BarrageAddRequest,
   BarrageControllerService, FileControllerService,
   Movie,
-  MovieControllerService,
+  MovieControllerService, OrderAddRequest, OrderByRequest, OrderControllerService,
   UserControllerService, Users, VideoUpload
 } from "../../../../generated";
 import dayjs from "dayjs";
@@ -79,13 +107,14 @@ import empty from '../../../assets/empty.png'
 import loading from '../../../assets/loading.png'
 import {message} from "ant-design-vue";
 import './style.css';
+import m from "../../../assets/erweima.png";
 const videoUrl = ref();
 const flag = ref(false)
 const {query} = useRoute();
 const currentMovie = ref<Movie>();
 const currentBarrage = ref();
 const currentVedio = ref<VideoUpload>();
-
+const open = ref(false);
 //右侧展示的barrage
 const showBarrage = ref<any>([]);
 const currentUser = ref<Users>()
@@ -94,7 +123,49 @@ onMounted(async () => {
   getUser()
 })
 
+const showModal = () => {
+  open.value = true;
+};
 
+const nowBuy = async () => {
+  if(currentUser.value == null){
+    message.warn('请先登录');
+    return
+  }
+  // alert(1)
+  let data : OrderByRequest = {
+    movieId: currentMovie.value.id,
+    state : 1,
+  }
+  const res = await OrderControllerService.toBuyUsingPost(data);
+  if(res.data){
+    message.success('购买成功,可在我个人中心查看')
+    open.value=false;
+  }
+}
+
+const addOrder = async () => {
+  if(currentUser.value == null){
+    message.warn('请先登录');
+    return
+  }
+  //电影下单 1
+  let data:OrderAddRequest = {
+    movieId:currentMovie.value.id,
+    state: 1,
+  }
+  console.log(data);
+  const res = await OrderControllerService.addOrderUsingPost(data)
+  console.log(res);
+  if(res.data){
+    message.success('订单已提交成功,15分钟后未下单自动取消')
+  }else {
+    message.warn('订单已经存在,跳转至订单页面')
+    router.push({
+      path:'/layout/account/myOrder'
+    })
+  }
+}
 
 // const popover = ref();
 // const btn = ref()
@@ -103,6 +174,7 @@ onMounted(async () => {
 const getUser = async () => {
   const res = await UserControllerService.getLoginUserUsingGet();
   currentUser.value = res.data;
+  console.log('用户',currentUser.value)
 }
 
 //要确认现在传过来什么
@@ -111,8 +183,7 @@ const init = async () => {
   currentMovie.value = res.data;
   console.log('movie',currentMovie.value)
   getBarrage();
-  playVideo(currentMovie.value.videoId,currentMovie.value.videoId);
-
+  playVideo(currentMovie.value.videoId,currentMovie.value.state,currentMovie.value.id);
 }
 
 const getBarrage = async () => {
@@ -308,6 +379,10 @@ const playVideo = async (videoId:any,state:any,movieId:any) => {
 }
 
 const sendBarrage = async (data: BarrageAddRequest) => {
+  if(currentUser.value == null){
+    message.warn('登陆后才能发送弹幕')
+    return;
+  }
   const res = await BarrageControllerService.addBarrageUsingPost(data)
   if (res.data){
     getBarrage();
@@ -562,6 +637,31 @@ th:first-child {
 }
 
 
-
+.nameClass{
+  margin-bottom: 5%;
+  font-size: 20px;
+}
+.priceClass{
+  font-size: 18px;
+}
+.fontWarp{
+  position: absolute;
+  width: 40%;
+  left: 60%;
+  top: 35%;
+}
+.ewm{
+  margin-left: 2%;
+  width: 200px;
+}
+.img2{
+  width: 80%;
+  height: 80%;
+}
+.orderButton{
+  position: absolute;
+  top: 81%;
+  left: 23%;
+}
 
 </style>

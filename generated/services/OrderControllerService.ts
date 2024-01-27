@@ -125,6 +125,24 @@ id?: number,
     }
 
     /**
+     * getDDLTime
+     * @returns BaseResponse_int_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getDdlTimeUsingPost(): CancelablePromise<BaseResponse_int_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/getDDLTime',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * listOrder
      * @param createTime 
      * @param current 

@@ -128,17 +128,19 @@ type?: number,
 
     /**
      * addHot
-     * @param movie movie
+     * @param movieId movieId
      * @returns any OK
      * @throws ApiError
      */
     public static addHotUsingPost(
-movie: DeleteRequest,
+movieId?: number,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/movie/hot',
-            body: movie,
+            query: {
+                'movieId': movieId,
+            },
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

@@ -49,7 +49,7 @@
        <a-button   type="primary" v-if="!isSc" @click="toFavour">我要收藏</a-button>
        <a-button   type="primary"  v-if="isSc" @click="toFavour">已收藏</a-button>
        <a-button  type="primary" v-if="currentMovie?.state===3 && !currentMovie?.buy"  @click="showModal">购买正片</a-button>
-       <a-button  type="primary" v-if="currentMovie?.state===3 && currentMovie?.buy"  @click="showModal">已购买</a-button>
+       <a-button  type="primary" v-if="currentMovie?.state===3 && currentMovie?.buy"  @click="showModal" disabled>已购买</a-button>
      </div>
 
     </div>
@@ -101,11 +101,11 @@ import {onMounted, ref, watch} from "vue";
 import {message} from "ant-design-vue";
 import m from '../../../assets/erweima.png'
 
-
+const currentUser = ref(JSON.parse(sessionStorage.getItem("user")))
 const router = useRouter();
 const isSc = ref(false)
 const currentMovie = ref<Movie>();
-
+const route = useRoute();
 const {query} = useRoute();
 
 
@@ -116,6 +116,10 @@ const showModal = () => {
 
 //提交订单
 const addOrder = async () => {
+  if(currentUser.value == null){
+    message.warn('请先登录');
+    return
+  }
   //电影下单 1
    let data:OrderAddRequest = {
      movieId:currentMovie.value.id,
@@ -141,6 +145,10 @@ const handleOk = (e: MouseEvent) => {
 
 //现在购买
 const nowBuy = async () => {
+  if(currentUser.value == null){
+    message.warn('请先登录');
+    return
+  }
   // alert(1)
   let data : OrderByRequest = {
     movieId: currentMovie.value.id,
@@ -154,7 +162,11 @@ const nowBuy = async () => {
 }
 //收藏
 const toFavour = async () => {
-
+  console.log(currentUser.value)
+  if(currentUser.value == null){
+    message.warn('请先登录');
+    return
+  }
   let data :FavoritesAddRequest = {
     movieId: Number(query.currentMovieId)
   }
@@ -168,7 +180,8 @@ const toFavour = async () => {
   }
 }
 
-const toWatch = () => {
+const toWatch =  () => {
+  MovieControllerService.addHotUsingPost(currentMovie.value.id);
   router.push({
     path: '/layout/detail/watch',
     query:{
@@ -177,7 +190,9 @@ const toWatch = () => {
   })
 }
 
-
+watch(route,()=>{
+  getMovieDetail(route.query.currentMovieId)
+},{deep:true})
 
 onMounted(()=>{
   console.log('当前的----------------->',query.currentMovieId)
@@ -188,6 +203,7 @@ onMounted(()=>{
 const getMovieDetail = async (id:any) => {
      const res = await MovieControllerService.getMovieByIdUsingGet(id)
      currentMovie.value = res.data;
+     console.log('返回信息',res)
      isSc.value = res.data.favorite;
      console.log(currentMovie.value)
 }

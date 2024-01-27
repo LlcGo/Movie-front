@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {Movie, Purchased, PurchasedControllerService} from "../../../../../generated";
+import {Movie, MovieControllerService, Purchased, PurchasedControllerService} from "../../../../../generated";
 import {useRouter} from "vue-router";
 const router = useRouter();
 const PurchasedVOList = ref<Array<Purchased>>();
@@ -75,6 +75,7 @@ const toDetail = (movieItem:Movie) => {
 }
 
 const toWatch = (movie:any) => {
+  MovieControllerService.addHotUsingPost(movie.id);
   router.push({
     path: '/layout/detail/watch',
     query:{

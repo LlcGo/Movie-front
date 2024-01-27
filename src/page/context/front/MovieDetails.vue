@@ -27,7 +27,7 @@
       </div>
 
       <div class="commentTextContext">
-        <div class="commentUserImg">
+        <div class="commentUserImg" v-if="currentUser">
           <a-avatar :src="currentUser?.faceImage" alt="Han Solo"/>
         </div>
         <div class="commentInput">
@@ -37,9 +37,6 @@
           <a-button type="primary" @click="pushComment">发布</a-button>
         </div>
       </div>
-
-
-
 
 
 <!--      喜欢与不喜欢-->
@@ -94,13 +91,6 @@
         </a-comment>
       </div>
 
-
-
-
-
-
-
-
       <div v-if="currentComment.length == 0" class="noClass">
         <a-empty
             :image="noMessage"
@@ -129,13 +119,13 @@
       <div class="rightContext" v-for="hotMovie in hotMovies">
         <div class="rightContext2">
           <img class="rightImg" :src="hotMovie.img"/>
-          <div class="rightFont">
-            <div>{{hotMovie.movieName}}</div>
+           <div class="rightFont" @click="toDetail(hotMovie)">
+            <div >{{hotMovie.movieName}}</div>
             <div class="hotContext">
               <img class="hotImg" :src="hot"/>
               <div class="hotSize">{{hotMovie.hot}}</div>
             </div>
-            <div class="xx5">{{hotMovie?.movieNation?.nationName }}/{{ hotMovie.movieType.typeName }}</div>
+            <div class="xx5">{{hotMovie?.movieNation?.nationName }}/{{hotMovie.movieType.typeName}}</div>
             <div class="xx6">状态：{{getMovieState(hotMovie.state)}}</div>
           </div>
         </div>
@@ -148,7 +138,7 @@
 <script setup lang="ts">
 import img from '../../../assets/xtf.jpg'
 import hot from '../../../assets/hot.png'
-import {onMounted, ref, watch} from 'vue';
+import {onMounted, ref, watch, watchEffect} from 'vue';
 import noMessage from '../../../assets/noMessage.png';
 
 const value = ref<number>(3);
@@ -182,7 +172,7 @@ const router = useRouter();
 dayjs.extend(relativeTime);
 const currentUser = ref();
 const {query} = useRoute();
-
+const route = useRoute();
 
 //当前的电影
 const currentMovie = ref<Movie>();
@@ -197,7 +187,20 @@ onMounted(() => {
   document.documentElement.scrollTop = 0
   // getCount();
 })
-
+const toDetail = (movieItem:Movie) => {
+  // alert(route.path)
+  //如果还是当前页面
+  // if(route.path == '/layout/detail'){
+  //   alert(1)
+  // }
+  // alert(movieItem.id)
+  router.push({
+    path:'/layout/detail',
+    query: {
+      currentMovieId:movieItem.id
+    }
+  })
+}
 const moreMovie = () =>{
   router.push({
     path:'/layout/search',
@@ -206,6 +209,7 @@ const moreMovie = () =>{
     }
   })
 }
+
 
 const toDeleteComment = async (comment:Remark) => {
   let data : RemarkDeleteRequest= {
@@ -231,9 +235,7 @@ const getUserAndHotAndCurrentMovie = async () => {
 
 
 
-
 //设置是否观影
-
 const getComment = async () => {
   const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, Number(query.currentMovieId), pageSize.value);
   // total.value = res.data?[0].total;
@@ -253,6 +255,11 @@ const getComment = async () => {
  * 发布评论 不带分数
  */
 const pushComment = async () => {
+  if(currentUser.value == null){
+    message.warn('请登陆后发布评论')
+    return
+  }
+
   let data: RemarkAddRequest = {
     content: content.value,
     movieId: Number(query.currentMovieId),
@@ -265,6 +272,11 @@ const pushComment = async () => {
 }
 
 const like = async (id: number) => {
+  if(currentUser.value == null){
+    message.warn('请登陆后操作')
+    return
+  }
+
   currentComment.value?.forEach(item => {
     if (item.id == id) {
       console.log('点之前的 hate', item.hate)
@@ -301,6 +313,10 @@ const like = async (id: number) => {
 };
 
 const dislike = async (id: number) => {
+  if(currentUser.value == null){
+    message.warn('请登陆后操作')
+    return
+  }
   //不喜欢 1
   currentComment.value?.forEach(item => {
     if (item.id == id) {
@@ -336,6 +352,10 @@ const chooseState = (state) => {
   choose.value = state;
 }
 const toScore = async () => {
+  if(currentUser.value == null){
+    message.warn('请登陆后操作')
+    return
+  }
   let data: RemarkAddRequest = {
     score: score.value * 2,
     movieId: currentMovie.value.id,
@@ -426,25 +446,22 @@ const toScore = async () => {
 }
 
 .hotContext {
+  width: 1px;
+  height: 1px;
+  display: flex;
   position: relative;
   top: -9px;
-  left: -10px;
+  left: 136px;
 }
 
 .hotSize {
-  position: absolute;
-  left: 190%;
-  top: 17%;
   font-size: 15px;
   color: #999;
 }
 
 .hotImg {
-  position: absolute;
   width: 18px;
   height: 18px;
-  left: 150%;
-  top: 14%;
 }
 
 .xx5 {
@@ -460,9 +477,13 @@ const toScore = async () => {
 }
 
 .rightFont {
+  cursor: pointer;
   position: absolute;
   top: 24px;
   left: 23%;
+}
+.rightFont:hover {
+  color: skyblue;
 }
 
 .rightImg {

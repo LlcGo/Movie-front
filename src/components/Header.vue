@@ -169,6 +169,10 @@ watch(userStore,(value, oldValue)=>{
 },)
 
 const toChat = () => {
+  if(currentUser.value == null){
+    message.warn('请先登录')
+    return
+  }
   router.push({
     path:'/layout/chat'
   })
@@ -186,6 +190,10 @@ const toAccount = () => {
 
 //去我的收藏
 const toFavour = () => {
+  if(currentUser.value == null){
+    message.warn('请先登录')
+    return
+  }
   FriendsControllerService.removeCurrentUsingPost();
   router.push({
     path:"/layout/account/favour",
@@ -280,6 +288,9 @@ const loginOut = async () => {
   const res = await UserControllerService.userLogoutUsingPost();
   sessionStorage.removeItem('user');
   getUser()
+  router.push({
+    path:'/layout'
+  })
 }
 const toHome = () => {
   FriendsControllerService.removeCurrentUsingPost();
@@ -289,6 +300,9 @@ const toHome = () => {
 }
 
 const toOrder = async () => {
+  if(currentUser.value == null){
+    message.warn("请先登录")
+  }
   let data : OrderAddRequest = {
     vipType: date.value,
     state : 0
@@ -312,6 +326,10 @@ const handleMenuClick: MenuProps['onClick'] = e => {
 
 //现在买
 const nowBuy = async () => {
+  if(currentUser.value == null){
+    message.warn('请先登录')
+    return
+  }
   let data = {
     date: date.value,
     state: 0,

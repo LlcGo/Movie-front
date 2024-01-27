@@ -16,16 +16,16 @@
           <div class="right">
             <div class="rightWarp">
               <div class="movieNameFont" v-if="record.movie.id">
-                电影：{{record.movie.movieName}}
+                电影：{{ record.movie.movieName }}
               </div>
               <div class="font" v-if="record.movie.id">
-                价格:${{record.movie.price}}
+                价格:${{ record.movie.price }}
               </div>
               <div class="movieNameFont" v-if="!record.movie.id">
-                会员：{{getVip(record.vipType)}}
+                会员：{{ getVip(record.vipType) }}
               </div>
               <div class="font" v-if="!record.movie.id">
-                价格:${{getPrice(record.vipType)}}
+                价格:${{ getPrice(record.vipType) }}
               </div>
             </div>
           </div>
@@ -34,17 +34,17 @@
 
       <template v-if="column.key === 'action'">
         <div class="button" v-if="record.orderState == 0">
-<!--          {{record.end}}自动取消订单-->
-<!--          {{countdown}}-->
+          <!--          {{record.end}}自动取消订单-->
+          <!--          {{countdown}}-->
           <count-down class="countClass" :order="record" @setOrderState="setState"/>
           <a-button @click="toBuy(record)">购买</a-button>
           <a-button>取消订单</a-button>
         </div>
-        <div  v-if="record.orderState == 1">
-          <a-tag  color="blue">已购买</a-tag>
+        <div v-if="record.orderState == 1">
+          <a-tag color="blue">已购买</a-tag>
         </div>
-        <div  v-if="record.orderState == 2">
-          <a-tag  color="orange">已取消</a-tag>
+        <div v-if="record.orderState == 2">
+          <a-tag color="orange">已取消</a-tag>
         </div>
       </template>
     </template>
@@ -68,6 +68,7 @@ import getVipType from "../../../typeEnum/getVipType.ts";
 import dayjs from "dayjs";
 import Demo from "../../../demo/CountDown.vue";
 import CountDown from "../../../demo/CountDown.vue";
+
 const current = ref(1);
 const pageSize = ref(6);
 const total = ref();
@@ -113,38 +114,43 @@ onMounted(() => {
 //
 // }
 
-const setState =(record:Order) =>{
-   record.orderState = 2
+const setState = (record: Order) => {
+  record.orderState = 2
 }
 
 //获取自己的订单信息
 const getMyOrder = async () => {
-   const res = await OrderControllerService.getOrderByUserIdUsingGet()
-   console.log(res);
-   res.data?.forEach(item => {
-     if(item.orderState == 0) {
-       let curTime = dayjs(item.createTime).toDate()
-       curTime.setMinutes(curTime.getMinutes() + 15)
-       item.end = curTime.valueOf();
-       console.log(item.end)
-     }
-   })
-   orderList.value = res.data;
+  //获取时间
+  const res0 = await OrderControllerService.getDdlTimeUsingPost();
+
+  let time = Math.floor(res0.data / (1000 * 60))
+  console.log('时间',time )
+  const res = await OrderControllerService.getOrderByUserIdUsingGet()
+  console.log(res);
+  res.data?.forEach(item => {
+    if (item.orderState == 0) {
+      let curTime = dayjs(item.createTime).toDate()
+      curTime.setMinutes(curTime.getMinutes() + time)
+      item.end = curTime.valueOf();
+      console.log(item.end)
+    }
+  })
+  orderList.value = res.data;
 }
 
 //购买电影
-const toBuy = async (order:Order) => {
+const toBuy = async (order: Order) => {
   console.log(order)
-  let data :OrderByRequest = null;
-  if(order.state == 0){
+  let data: OrderByRequest = null;
+  if (order.state == 0) {
     data = {
       date: getVipType(order.vipType),
       orderId: order.id,
       state: order.state,
-      userId:order.userId
+      userId: order.userId
     }
-  }else {
-     data = {
+  } else {
+    data = {
       movieId: order.movie?.id,
       orderId: order.id,
       state: order.state,
@@ -170,57 +176,67 @@ const toBuy = async (order:Order) => {
 
 <style scoped>
 
-.leftWarp{
+.leftWarp {
   width: 130px;
   height: 180px;
 }
-.leftWarp2{
+
+.leftWarp2 {
   position: absolute;
   top: 20%;
   width: 130px;
   height: 130px;
 }
-img{
+
+img {
   width: 100%;
   height: 100%;
   background-size: cover;
 }
-.movieNameFont{
+
+.movieNameFont {
   font-size: 18px;
 }
-.font{
+
+.font {
   margin-top: 9%;
 }
-.rightWarp{
+
+.rightWarp {
   position: absolute;
   top: 35%;
 }
-.left{
+
+.left {
   padding: 10px 10px 0px 30px;
   position: relative;
   float: left;
   width: 50%;
   height: 100%;
 }
-.right{
+
+.right {
   position: relative;
   float: right;
   width: 50%;
   height: 100%;
 }
-.content{
+
+.content {
   position: relative;
 
   height: 200px;
   width: 360px;
 }
+
 .button {
   display: flex;
   flex-direction: column;
   height: 100px;
   justify-content: space-around;
 }
-.countClass{
+
+.countClass {
   position: absolute;
   left: -140%;
 }
