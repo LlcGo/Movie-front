@@ -17,7 +17,7 @@ export const useApp = defineStore('useApp',{
      * 添加 tags
      */
     addTagsViewList(tag) {
-      console.log('addTagsViewList',tag)
+      // console.log('addTagsViewList',tag)
       const isFind = this.tagsViewList.find(item => {
         return item.path === tag.path
       })

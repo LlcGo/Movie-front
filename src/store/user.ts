@@ -15,10 +15,10 @@ const apiLogin =   async(user: UserLoginRequest ):Promise<BaseResponse_User_> =>
 export const useUserStore = defineStore('user',{
 
     state: () => ({
-        currentUser :undefined as UserVo,
+        currentUser :null,
         change: false
     }),
-
+    persist: true,
     actions: {
         async logout() {
            await UserControllerService.userLogoutUsingPost()
@@ -27,6 +27,12 @@ export const useUserStore = defineStore('user',{
             })
             // we could do other stuff like redirecting the user
         },
+
+        setAdminUser(user:UserVo){
+            this.currentUser = user
+        },
+
+
 
         async setUser() {
             const res =  await UserControllerService.getLoginUserUsingGet()
@@ -55,8 +61,10 @@ export const useUserStore = defineStore('user',{
             }else {
                 this.change = true;
             }
-        }
+        },
+
     },
+
 })
 
 if (import.meta.hot) {

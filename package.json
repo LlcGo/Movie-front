@@ -22,7 +22,6 @@
     "hls.js": "^1.5.2",
     "nplayer": "^1.0.15",
     "pinia": "^2.1.7",
-    "pinia-plugin-persist": "^1.0.0",
     "pinia-plugin-persistedstate": "^3.2.1",
     "screenfull": "^5.1.0",
     "moment": "^2.29.4",

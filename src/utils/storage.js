@@ -15,10 +15,10 @@ export const setItem = (key, value) => {
 export const getItem = key => {
   const data = window.localStorage.getItem(key)
   try {
-    console.log('getItem', JSON.parse(data))
+    // console.log('getItem', JSON.parse(data))
     return JSON.parse(data)
   } catch (err) {
-    console.log('getItem err', JSON.parse(data))
+    // console.log('getItem err', JSON.parse(data))
     return data
   }
 }

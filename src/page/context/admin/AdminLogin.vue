@@ -30,16 +30,20 @@
         </span>
       </el-form-item>
 
-<!--      <el-form-item class="code-box" prop="captcha_code">-->
-<!--       <span class="icon-container">-->
-<!--          <Tickets style="width: 1em;height: 1em"/>-->
-<!--        </span>-->
-<!--        <el-input-->
-<!--            placeholder="图形验证码"-->
-<!--            v-model="loginForm.captcha_code" name="captcha_code" class="code-input" maxlength="4" @keyup.enter.native="handleLogin">-->
-<!--        </el-input>-->
-<!--        <div class="code-img" >{{ code_net }}</div>-->
-<!--      </el-form-item>-->
+
+      <el-form-item class="code-box" prop="captcha_code">
+        <el-input
+            placeholder="图形验证码"
+            v-model="loginForm.captcha_code" name="captcha_code" class="code-input" maxlength="4" @keyup.enter.native="handleLogin">
+        </el-input>
+      </el-form-item>
+      <img
+          class="login-imgStyle"
+          id="accountImg"
+          :src="imgSrc"
+          @click="refreshAccountImg()"
+      />
+
 
 
       <el-button type="primary" style="width: 100%; margin-bottom: 30px;" :loading="loading"
@@ -51,10 +55,7 @@
 
 
     </el-form>
-    <!--  底部  -->
-    <div class="el-login-footer">
-      <span>项目搭建博客地址：https://juejin.cn/user/1310273591836957</span>
-    </div>
+
 
   </div>
 </template>
@@ -66,53 +67,29 @@ import {UserFilled, Lock, Tickets} from '@element-plus/icons'
 import {ref, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
-
+import {message} from "ant-design-vue";
+import {UserControllerService} from "../../../../generated/index.ts";
+import {useUserStore} from "@/store/user.ts";
+const currentUser = useUserStore();
+onMounted(()=>{
+  window.localStorage.clear()
+  refreshAccountImg();
+})
 //雪花效果
 const snow = ref([])
 for(let i=0;i<1000;i++){
   snow.value.push(i)
 }
 
-const code_net = ref('')
 
-// onMounted(() => {
-//   getCodeImg()
-// })
 
 //数据源
 const loginForm = ref({
-  username: 'admin',
-  password: '123456',
+  username: 'lc1644',
+  password: '12345678',
   captcha_code: '',
-  code_key: ''
 })
-//验证规则
-const loginRules = ref({
-  // username: [
-  //   {
-  //     required: true,
-  //     trigger: 'blur',
-  //     message: '请输入用户名'
-  //   },
-  //
-  // ],
-  // password: [
-  //   {
-  //     required: true,
-  //     trigger: 'blur',
-  //     validator: validatePassword()
-  //   },
-  //
-  // ],
-  // captcha_code: [
-  //   {
-  //     required: true,
-  //     trigger: 'blur',
-  //     validator: validateCode()
-  //   },
-  //
-  // ],
-})
+
 
 // 处理密码框文本显示状态
 const passwordType = ref('password')
@@ -129,34 +106,75 @@ const loading = ref(false)
 const loginFromRef = ref(null)
 // const store = useStore()
 const router = useRouter()
-
+const imgSrc = ref();
 /**
  * 登录
  */
-const handleLogin = () => {
-  loginFromRef.value.validate(valid => {
-    if (!valid) return
-    console.log(loginForm.value)
-    if(loginForm.value.captcha_code != code_net.value){
-      ElMessage.error("验证码错误！")
-      return;
-    }
-    loading.value = true
-    // store.dispatch('user/login', loginForm.value)
-    //     .then(() => {
-    //       setTimeout(() => {
-    //         loading.value = false
-    //         // TODO: 登录后操作
-    //         router.push('/')
-    //       }, 500)
-    //     })
-    //     .catch(err => {
-    //       getCodeImg()
-    //       loading.value = false
-    //     })
-  })
+const handleLogin = async () => {
+  if(loginForm.value.username == null){
+    message.warn('请输入账号')
+    return
+  }
+  if(loginForm.value.password == null){
+    message.warn('请输入密码')
+  }
+  let data = {
+    userAccount: loginForm.value.username,
+    userPassword:loginForm.value.password
+  }
+  if(!await comparePicCode()){
+    return;
+  }
+  console.log('成功')
+  const res = await UserControllerService.adminLoginUsingPost(data)
+  console.log('返回的数据',res)
+  if(!res.data){
+    message.warn(res.message)
+    return;
+  }
+  // sessionStorage.setItem('user', JSON.stringify(res.data));
+  currentUser.setAdminUser(res.data)
+  router.push('/admin')
+  // console.log(res)
+
+}
 
 
+/**
+ * 刷新验证码
+ */
+const refreshAccountImg =  () => {
+  window.localStorage.removeItem("loginVerifyCodeRandom");
+  let loginVerifyCodeRandom = Math.random();
+  //使用 localStorage 创建一个本地存储的 name/value 对
+  window.localStorage.setItem("loginVerifyCodeRandom", loginVerifyCodeRandom);
+  imgSrc.value = window.location.origin + '/api' +
+      "/user"+ "/loginCode/getVerifyCode" + '?num = ' + loginVerifyCodeRandom//给图片地址配一个无用的随机数
+  console.log(imgSrc.value)
+}
+
+/**
+ * 验证码对比
+ * @returns {Promise<boolean>}
+ */
+const  comparePicCode = async () => {
+  let loginVerifyCodeRandom = window.localStorage.getItem("loginVerifyCodeRandom");
+  if(loginForm.value.captcha_code == null){
+    message.warn('请输入验证码')
+    return false;
+  }
+  let data = {
+    loginVerifyCodeRandom:loginVerifyCodeRandom,
+    picCode: loginForm.value.captcha_code,
+  };
+  const res =  await UserControllerService.comparePicCodeUsingPost('loginCode',data);
+  console.log('二维码验证返回消息---------->',res)
+  if(!res.code == 0){
+    message.warn(res.message)
+    refreshAccountImg();
+    return false;
+  }
+  return true;
 }
 
 
@@ -170,6 +188,12 @@ $light_gray: #eee;
 $cursor: #000000;
 $txt_color: #333;
 
+.login-imgStyle{
+  position: absolute;
+  height: 10%;
+  top: 59%;
+  left: 56%;
+}
 .login-container {
   display: flex;
   justify-content: center;

@@ -11,6 +11,7 @@
         <div class="avatar-wrapper">
           <el-image
               class="avatar"
+              :src="currentUser?.currentUser?.faceImage"
           ></el-image>
 <!--          <div>{{ $store.getters.userInfo.admin_nick_name }}</div>-->
           <CaretBottom style="width: 1em; height: 1em; margin-left: 4px;"/>
@@ -18,10 +19,10 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu class="user-dropdown">
-            <router-link to="/">
+            <router-link to="/admin">
               <el-dropdown-item> 首页</el-dropdown-item>
             </router-link>
-            <el-dropdown-item @click="editCropper">
+            <el-dropdown-item @click="showModal">
               修改头像
             </el-dropdown-item>
             <el-dropdown-item @click="logout">
@@ -30,7 +31,34 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+
     </div>
+
+    <a-modal v-model:open="open"
+             title="修改头像"
+             @ok="handleOk"
+             width="260px"
+             @cancel="closeModal"
+             cancelText="取消"
+             okText="确认修改"
+    >
+      <a-upload
+          v-model:file-list="fileList"
+          name="avatar"
+          list-type="picture-card"
+          class="avatar-uploader"
+          :show-upload-list="false"
+          :custom-request="uploadUserImg"
+          :before-upload="beforeUpload"
+      >
+        <img v-if="currentImgURI" class="uploadImgClass" :src="currentImgURI" alt="avatar" />
+        <div v-else>
+          <loading-outlined v-if="loading"></loading-outlined>
+          <plus-outlined v-else></plus-outlined>
+          <div class="ant-upload-text">Upload</div>
+        </div>
+      </a-upload>
+    </a-modal>
 
 <!--    <el-dialog :title="title"     align-center-->
 <!--               v-model="open" width="800px" append-to-body @opened="modalOpened" @close="closeDialog">-->
@@ -101,13 +129,51 @@ import {ref,reactive} from 'vue'
 import Hamburger from '../../components/Hamburger/index.vue'
 import Breadcrumb from '../../components/Breadcrumb/index.vue'
 import {ElMessage} from "element-plus";
-
-// const store = useStore()
+import {FileControllerService, UserControllerService} from "../../../generated/index.ts";
+import {useRouter} from "vue-router";
+import {useUserStore} from "@/store/user.ts";
+import {LoadingOutlined, PlusOutlined} from "@ant-design/icons-vue";
+import {message} from "ant-design-vue";
+const router = useRouter();
+const fileList = ref([]);
+const loading = ref(false);
 
 const open = ref(false);
 const visible = ref(false);
 const title = ref("修改头像");
 const cropper = ref(null)
+const currentImgURI = ref();
+const showModal = () => {
+  open.value = true;
+};
+
+const uploadUserImg = async (data) => {
+  const formdata = new FormData();
+  formdata.append("file",data.file)
+  const res = await FileControllerService.uploadUserImgUsingPost(formdata);
+  currentImgURI.value = res.data;
+  console.log(currentImgURI.value)
+}
+
+const handleOk = async () => {
+  if(currentImgURI.value == null){
+    message.warn('请上传头像')
+  }
+  const res = await UserControllerService.updateUserImgUsingPost(currentImgURI.value);
+  if(res.data){
+    message.success('头像修改成功')
+    open.value = false;
+    currentImgURI.value = null;
+    const res = await UserControllerService.getLoginUserUsingGet();
+    currentUser.setAdminUser(res.data)
+    // getCurrentUser()
+    // userChange.setChange();
+  }
+};
+const closeModal = () => {
+  open.value = false;
+  currentImgURI.value = null;
+}
 
 //图片裁剪数据
 const options = reactive({
@@ -182,13 +248,21 @@ function closeDialog() {
   options.visible = false;
 }
 
-
-const logout = () => {
+const currentUser = useUserStore();
+const logout = async () => {
   // store.dispatch('user/logout')
+  const res = await UserControllerService.userLogoutUsingPost();
+  sessionStorage.removeItem('user');
+  currentUser.setAdminUser(null);
+  router.push("/isAdmin/Login")
 }
 </script>
 
 <style lang="scss" scoped>
+.uploadImgClass{
+  width: 100%;
+  height: 100%;;
+}
 .navbar {
   height: 50px;
   overflow: hidden;

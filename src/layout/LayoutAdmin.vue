@@ -27,7 +27,24 @@ import Sidebar from './components/Sidebar/index.vue'
 import AppMain from './components/AppMain.vue'
 import TagsView from '../components/TagsView/index.vue'
 import {useApp} from "@/store/modules/app.ts";
+import {onMounted} from "vue";
+import {UserControllerService} from "../../generated/index.ts";
+import {useRouter} from "vue-router";
 const app = useApp();
+const router = useRouter();
+onMounted(()=>{
+  getLoginUser()
+})
+const getLoginUser =async () =>{
+ const res = await UserControllerService.getLoginUserUsingGet();
+ console.log('getLoginUser',res);
+ if(res.data == null){
+   router.push("/isAdmin/Login")
+ }
+ if(res.data.userRole !== 'admin'){
+   router.push("/isAdmin/Login")
+ }
+}
 
 </script>
 

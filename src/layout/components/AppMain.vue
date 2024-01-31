@@ -52,7 +52,7 @@ watch(
       // if (!isTags(to.path)) return
       flag.value = false;
       const { fullPath, meta, name, params, path, query } = to
-      console.log('fullPath->',fullPath, 'meta->',meta,'name->', name, params, path, query )
+      // console.log('fullPath->',fullPath, 'meta->',meta,'name->', name, params, path, query )
       store.addTagsViewList( {
         fullPath,
         meta,

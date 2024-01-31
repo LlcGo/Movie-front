@@ -27,15 +27,15 @@ const app = useApp();
 const router = useRouter();
 const routes = computed(() => {
   const filterRoutes = filterRouters(router.getRoutes());
-  console.log('el-menu--->', generateMenus(filterRoutes))
+  // console.log('el-menu--->', generateMenus(filterRoutes))
   return generateMenus(filterRoutes);
 });
-console.log("routes111==", routes)
+// console.log("routes111==", routes)
 // 计算高亮 menu 的方法
 const route = useRoute();
 const activeMenu = computed(() => {
   const {path} = route;
-  console.log('activeMenu-->',path)
+  // console.log('activeMenu-->',path)
   return path;
 });
 </script>

@@ -31,10 +31,12 @@ import 'virtual:svg-icons-register'
 //element 图片
 
 import elementIcons from './plugins/svgicon.js'
+import piniaPluginPersistedstate, {createPersistedState} from 'pinia-plugin-persistedstate'
 app.use(ElementPlus).use(elementIcons) //全局注册element svg图标
-
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 // 全局组件挂载
-app.use(createPinia())
+app.use(pinia)
     .use(router)
     .use(Antd)
     .use(NPlayer)

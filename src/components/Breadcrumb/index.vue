@@ -30,7 +30,7 @@
     breadcrumbData.value = route.matched.filter(
       item => item.meta && item.meta.title
     )
-    console.log('1',breadcrumbData.value)
+    // console.log('1',breadcrumbData.value)
   }
   // 监听路由变化时触发
   watch(
@@ -47,7 +47,7 @@
   const router = useRouter()
   const onLinkClick = item => {
     // console.log(item)
-    console.log('onLinkClick',item)
+    // console.log('onLinkClick',item)
     router.push(item.path)
   }
 </script>
