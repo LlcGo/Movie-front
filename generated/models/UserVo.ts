@@ -10,5 +10,6 @@ export type UserVo = {
     nickname?: string;
     sex?: string;
     signature?: string;
+    userRole?: string;
     username?: string;
 };

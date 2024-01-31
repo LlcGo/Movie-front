@@ -193,31 +193,25 @@ img{
   font-size: 18px;
   margin-left: 10%;
 }
-.list{
-
-}
-
 .item{
-  height: 40px;
-  -webkit-box-align: center;
-  align-items: center;
-  position: relative;
-  color: #6b757b;
+  height: 40px !important;
+  -webkit-box-align: center !important;
+  align-items: center !important;
+  position: relative !important;
+  color: #6b757b !important;
 }
-
-
 
 li {
-  cursor: pointer;
-  list-style-type: disc;
-  font-size: 18px;
+  cursor: pointer !important;
+  list-style-type: disc !important;
+  font-size: 18px !important;
 }
 li:hover{
-  color: #2faee3;
+  color: #2faee3 !important;
 }
 
 .bgc{
-  color: #2faee3;
+  color: #2faee3 !important;
 }
 
 

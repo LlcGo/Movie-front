@@ -26,6 +26,28 @@ import { request as __request } from '../core/request';
 export class UserControllerService {
 
     /**
+     * adminLogin
+     * @param userLoginRequest userLoginRequest
+     * @returns BaseResponse_Users_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static adminLoginUsingPost(
+userLoginRequest: UserLoginRequest,
+): CancelablePromise<BaseResponse_Users_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/AdminLogin',
+            body: userLoginRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * addUser
      * @param userAddRequest userAddRequest
      * @returns BaseResponse_string_ OK

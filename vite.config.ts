@@ -1,19 +1,35 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from "path";
+import {createSvgIconsPlugin} from "vite-plugin-svg-icons";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  server: {
-    port: '5173',
-    proxy: {
-      '/api': {
-        target: 'http://localhost:7529',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
-      }
+    plugins: [
+        vue(),
+        createSvgIconsPlugin({
+            // 指定要缓存的图标文件夹
+            iconDirs: [path.resolve('./src/icons/svg')],
+            // 执行icon name的格式
+            symbolId: 'icon-[name]',
+        }),
+    ],
+    resolve: {
+        alias: {
+            '@':  path.resolve('./src')
+        },
+        extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
+    },
+    server: {
+        port: '5173',
+        proxy: {
+            '/api': {
+                target: 'http://localhost:7529',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
+            }
+        }
     }
-  }
 })
 // module.exports = {
 //   devServer: {
