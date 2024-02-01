@@ -1,31 +1,70 @@
 <template>
   <div class="home-box">
     <el-form :inline="true" :model="searchForm" v-show="showSearch">
-      <el-form-item label="账号ID" prop="id">
-        <el-input v-model="searchForm.id" clearable/>
+      <el-form-item label="影片ID" prop="id">
+        <el-input v-model="searchForm.id" placeholder="影片ID" clearable/>
       </el-form-item>
 
-      <el-form-item label="账号">
-        <el-input v-model="searchForm.username" placeholder="账号" clearable></el-input>
+      <el-form-item label="影片名字">
+        <el-input v-model="searchForm.movieName" placeholder="影片名字" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="用户名">
-        <el-input v-model="searchForm.nickname" placeholder="账号" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="角色">
-        <!--        <el-select v-model="searchForm.userRole" placeholder="角色" clearable>-->
-        <!--          <el-option-->
-        <!--              v-for="item in roleList"-->
-        <!--              :key="item.value"-->
-        <!--              :label="item.label"-->
-        <!--              :value="item.label"-->
-        <!--          />-->
-        <!--        </el-select>-->
+      <el-form-item label="类型">
         <el-select
-            v-model="searchForm.userRole"
+            v-model="searchForm.type"
             class="m-2"
-            placeholder="角色"
+            placeholder="状态"
+            style="width: 240px"
+            clearable
+        >
+          <el-option
+              v-for="item in movieTypes"
+              :key="item.id"
+              :label="item.typeName"
+              :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="年代">
+        <el-select
+            v-model="searchForm.year"
+            class="m-2"
+            placeholder="年代"
+            style="width: 240px"
+            clearable
+        >
+          <el-option
+              v-for="item in movieYears"
+              :key="item.id"
+              :label="item.yearName"
+              :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="地区">
+        <el-select
+            v-model="searchForm.nation"
+            class="m-2"
+            placeholder="地区"
+            style="width: 240px"
+            clearable
+        >
+          <el-option
+              v-for="item in movieNations"
+              :key="item.id"
+              :label="item.nationName"
+              :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="影片状态">
+        <el-select
+            v-model="searchForm.state"
+            class="m-2"
+            placeholder="影片状态"
             style="width: 240px"
             clearable
         >
@@ -74,37 +113,31 @@
                 element-loading-text="加载中..."
                 border>
         <el-table-column prop="id" label="ID" width="180"></el-table-column>
-        <el-table-column prop="username" label="账号" width="180"></el-table-column>
-        <el-table-column prop="nickname" label="用户名" width="180"></el-table-column>
-        <el-table-column label="角色" width="88" align="center">
-          <template #default="{ row }">
-            <div v-if="row.userRole === 'vip'">
-              <el-tag type="danger">{{ getRole(row.userRole) }}</el-tag>
-            </div>
-            <div v-if="row.userRole === 'user'">
-              <el-tag type="info">{{ getRole(row.userRole) }}</el-tag>
-            </div>
-            <div v-if="row.userRole === 'admin'">
-              <el-tag type="warning">{{ getRole(row.userRole) }}</el-tag>
-            </div>
-            <!--            <el-tag type="success">{{ getRole(row.userRole) }}</el-tag>-->
-          </template>
-        </el-table-column>
-        <el-table-column label="头像" align="center" width="180">
+        <el-table-column prop="movieName" label="电影名" width="180"></el-table-column>
+        <el-table-column prop="movieNation" label="电影地区" width="180"></el-table-column>
+        <el-table-column prop="movieType" width="88"  label="电影类型"></el-table-column>
+        <el-table-column prop="movieYear" width="88"  label="电影年代"></el-table-column>
+        <el-table-column label="影视图片" align="center" width="180">
           <template #default="{ row }">
             <el-image
                 class="avatar"
-                :src="row.faceImage"
+                :src="row.img"
             ></el-image>
           </template>
         </el-table-column>
         <el-table-column label="状态" width="180" align="center">
           <template #default="{ row }">
+            <div v-if="row.state === 3">
+              <el-tag type="danger">会员影视</el-tag>
+            </div>
+            <div v-if="row.state === 2">
+              <el-tag type="danger">付费影视</el-tag>
+            </div>
             <div v-if="row.state === 1">
-              <el-tag type="danger">冻结</el-tag>
+              <el-tag type="danger">已上架</el-tag>
             </div>
             <div v-if="row.state === 0">
-              <el-tag type="success">正常</el-tag>
+              <el-tag type="success">未上架</el-tag>
             </div>
             <!--            <span>{{ row.state == "1" ? "冻结" : "正常" }}</span>-->
           </template>
@@ -131,14 +164,14 @@
                 type="danger"
                 size="small"
                 v-auth="'/adminAuth/del'"
-                @click="onRemoveClick(row)">冻结
+                @click="onRemoveClick(row)">上架
             </el-button>
             <el-button
-                v-if="row.state === 1"
+                v-if="row.state === 1 || row.state ===2 || row.state === 3"
                 type="danger"
                 size="small"
                 v-auth="'/adminAuth/del'"
-                @click="onReClick(row)">解冻
+                @click="onReClick(row)">下架
             </el-button>
           </template>
         </el-table-column>
@@ -220,11 +253,7 @@
 
   </div>
 </template>
-<script>
-export default {
-  name: "adminList",
-};
-</script>
+
 <script setup>
 // import RolesDialog from './components/roles.vue'
 // import UploadExcel from '@/components/UploadExcel'
@@ -234,7 +263,11 @@ import {ref, onMounted, watch, reactive} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {ElMessageBox, ElMessage} from 'element-plus'
 import {switchServerUrl} from "@/utils/index";
-import {UserControllerService} from "../../../../../generated/index.ts";
+import {
+  MovieControllerService, MovieNationControllerService,
+  MovieTyepControllerService, MovieYearControllerService,
+  UserControllerService
+} from "../../../../../generated/index.ts";
 import {message} from "ant-design-vue";
 
 const route = useRoute();
@@ -292,21 +325,24 @@ const getRole = (role) => {
 }
 //数据源
 const searchForm = ref({
-  id: null,
+  id: '',
+  nation: '',
+  year: '',
+  type: '',
   current: 1,
-  nickname: null,
+  movieName: '',
   pageSize: 5,
-  userRole: null,
-  username: null,
+  state: ''
 });
 
 const tableData = ref([]);
 const total = ref(0);
 const loading = ref(false)
 const options = [
-  {value: 'user', label: '用户'},
-  {value: 'vip', label: 'vip'},
-  {value: 'admin', label: '管理员'}
+  {value: 0, label: '未上架'},
+  {value: 1, label: '已上架'},
+  {value: 3, label: '会员影视'},
+  {value: 2, label: '付费影视'}
 ]
 const options2 = [
   {value: 'user', label: '用户'},
@@ -316,23 +352,75 @@ onMounted(() => {
   // alert(1)
   getListData();
   // getRoleData()
+  getMovieTypes()
+  getMovieNations()
+  getMovieYears()
 });
+
+const movieTypes = ref([])
+const movieNations = ref([])
+const movieYears = ref([])
+
+const getMovieTypes = async () => {
+  const res = await MovieTyepControllerService.getMovieNationUsingGet();
+  movieTypes.value = res.data
+  console.log('getMovieTypes',movieTypes.value)
+}
+
+const getMovieNations = async () => {
+  const res = await MovieNationControllerService.getMovieTypeUsingGet();
+  movieNations.value = res.data
+  console.log('getMovieNations',movieNations.value)
+}
+
+const getMovieYears = async () => {
+  const res = await MovieYearControllerService.getMovieTypeUsingGet1();
+  movieYears.value = res.data
+  console.log('getMovieYears',movieYears.value)
+}
 
 const searchAll = async () => {
   loading.value = true
   // console.log('发送的数据',searchForm.value)
   let data = {
-    id: null,
     current: 1,
-    nickname: null,
     pageSize: 5,
-    userRole: null,
-    username: null,
   }
   // return;
-  const res = await UserControllerService.listUserByPageUsingPost(data)
+
+  // return;
+  const res = await MovieControllerService.listMovieByPageUsingPost(data)
   console.log('获得的数据', res)
   if (res.data !== null) {
+    res.data.records.forEach(item0 => {
+      if(item0.nation){
+        movieNations.value.forEach(item1=>{
+          if(item1.id == item0.nation){
+            item0.movieNation = item1.nationName;
+          }
+        })
+      }
+      if(item0.type){
+        movieTypes.value.forEach(item1=>{
+          if(item1.id == item0.type){
+            // console.log('电影类型id',item0.type,'类型id',item1.id)
+            item0.movieType = item1.typeName;
+            // console.log(item1.typeName)
+          }
+        })
+      }
+      if(item0.year){
+        movieYears.value.forEach(item1=>{
+          if(item1.id == item0.year){
+            // console.log('电影类型id',item0.type,'类型id',item1.id)
+            item0.movieYear = item1.yearName;
+            // console.log(item1.yearName)
+          }
+        })
+      }
+
+    })
+
     total.value = Number(res.data.total);
     tableData.value = res.data.records;
   }
@@ -350,24 +438,40 @@ const handleClose = () => {
  */
 const getListData = async () => {
   loading.value = true
-  console.log('发送的数据', searchForm.value)
-  if (searchForm.value.userRole == '') {
-    searchForm.value.userRole = null;
-  }
-  if (searchForm.value.id == '') {
-    searchForm.value.id = null;
-  }
-  if (searchForm.value.nickname == '') {
-    searchForm.value.nickname = null;
-  }
-  if (searchForm.value.username == '') {
-    searchForm.value.username = null;
-  }
-
-  // return;
-  const res = await UserControllerService.listUserByPageUsingPost(searchForm.value)
+  console.log('searchForm.value',searchForm.value)
+  // return
+  const res = await MovieControllerService.listMovieByPageUsingPost(searchForm.value)
   console.log('获得的数据', res)
   if (res.data !== null) {
+    res.data.records.forEach(item0 => {
+      if(item0.nation){
+        movieNations.value.forEach(item1=>{
+         if(item1.id == item0.nation){
+           item0.movieNation = item1.nationName;
+         }
+        })
+      }
+      if(item0.type){
+        movieTypes.value.forEach(item1=>{
+          if(item1.id == item0.type){
+            // console.log('电影类型id',item0.type,'类型id',item1.id)
+            item0.movieType = item1.typeName;
+            // console.log(item1.typeName)
+          }
+        })
+      }
+      if(item0.year){
+        movieYears.value.forEach(item1=>{
+          if(item1.id == item0.year){
+            // console.log('电影类型id',item0.type,'类型id',item1.id)
+            item0.movieYear = item1.yearName;
+            // console.log(item1.yearName)
+          }
+        })
+      }
+
+    })
+
     total.value = Number(res.data.total);
     tableData.value = res.data.records;
   }
@@ -480,7 +584,7 @@ const onDownTemplate = () => {
   ::v-deep .avatar {
     width: 60px;
     height: 60px;
-    border-radius: 50%;
+    //border-radius: 50%;
   }
 
 }

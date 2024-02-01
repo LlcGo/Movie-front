@@ -28,6 +28,7 @@ import LayoutAdmin from "../layout/LayoutAdmin.vue";
 import UserList from "../page/context/admin/userManger/UserList.vue";
 import UserDetail from "../page/context/admin/userManger/UserDetail.vue";
 import AdminIndex from "../page/context/admin/home/AdminIndex.vue";
+import MovieList from "../page/context/admin/movieManger/MovieList.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -211,7 +212,7 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '/adminMovie/movieList',
-                component: UserList,
+                component: MovieList,
                 name: 'movieList',
                 meta: { title: '影片列表',icon:'permission'}
             },
