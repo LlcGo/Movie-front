@@ -266,6 +266,90 @@ movieQueryRequest: MovieQueryRequest,
     }
 
     /**
+     * setMf
+     * @param movieId movieId
+     * @param state state
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setMfUsingPost(
+movieId?: number,
+state?: number,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/set/mf',
+            query: {
+                'movieId': movieId,
+                'state': state,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setPrice
+     * @param movieId movieId
+     * @param price price
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setPriceUsingPost(
+movieId?: number,
+price?: number,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/set/price',
+            query: {
+                'movieId': movieId,
+                'price': price,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setState
+     * @param flag flag
+     * @param movieId movieId
+     * @param state state
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setStateUsingPost(
+flag?: boolean,
+movieId?: number,
+state?: number,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/set/state',
+            query: {
+                'flag': flag,
+                'movieId': movieId,
+                'state': state,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * updateMovie
      * @param movieUpdateRequest movieUpdateRequest
      * @returns BaseResponse_boolean_ OK
