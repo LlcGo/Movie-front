@@ -13,6 +13,7 @@ export type Users = {
     password?: string;
     sex?: string;
     signature?: string;
+    state?: number;
     updateTime?: string;
     userRole?: string;
     username?: string;

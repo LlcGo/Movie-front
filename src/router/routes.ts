@@ -191,7 +191,7 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'detail',
                 component: UserDetail,
                 meta: { title: '用户详情',icon:'permission'},
-                hidden: false,//true不显示在侧边栏
+                hidden: true,//true不显示在侧边栏
             }
         ]
     },

@@ -10,6 +10,7 @@ export type UserVo = {
     nickname?: string;
     sex?: string;
     signature?: string;
+    state?: number;
     userRole?: string;
     username?: string;
 };

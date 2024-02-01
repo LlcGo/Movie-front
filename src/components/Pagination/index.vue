@@ -29,7 +29,7 @@ const props = defineProps({
   },
   limit: {
     type: Number,
-    default: 20
+    default: 3
   },
   pageSizes: {
     type: Array,
@@ -44,7 +44,7 @@ const props = defineProps({
   },
   layout: {
     type: String,
-    default: 'total, sizes, prev, pager, next, jumper'
+    default: 'total, prev, pager, next'
   },
   background: {
     type: Boolean,

@@ -70,6 +70,33 @@ userAddRequest: UserAddRequest,
     }
 
     /**
+     * adminUpdatePassword
+     * @param id id
+     * @param password password
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static adminUpdatePasswordUsingPost(
+id?: string,
+password?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/admin/updatePassword',
+            query: {
+                'id': id,
+                'password': password,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * deleteUser
      * @param deleteRequest deleteRequest
      * @returns BaseResponse_boolean_ OK
@@ -201,64 +228,18 @@ userRole?: string,
 
     /**
      * listUserByPage
-     * @param createTime 
-     * @param current 
-     * @param faceImage 
-     * @param id 
-     * @param isDelete 
-     * @param likeType 
-     * @param nickname 
-     * @param pageSize 
-     * @param password 
-     * @param sex 
-     * @param signature 
-     * @param sortField 
-     * @param sortOrder 
-     * @param updateTime 
-     * @param username 
-     * @param userRole 
+     * @param userQueryRequest userQueryRequest
      * @returns BaseResponse_Page_UserVo_ OK
+     * @returns any Created
      * @throws ApiError
      */
-    public static listUserByPageUsingGet(
-createTime?: string,
-current?: number,
-faceImage?: string,
-id?: string,
-isDelete?: number,
-likeType?: string,
-nickname?: string,
-pageSize?: number,
-password?: string,
-sex?: string,
-signature?: string,
-sortField?: string,
-sortOrder?: string,
-updateTime?: string,
-username?: string,
-userRole?: string,
-): CancelablePromise<BaseResponse_Page_UserVo_> {
+    public static listUserByPageUsingPost(
+userQueryRequest: UserQueryRequest,
+): CancelablePromise<BaseResponse_Page_UserVo_ | any> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/user/list/page',
-            query: {
-                'createTime': createTime,
-                'current': current,
-                'faceImage': faceImage,
-                'id': id,
-                'isDelete': isDelete,
-                'likeType': likeType,
-                'nickname': nickname,
-                'pageSize': pageSize,
-                'password': password,
-                'sex': sex,
-                'signature': signature,
-                'sortField': sortField,
-                'sortOrder': sortOrder,
-                'updateTime': updateTime,
-                'username': username,
-                'userRole': userRole,
-            },
+            body: userQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -322,6 +303,28 @@ num?: number,
             query: {
                 'num': num,
             },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * reUser
+     * @param deleteRequest deleteRequest
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static reUserUsingPost(
+deleteRequest: DeleteRequest,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/re',
+            body: deleteRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
