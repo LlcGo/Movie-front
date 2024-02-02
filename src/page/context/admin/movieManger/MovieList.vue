@@ -879,7 +879,7 @@ const getListData = async () => {
  */
 const onShowClick = row => {
   router.push({
-    path: '/adminAuth/detail',
+    path: '/adminMovie/movieDetail',
     query: row
   })
 

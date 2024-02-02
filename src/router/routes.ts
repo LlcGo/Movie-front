@@ -29,6 +29,7 @@ import UserList from "../page/context/admin/userManger/UserList.vue";
 import UserDetail from "../page/context/admin/userManger/UserDetail.vue";
 import AdminIndex from "../page/context/admin/home/AdminIndex.vue";
 import MovieList from "../page/context/admin/movieManger/MovieList.vue";
+import MovieDetail from "../page/context/admin/movieManger/MovieDetail.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -215,6 +216,13 @@ const routes: Array<RouteRecordRaw> = [
                 component: MovieList,
                 name: 'movieList',
                 meta: { title: '影片列表',icon:'permission'}
+            },
+            {
+                path: '/adminMovie/movieDetail',
+                component: MovieDetail,
+                name: 'movieDetail',
+                meta: { title: '影片详情',icon:'permission'},
+                hidden: true,//true不显示在侧边栏
             },
         ]
     },
