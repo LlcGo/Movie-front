@@ -8,5 +8,6 @@ export type MovieNation = {
     id?: number;
     isDelete?: number;
     nationName?: string;
+    state?: number;
     updateTime?: string;
 };

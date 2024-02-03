@@ -753,13 +753,13 @@ const getMovieTypes = async () => {
 }
 
 const getMovieNations = async () => {
-  const res = await MovieNationControllerService.getMovieTypeUsingGet();
+  const res = await MovieNationControllerService.getMoveNationUsingGet();
   movieNations.value = res.data
   console.log('getMovieNations', movieNations.value)
 }
 
 const getMovieYears = async () => {
-  const res = await MovieYearControllerService.getMovieTypeUsingGet1();
+  const res = await MovieYearControllerService.getMovieYearUsingGet();
   movieYears.value = res.data
   console.log('getMovieYears', movieYears.value)
 }

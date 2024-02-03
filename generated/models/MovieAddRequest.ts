@@ -4,10 +4,13 @@
 /* eslint-disable */
 
 export type MovieAddRequest = {
-    gender?: number;
-    userAccount?: string;
-    userAvatar?: string;
-    userName?: string;
-    userPassword?: string;
-    userRole?: string;
+    actorsName?: string;
+    directorName?: string;
+    img?: string;
+    movieName?: string;
+    movieProfile?: string;
+    nation?: number;
+    type?: number;
+    videoId?: number;
+    year?: number;
 };

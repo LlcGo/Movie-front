@@ -30,6 +30,9 @@ import UserDetail from "../page/context/admin/userManger/UserDetail.vue";
 import AdminIndex from "../page/context/admin/home/AdminIndex.vue";
 import MovieList from "../page/context/admin/movieManger/MovieList.vue";
 import MovieDetail from "../page/context/admin/movieManger/MovieDetail.vue";
+import MovieType from "../page/context/admin/movieManger/MovieType.vue";
+import MovieNation from "../page/context/admin/movieManger/MovieNation.vue";
+import MovieYear from "../page/context/admin/movieManger/MovieYear.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -224,6 +227,24 @@ const routes: Array<RouteRecordRaw> = [
                 meta: { title: '影片详情',icon:'permission'},
                 hidden: true,//true不显示在侧边栏
             },
+            {
+                path: '/adminMovie/typeManger',
+                component: MovieType,
+                name: 'typeManger',
+                meta: { title: '类型管理',icon:'permission'},
+            },
+            {
+                path: '/adminMovie/nationManger',
+                component: MovieNation,
+                name: 'nationManger',
+                meta: { title: '地区管理',icon:'permission'},
+            },
+            {
+                path: '/adminMovie/yearManger',
+                component: MovieYear,
+                name: 'yearManger',
+                meta: { title: '年份管理',icon:'permission'},
+            },
         ]
     },
 
@@ -245,8 +266,78 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'setMovie',
                 meta: { title: '排名设置',icon:'permission'}
             },
+            {
+                path: '/adminLeaderboard/popMovie',
+                component: UserList,
+                name: 'popMovie',
+                meta: { title: '首页推荐设置',icon:'permission'}
+            },
+
         ]
     },
+
+    // 评论管理
+    {
+        path: '/adminRemark',
+        component: LayoutAdmin,
+        redirect: '/adminRemark/movieRemark',
+        alwaysShow: true, // will always show the root menu
+        name: 'adminRemark',
+        meta: {
+            title: '评论管理',
+            icon: 'permission'
+        },
+        children: [
+            {
+                path: '/adminRemark/movieRemark',
+                component: UserList,
+                name: 'movieRemark',
+                meta: { title: '影片评论',icon:'permission'}
+            },
+            {
+                path: '/adminRemark/movieBarrageRemark',
+                component: UserList,
+                name: 'movieBarrageRemark',
+                meta: { title: '弹幕评论',icon:'permission'}
+            },
+
+        ]
+    },
+
+    //订单管理
+    {
+        path: '/adminOrder',
+        component: LayoutAdmin,
+        redirect: '/adminOrder/order',
+        alwaysShow: true, // will always show the root menu
+        name: 'adminOrder',
+        meta: {
+            title: '订单管理',
+            icon: 'permission'
+        },
+        children: [
+            {
+                path: '/adminOrder/order',
+                component: UserList,
+                name: 'order',
+                meta: { title: '订单详情',icon:'permission'}
+            },
+            {
+                path: '/adminOrder/orderSetDDL',
+                component: UserList,
+                name: 'orderSetDDL',
+                meta: { title: '延迟时间设置',icon:'permission'}
+            },
+            {
+                path: '/adminOrder/vipSet',
+                component: UserList,
+                name: 'vipSet',
+                meta: { title: '会员价格管理',icon:'permission'}
+            },
+
+        ]
+    },
+
 
     //网站数据可视化
     {

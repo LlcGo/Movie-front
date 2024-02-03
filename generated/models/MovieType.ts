@@ -7,6 +7,7 @@ export type MovieType = {
     createTime?: string;
     id?: number;
     isDelete?: number;
+    state?: number;
     typeName?: string;
     updateTime?: string;
 };

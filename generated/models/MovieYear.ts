@@ -7,6 +7,7 @@ export type MovieYear = {
     createTiem?: string;
     id?: number;
     isDelete?: number;
+    state?: number;
     updateTime?: string;
     yearName?: string;
 };
