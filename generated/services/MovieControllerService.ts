@@ -6,10 +6,12 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_ConcurrentHashMap_int_List_Movie_ } from '../models/BaseResponse_ConcurrentHashMap_int_List_Movie_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Movie_ } from '../models/BaseResponse_List_Movie_';
+import type { BaseResponse_Map_object_object_ } from '../models/BaseResponse_Map_object_object_';
 import type { BaseResponse_MovieVo_ } from '../models/BaseResponse_MovieVo_';
 import type { BaseResponse_Page_Movie_ } from '../models/BaseResponse_Page_Movie_';
 import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { DeleteRequest } from '../models/DeleteRequest';
+import type { MovieAddRe } from '../models/MovieAddRe';
 import type { MovieAddRequest } from '../models/MovieAddRequest';
 import type { MovieQueryRequest } from '../models/MovieQueryRequest';
 import type { MovieUpdateRequest } from '../models/MovieUpdateRequest';
@@ -106,6 +108,24 @@ id?: number,
     }
 
     /**
+     * getSyRe
+     * @returns BaseResponse_Map_object_object_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getSyReUsingPost(): CancelablePromise<BaseResponse_Map_object_object_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/get/SyRe',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * getTypeRe
      * @returns BaseResponse_string_ OK
      * @returns any Created
@@ -132,6 +152,36 @@ id?: number,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/movie/get/hotMovie',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getSyReMovieById
+     * @param id id
+     * @param id2 id2
+     * @param id3 id3
+     * @returns BaseResponse_List_Movie_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getSyReMovieByIdUsingPost(
+id?: number,
+id2?: number,
+id3?: number,
+): CancelablePromise<BaseResponse_List_Movie_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/get/ids',
+            query: {
+                'id': id,
+                'id2': id2,
+                'id3': id3,
+            },
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -318,6 +368,33 @@ state?: string,
             query: {
                 'state': state,
             },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setSyRe
+     * @param movie movie
+     * @param state state
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setSyReUsingPost(
+movie: MovieAddRe,
+state?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/set/SyRe',
+            query: {
+                'state': state,
+            },
+            body: movie,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

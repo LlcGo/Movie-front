@@ -9,6 +9,7 @@ import type { MovieYear } from './MovieYear';
 
 export type Movie = {
     actorsName?: string;
+    bigImg?: string;
     buy?: boolean;
     creatTime?: string;
     directorName?: string;

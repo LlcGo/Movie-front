@@ -60,7 +60,7 @@
 
     <el-dialog
         v-model="dialogVisible"
-        title="新增影视"
+        title="修改影视"
         width="50%"
         :before-close="handleEditClose"
     >
@@ -327,13 +327,13 @@ const getMovieTypes = async () => {
 }
 
 const getMovieNations = async () => {
-  const res = await MovieNationControllerService.getMovieTypeUsingGet();
+  const res = await MovieNationControllerService.getMoveNationUsingGet();
   movieNations.value = res.data
   console.log('getMovieNations', movieNations.value)
 }
 
 const getMovieYears = async () => {
-  const res = await MovieYearControllerService.getMovieTypeUsingGet1();
+  const res = await MovieYearControllerService.getMovieYearUsingGet();
   movieYears.value = res.data
   console.log('getMovieYears', movieYears.value)
 }
@@ -435,6 +435,10 @@ const toEditMovie = async () => {
     // return
   }
   // return
+  console.log('formEditLabelAlign',formEditLabelAlign);
+
+
+
   const res = await MovieControllerService.updateMovieUsingPost(formEditLabelAlign);
   if (res.code === 0) {
     movieInfo.value = formEditLabelAlign;
