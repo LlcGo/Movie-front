@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Movie } from './Movie';
 import type { RemarkUser } from './RemarkUser';
 import type { Users } from './Users';
 
@@ -15,9 +16,11 @@ export type Remark = {
     isDelete?: number;
     like?: boolean;
     liked?: number;
+    movie?: Movie;
     movieId?: number;
     remarkUser?: RemarkUser;
     score?: number;
+    state?: number;
     total?: number;
     updateTime?: string;
     user?: Users;

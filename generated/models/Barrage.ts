@@ -3,6 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Movie } from './Movie';
+import type { Users } from './Users';
+
 export type Barrage = {
     appTime?: string;
     barType?: string;
@@ -11,7 +14,11 @@ export type Barrage = {
     createTime?: string;
     id?: number;
     isDelete?: number;
+    movie?: Movie;
     movieId?: number;
+    state?: number;
+    total?: number;
     updateTime?: string;
+    user?: Users;
     userId?: string;
 };

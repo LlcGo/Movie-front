@@ -9,12 +9,14 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { Barrage } from './models/Barrage';
 export type { BarrageAddRequest } from './models/BarrageAddRequest';
+export type { BarrageQueryRequest } from './models/BarrageQueryRequest';
 export type { BarrageVO } from './models/BarrageVO';
 export type { BaseResponse } from './models/BaseResponse';
 export type { BaseResponse_boolean_ } from './models/BaseResponse_boolean_';
 export type { BaseResponse_ConcurrentHashMap_int_List_Movie_ } from './models/BaseResponse_ConcurrentHashMap_int_List_Movie_';
 export type { BaseResponse_Favorites_ } from './models/BaseResponse_Favorites_';
 export type { BaseResponse_int_ } from './models/BaseResponse_int_';
+export type { BaseResponse_List_Barrage_ } from './models/BaseResponse_List_Barrage_';
 export type { BaseResponse_List_BarrageVO_ } from './models/BaseResponse_List_BarrageVO_';
 export type { BaseResponse_List_ChatMsg_ } from './models/BaseResponse_List_ChatMsg_';
 export type { BaseResponse_List_Favorites_ } from './models/BaseResponse_List_Favorites_';

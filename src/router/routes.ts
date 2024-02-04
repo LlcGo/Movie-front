@@ -35,6 +35,8 @@ import MovieNation from "../page/context/admin/movieManger/MovieNation.vue";
 import MovieYear from "../page/context/admin/movieManger/MovieYear.vue";
 import Leaderboard from "../page/context/admin/Leaderboard/Leaderboard.vue";
 import Recommend from "../page/context/admin/Leaderboard/Recommend.vue";
+import MovieRemark from "../page/context/admin/movieRemark/MovieRemark.vue";
+import MovieBarrage from "../page/context/admin/movieRemark/MovieBarrage.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -292,13 +294,13 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '/adminRemark/movieRemark',
-                component: UserList,
+                component: MovieRemark,
                 name: 'movieRemark',
                 meta: { title: '影片评论',icon:'permission'}
             },
             {
                 path: '/adminRemark/movieBarrageRemark',
-                component: UserList,
+                component: MovieBarrage,
                 name: 'movieBarrageRemark',
                 meta: { title: '弹幕评论',icon:'permission'}
             },

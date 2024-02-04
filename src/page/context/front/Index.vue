@@ -4,9 +4,10 @@
 <!--    轮播图-->
     <div id="slideshow">
       <!-- 插入轮播的图片们 -->
-      <img class="active" :src="img" />
-      <img :src="img2" />
-      <img :src="img3" />
+        <img @click="toDetail" class="active" :src="movie1?.bigImg" />
+        <img @click="toDetail" :src="movie2?.bigImg" />
+        <img @click="toDetail" :src="movie3?.bigImg" />
+
       <!-- 插入轮播的页码们 -->
       <div>
         <span class="active">1</span>
@@ -15,10 +16,10 @@
       </div>
       <!-- 插入图片的描述们 -->
       <p class="active">
-        这是第一幅图片哈哈哈
+        {{movie1?.movieName}}
       </p>
-      <p>这是第二幅图片咩</p>
-      <p>到第三幅了！</p>
+      <p>{{movie2?.movieName}}</p>
+      <p>{{movie3?.movieName}}</p>
     </div>
 <!--    内容-->
     <div v-for="movie in movieList" >
@@ -40,22 +41,74 @@ import {useRouter} from "vue-router";
 defineProps<{ msg: string }>()
 const router = useRouter();
 const movieList = ref<Map<number, Array<Movie>>>([]);
-
-const img = ref('/api/uploads/img/test.jpg')
-const img2 = ref('/api/uploads/img/yfr.jpg')
-const img3 = ref('/api/uploads/img/whwdzg.jpg')
+const currentId = ref();
+const movie1 = ref()
+const movie2 = ref()
+const movie3 = ref()
 onMounted(()=>{
   slideshow();
   init();
+  getRe();
 })
 
+const toDetail = () => {
+  switch (currentId.value){
+    case 0 :
+      router.push({
+        path:'/layout/detail',
+        query: {
+          currentMovieId:movie1.value.id
+        }
+      })
+          break;
+    case 1 :
+      router.push({
+        path:'/layout/detail',
+        query: {
+          currentMovieId:movie2.value.id
+        }
+      })
+          break;
+    case 2 :
+      router.push({
+        path:'/layout/detail',
+        query: {
+          currentMovieId:movie3.value.id
+        }
+      })
+          break;
+  }
+
+}
 const init = async () => {
   const res = await MovieControllerService.listIndexMovieByPageUsingGet()
   movieList.value = res.data
   // console.log(res.data)
 }
+const reMovie = ref();
+const getRe = async () => {
+  const res = await MovieControllerService.getSyReUsingPost();
+  reMovie.value = new Map(Object.entries(res.data))
+  console.log(reMovie.value.get('1'))
+  const index1Img = reMovie.value.get('1').bigImg;
+  const index2Img = reMovie.value.get('2').bigImg;
+  const index3Img = reMovie.value.get('3').bigImg;
+  const res1 = await MovieControllerService.getSyReMovieByIdUsingPost(reMovie.value.get('3').id,reMovie.value.get('2').id,reMovie.value.get('1').id)
+  res1.data.forEach(item=>{
+    console.log(item,index1Img)
+    if(item.bigImg == index1Img){
+      movie1.value = item
+    }
+    if(item.bigImg == index2Img){
+      movie2.value = item
+    }
+    if(item.bigImg == index3Img){
+      movie3.value = item
+    }
+  })
+}
 
-
+//1:3 2:1 3:2
 
 
 //轮播图函数
@@ -72,6 +125,8 @@ function slideshow() {
     descrips[current].className="";
   }
   function slideOn() {
+    currentId.value = current;
+    console.log(currentId.value)
     imgs[current].className="active"; //图片淡入
     pages[current].className="active";
     descrips[current].className="active";
@@ -79,13 +134,13 @@ function slideshow() {
 
   function changeSlide() { //切换图片的函数
     slideOff();
-    current++; //自增1
+    current ++; //自增1
     if(current>=3) current=0;
     slideOn();
   }
 
   //每2s调用changeSlide函数进行图片轮播
-  var slideon=setInterval(changeSlide,3000);
+  var slideon=setInterval(changeSlide,2000);
 
   slideshow.onmouseover=function () {
     clearInterval(slideon); //当鼠标移入时清除轮播事件
@@ -126,6 +181,7 @@ img{
   width: 100%;
   height: 100%;
   background-size: cover;
+  cursor: pointer;
 }
 
 

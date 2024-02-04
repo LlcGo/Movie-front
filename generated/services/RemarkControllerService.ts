@@ -40,6 +40,84 @@ remarkAddRequest: RemarkAddRequest,
     }
 
     /**
+     * adminAdd
+     * @param content content
+     * @param movieName movieName
+     * @param userId userId
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static adminAddUsingPost(
+content?: string,
+movieName?: string,
+userId?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/remark/admin/add',
+            query: {
+                'content': content,
+                'movieName': movieName,
+                'userId': userId,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * adminDelete
+     * @param id id
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static adminDeleteUsingPost1(
+id?: number,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/remark/admin/delete',
+            query: {
+                'id': id,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * adminHf
+     * @param id id
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static adminHfUsingPost(
+id?: number,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/remark/admin/hf',
+            query: {
+                'id': id,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * deleteRemark
      * @param deleteRequest deleteRequest
      * @returns BaseResponse_boolean_ OK
@@ -86,30 +164,42 @@ id?: number,
 
     /**
      * listRemark
+     * @param content 
      * @param current 
      * @param movieId 
+     * @param movieName 
+     * @param nickName 
      * @param pageSize 
      * @param sortField 
      * @param sortOrder 
+     * @param userName 
      * @returns BaseResponse_List_Remark_ OK
      * @throws ApiError
      */
     public static listRemarkUsingGet(
+content?: string,
 current?: number,
 movieId?: number,
+movieName?: string,
+nickName?: string,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
+userName?: string,
 ): CancelablePromise<BaseResponse_List_Remark_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/remark/list',
             query: {
+                'content': content,
                 'current': current,
                 'movieId': movieId,
+                'movieName': movieName,
+                'nickName': nickName,
                 'pageSize': pageSize,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
+                'userName': userName,
             },
             errors: {
                 401: `Unauthorized`,
@@ -121,30 +211,42 @@ sortOrder?: string,
 
     /**
      * listCount
+     * @param content 
      * @param current 
      * @param movieId 
+     * @param movieName 
+     * @param nickName 
      * @param pageSize 
      * @param sortField 
      * @param sortOrder 
+     * @param userName 
      * @returns BaseResponse_long_ OK
      * @throws ApiError
      */
     public static listCountUsingGet(
+content?: string,
 current?: number,
 movieId?: number,
+movieName?: string,
+nickName?: string,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
+userName?: string,
 ): CancelablePromise<BaseResponse_long_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/remark/list/count',
             query: {
+                'content': content,
                 'current': current,
                 'movieId': movieId,
+                'movieName': movieName,
+                'nickName': nickName,
                 'pageSize': pageSize,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
+                'userName': userName,
             },
             errors: {
                 401: `Unauthorized`,
@@ -156,30 +258,42 @@ sortOrder?: string,
 
     /**
      * listRemarkByPage
+     * @param content 
      * @param current 
      * @param movieId 
+     * @param movieName 
+     * @param nickName 
      * @param pageSize 
      * @param sortField 
      * @param sortOrder 
+     * @param userName 
      * @returns BaseResponse_List_Remark_ OK
      * @throws ApiError
      */
     public static listRemarkByPageUsingGet(
+content?: string,
 current?: number,
 movieId?: number,
+movieName?: string,
+nickName?: string,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
+userName?: string,
 ): CancelablePromise<BaseResponse_List_Remark_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/remark/list/page',
             query: {
+                'content': content,
                 'current': current,
                 'movieId': movieId,
+                'movieName': movieName,
+                'nickName': nickName,
                 'pageSize': pageSize,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
+                'userName': userName,
             },
             errors: {
                 401: `Unauthorized`,

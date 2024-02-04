@@ -11,7 +11,7 @@
       </div>
 
     </div>
-    <img class="img" :src="img"/>
+    <img class="img" :src="currentMovie?.img"/>
     <div class="xx">
       <a-space>
         <template #split>
