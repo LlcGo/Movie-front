@@ -107,12 +107,14 @@ const isSc = ref(false)
 const currentMovie = ref<Movie>();
 const route = useRoute();
 const {query} = useRoute();
-
+const re = ref();
 
 const open = ref<boolean>(false);
 const showModal = () => {
   open.value = true;
 };
+
+
 
 //提交订单
 const addOrder = async () => {
@@ -192,11 +194,13 @@ const toWatch =  () => {
 
 watch(route,()=>{
   getMovieDetail(route.query.currentMovieId)
+
 },{deep:true})
 
 onMounted(()=>{
   console.log('当前的----------------->',query.currentMovieId)
   getMovieDetail(query.currentMovieId)
+
 })
 
 

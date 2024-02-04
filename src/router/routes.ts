@@ -33,6 +33,8 @@ import MovieDetail from "../page/context/admin/movieManger/MovieDetail.vue";
 import MovieType from "../page/context/admin/movieManger/MovieType.vue";
 import MovieNation from "../page/context/admin/movieManger/MovieNation.vue";
 import MovieYear from "../page/context/admin/movieManger/MovieYear.vue";
+import Leaderboard from "../page/context/admin/Leaderboard/Leaderboard.vue";
+import Recommend from "../page/context/admin/Leaderboard/Recommend.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -262,13 +264,13 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '/adminLeaderboard/setMovie',
-                component: UserList,
+                component: Leaderboard,
                 name: 'setMovie',
                 meta: { title: '排名设置',icon:'permission'}
             },
             {
                 path: '/adminLeaderboard/popMovie',
-                component: UserList,
+                component: Recommend,
                 name: 'popMovie',
                 meta: { title: '首页推荐设置',icon:'permission'}
             },

@@ -168,7 +168,7 @@ const initMovieType = async () => {
 }
 
 const initMovieNation = async () => {
-  const res = await MovieNationControllerService.getMovieTypeUsingGet();
+  const res = await MovieNationControllerService.getMoveNationUsingGet();
 
   res.data?.unshift({
     createTime: "2024-01-24 22:09:47",
@@ -182,7 +182,7 @@ const initMovieNation = async () => {
 }
 
 const initMovieYear = async () => {
-  const res = await MovieYearControllerService.getMovieTypeUsingGet1();
+  const res = await MovieYearControllerService.getMovieYearUsingGet();
   res.data?.unshift({
     createTime: "2024-01-24 22:09:47",
     id: 0,

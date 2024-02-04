@@ -114,7 +114,7 @@
 
 
     <div class="right">
-      <div class="rightTitleTop">{{hotMovies[0]?.movieType.typeName}}热度排行榜</div>
+      <div class="rightTitleTop">{{hotMovies[0]?.movieType.typeName}}排行榜</div>
       <div class="rightMoreTop" @click="moreMovie">更多</div>
       <div class="rightContext" v-for="hotMovie in hotMovies">
         <div class="rightContext2">
@@ -122,8 +122,14 @@
            <div class="rightFont" @click="toDetail(hotMovie)">
             <div >{{hotMovie.movieName}}</div>
             <div class="hotContext">
-              <img class="hotImg" :src="hot"/>
-              <div class="hotSize">{{hotMovie.hot}}</div>
+              <template v-if="re == '1'">
+                <img class="hotImg" :src="hot"/>
+                <div class="hotSize">{{hotMovie.hot}}</div>
+              </template>
+              <template v-else>
+                <img class="hotImg" :src="pf"/>
+                <div class="hotSize">{{hotMovie.score}}</div>
+              </template>
             </div>
             <div class="xx5">{{hotMovie?.movieNation?.nationName }}/{{hotMovie.movieType.typeName}}</div>
             <div class="xx6">状态：{{getMovieState(hotMovie.state)}}</div>
@@ -138,10 +144,12 @@
 <script setup lang="ts">
 import img from '../../../assets/xtf.jpg'
 import hot from '../../../assets/hot.png'
+import pf from '../../../assets/pff.png'
 import {onMounted, ref, watch, watchEffect} from 'vue';
 import noMessage from '../../../assets/noMessage.png';
 
 const value = ref<number>(3);
+const re = ref('1');
 //内容
 const content = ref();
 const desc = ref<string[]>(['很差', '较差', '一般', '很好', '力推']);
@@ -161,6 +169,11 @@ import {message} from "ant-design-vue";
 import getMovieNation from "../../typeEnum/MovieNation.ts";
 import getMovieState from "../../typeEnum/MovieState.ts";
 
+const getTypeRe = async () => {
+  const res = await MovieControllerService.getTypeReUsingPost();
+  re.value = res.data;
+  console.log(re.value)
+}
 
 //当前页码
 const current = ref(1);
@@ -184,6 +197,7 @@ const score = ref();
 onMounted(() => {
   getUserAndHotAndCurrentMovie();
   getComment();
+  getTypeRe();
   document.documentElement.scrollTop = 0
   // getCount();
 })

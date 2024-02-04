@@ -4,9 +4,9 @@
 <!--    轮播图-->
     <div id="slideshow">
       <!-- 插入轮播的图片们 -->
-      <img class="active" src="http://t1.mmonly.cc/uploads/tu/201602/198/qh1spjs3guk.jpg" />
-      <img src="https://image2.sina.com.cn/dongman/pic/chshidzrcji/U1595P55T4D115697F50DT20070406083109.jpeg" />
-      <img src="http://t1.mmonly.cc/uploads/tu/201602/198/qh1spjs3guk.jpg" />
+      <img class="active" :src="img" />
+      <img :src="img2" />
+      <img :src="img3" />
       <!-- 插入轮播的页码们 -->
       <div>
         <span class="active">1</span>
@@ -41,7 +41,9 @@ defineProps<{ msg: string }>()
 const router = useRouter();
 const movieList = ref<Map<number, Array<Movie>>>([]);
 
-
+const img = ref('/api/uploads/img/test.jpg')
+const img2 = ref('/api/uploads/img/yfr.jpg')
+const img3 = ref('/api/uploads/img/whwdzg.jpg')
 onMounted(()=>{
   slideshow();
   init();

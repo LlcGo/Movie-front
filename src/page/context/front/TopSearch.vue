@@ -122,6 +122,7 @@ const router = useRouter();
 const hotMovies = ref<Array<Movie>>([])
 const afterMovie = ref<Array<Movie>>([])
 
+
 onMounted(()=>{
   moveName.value = route.query.moveName
   search();

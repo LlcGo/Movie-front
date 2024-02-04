@@ -8,6 +8,7 @@ import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Movie_ } from '../models/BaseResponse_List_Movie_';
 import type { BaseResponse_MovieVo_ } from '../models/BaseResponse_MovieVo_';
 import type { BaseResponse_Page_Movie_ } from '../models/BaseResponse_Page_Movie_';
+import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { MovieAddRequest } from '../models/MovieAddRequest';
 import type { MovieQueryRequest } from '../models/MovieQueryRequest';
@@ -78,6 +79,42 @@ id?: number,
             query: {
                 'id': id,
             },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getSearchRe
+     * @returns BaseResponse_string_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getSearchReUsingPost(): CancelablePromise<BaseResponse_string_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/get/SearchRe',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getTypeRe
+     * @returns BaseResponse_string_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getTypeReUsingPost(): CancelablePromise<BaseResponse_string_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/get/TypeRe',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -257,6 +294,54 @@ movieQueryRequest: MovieQueryRequest,
             method: 'POST',
             url: '/movie/list/page',
             body: movieQueryRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setSearchRe
+     * @param state state
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setSearchReUsingPost(
+state?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/set/SearchRe',
+            query: {
+                'state': state,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setTypeRe
+     * @param state state
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setTypeReUsingPost(
+state?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/movie/set/TypeRe',
+            query: {
+                'state': state,
+            },
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
