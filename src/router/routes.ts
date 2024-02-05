@@ -37,6 +37,7 @@ import Leaderboard from "../page/context/admin/Leaderboard/Leaderboard.vue";
 import Recommend from "../page/context/admin/Leaderboard/Recommend.vue";
 import MovieRemark from "../page/context/admin/movieRemark/MovieRemark.vue";
 import MovieBarrage from "../page/context/admin/movieRemark/MovieBarrage.vue";
+import OrderDetial from "../page/context/admin/orderManger/OrderDetial.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -322,15 +323,15 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '/adminOrder/order',
-                component: UserList,
+                component: OrderDetial,
                 name: 'order',
-                meta: { title: '订单详情',icon:'permission'}
+                meta: { title: '订单查询',icon:'permission'}
             },
             {
                 path: '/adminOrder/orderSetDDL',
                 component: UserList,
                 name: 'orderSetDDL',
-                meta: { title: '延迟时间设置',icon:'permission'}
+                meta: { title: '自动取消时间设置',icon:'permission'}
             },
             {
                 path: '/adminOrder/vipSet',

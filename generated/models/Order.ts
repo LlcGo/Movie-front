@@ -4,6 +4,7 @@
 /* eslint-disable */
 
 import type { Movie } from './Movie';
+import type { Users } from './Users';
 
 export type Order = {
     createTime?: string;
@@ -13,7 +14,9 @@ export type Order = {
     movieId?: number;
     orderState?: number;
     state?: number;
+    total?: number;
     updateTime?: string;
+    user?: Users;
     userId?: string;
     vipType?: number;
 };

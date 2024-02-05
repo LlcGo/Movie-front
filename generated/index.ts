@@ -72,6 +72,7 @@ export type { Order } from './models/Order';
 export type { OrderAddRequest } from './models/OrderAddRequest';
 export type { OrderByRequest } from './models/OrderByRequest';
 export type { OrderItem } from './models/OrderItem';
+export type { OrderQueryRequest } from './models/OrderQueryRequest';
 export type { OrderUpdateRequest } from './models/OrderUpdateRequest';
 export type { Page_Movie_ } from './models/Page_Movie_';
 export type { Page_MovieNation_ } from './models/Page_MovieNation_';

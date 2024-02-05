@@ -10,6 +10,7 @@ import type { BaseResponse_Page_Order_ } from '../models/BaseResponse_Page_Order
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { OrderAddRequest } from '../models/OrderAddRequest';
 import type { OrderByRequest } from '../models/OrderByRequest';
+import type { OrderQueryRequest } from '../models/OrderQueryRequest';
 import type { OrderUpdateRequest } from '../models/OrderUpdateRequest';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -32,6 +33,28 @@ orderAddRequest: OrderAddRequest,
             method: 'POST',
             url: '/order/add',
             body: orderAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * listOrder
+     * @param orderQueryRequest orderQueryRequest
+     * @returns BaseResponse_List_Order_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static listOrderUsingPost(
+orderQueryRequest: OrderQueryRequest,
+): CancelablePromise<BaseResponse_List_Order_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/admin/list',
+            body: orderQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -143,108 +166,49 @@ id?: number,
     }
 
     /**
-     * listOrder
-     * @param createTime 
-     * @param current 
-     * @param gender 
-     * @param id 
-     * @param pageSize 
-     * @param sortField 
-     * @param sortOrder 
-     * @param updateTime 
-     * @param userAccount 
-     * @param userAvatar 
-     * @param userName 
-     * @param userRole 
-     * @returns BaseResponse_List_Order_ OK
-     * @throws ApiError
-     */
-    public static listOrderUsingGet(
-createTime?: string,
-current?: number,
-gender?: number,
-id?: number,
-pageSize?: number,
-sortField?: string,
-sortOrder?: string,
-updateTime?: string,
-userAccount?: string,
-userAvatar?: string,
-userName?: string,
-userRole?: string,
-): CancelablePromise<BaseResponse_List_Order_> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/order/list',
-            query: {
-                'createTime': createTime,
-                'current': current,
-                'gender': gender,
-                'id': id,
-                'pageSize': pageSize,
-                'sortField': sortField,
-                'sortOrder': sortOrder,
-                'updateTime': updateTime,
-                'userAccount': userAccount,
-                'userAvatar': userAvatar,
-                'userName': userName,
-                'userRole': userRole,
-            },
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-
-    /**
      * listOrderByPage
-     * @param createTime 
      * @param current 
-     * @param gender 
+     * @param date 
      * @param id 
+     * @param movieName 
+     * @param nickName 
+     * @param orderState 
      * @param pageSize 
      * @param sortField 
      * @param sortOrder 
-     * @param updateTime 
-     * @param userAccount 
-     * @param userAvatar 
-     * @param userName 
-     * @param userRole 
+     * @param state 
+     * @param vipType 
      * @returns BaseResponse_Page_Order_ OK
      * @throws ApiError
      */
     public static listOrderByPageUsingGet(
-createTime?: string,
 current?: number,
-gender?: number,
+date?: Array<string>,
 id?: number,
+movieName?: string,
+nickName?: string,
+orderState?: number,
 pageSize?: number,
 sortField?: string,
 sortOrder?: string,
-updateTime?: string,
-userAccount?: string,
-userAvatar?: string,
-userName?: string,
-userRole?: string,
+state?: number,
+vipType?: number,
 ): CancelablePromise<BaseResponse_Page_Order_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/order/list/page',
             query: {
-                'createTime': createTime,
                 'current': current,
-                'gender': gender,
+                'date': date,
                 'id': id,
+                'movieName': movieName,
+                'nickName': nickName,
+                'orderState': orderState,
                 'pageSize': pageSize,
                 'sortField': sortField,
                 'sortOrder': sortOrder,
-                'updateTime': updateTime,
-                'userAccount': userAccount,
-                'userAvatar': userAvatar,
-                'userName': userName,
-                'userRole': userRole,
+                'state': state,
+                'vipType': vipType,
             },
             errors: {
                 401: `Unauthorized`,
