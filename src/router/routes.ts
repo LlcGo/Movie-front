@@ -38,6 +38,7 @@ import Recommend from "../page/context/admin/Leaderboard/Recommend.vue";
 import MovieRemark from "../page/context/admin/movieRemark/MovieRemark.vue";
 import MovieBarrage from "../page/context/admin/movieRemark/MovieBarrage.vue";
 import OrderDetial from "../page/context/admin/orderManger/OrderDetial.vue";
+import OrderSetDDL from "../page/context/admin/orderManger/OrderSetDDL.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -329,7 +330,7 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 path: '/adminOrder/orderSetDDL',
-                component: UserList,
+                component: OrderSetDDL,
                 name: 'orderSetDDL',
                 meta: { title: '自动取消时间设置',icon:'permission'}
             },

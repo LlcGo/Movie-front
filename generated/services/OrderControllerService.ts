@@ -219,6 +219,30 @@ vipType?: number,
     }
 
     /**
+     * setDDLTime
+     * @param time time
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setDdlTimeUsingPost(
+time?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/setDDLTime',
+            query: {
+                'time': time,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * toBuy
      * @param orderByRequest orderByRequest
      * @returns BaseResponse_boolean_ OK
