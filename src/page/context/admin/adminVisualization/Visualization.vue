@@ -206,7 +206,7 @@ const getAll3 = async () => {
   let option;
   option = {
     title: {
-      text: '电影分数与热度(前40)'
+      text: '电影分数与热度'
     },
     legend: {},
     tooltip: {},
@@ -225,20 +225,6 @@ const getAll3 = async () => {
 }
 
 
-const initChart = async () => {
-  let chartDom = document.getElementById('main');
-  const res = await MovieControllerService.getAllByTypeECharsUsingGet();
-  const res2 = await MovieControllerService.getHotECharsUsingGet();
-  const res3 = await MovieControllerService.getScoreECharsUsingGet();
-
-
-  topHot.value = new Map(Object.entries(res2.data))
-  // console.log('top 20 热度 的电影的类型', topHot.value)
-  topScore.value = new Map(Object.entries(res3.data))
-  // console.log('top 20 分数 的电影的类型', topScore.value)
-
-
-}
 </script>
 
 <style lang="scss" scoped>

@@ -10,7 +10,7 @@ socket.init()
 
 </script>
 
-<style scoped>
+<style>
 
 
 </style>

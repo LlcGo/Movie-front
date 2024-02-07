@@ -3,10 +3,10 @@
     <div class="logo-container">
       <el-avatar
         :size="logoHeight"
-        src="https://osstest.eetop.com/bewt365/578d0d88e7ad2f9ae99f10eee8e08d9c.jpg"
+        :src="logo"
       />
       <h1 class="logo-title" v-if="app.sidebarOpened">
-        Vue3后台系统
+        罗罗影视后台
       </h1>
     </div>
     <el-scrollbar>
@@ -20,10 +20,14 @@ import SidebarMenu from "./SidebarMenu.vue";
 import {} from "vue";
 import {useApp} from "@/store/modules/app.ts";
 const app = useApp();
-const logoHeight = 32;
+const logoHeight = 50;
+import logo from '../../../assets/logo.png'
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-avatar){
+  --el-avatar-bg-color:none
+}
 .logo-container {
   height: v-bind(logoHeight) + "px";
   padding: 10px 0 22px 0;

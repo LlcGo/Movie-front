@@ -411,6 +411,11 @@ window.addEventListener('scroll', resizeHeaderOnScroll);
 </script>
 
 <style scoped >
+:where(.css-dev-only-do-not-override-3m4nqy).ant-avatar-lg.ant-avatar-icon {
+  font-size: 24px;
+  background: none;
+}
+
 .imgClass{
   width: 100%;
   height: 100%;

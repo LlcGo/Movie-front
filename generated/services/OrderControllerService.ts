@@ -6,6 +6,7 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Order_ } from '../models/BaseResponse_List_Order_';
 import type { BaseResponse_Map_int_List_Movie_ } from '../models/BaseResponse_Map_int_List_Movie_';
+import type { BaseResponse_Map_int_List_Order_ } from '../models/BaseResponse_Map_int_List_Order_';
 import type { BaseResponse_Order_ } from '../models/BaseResponse_Order_';
 import type { BaseResponse_Page_Order_ } from '../models/BaseResponse_Page_Order_';
 import type { DeleteRequest } from '../models/DeleteRequest';
@@ -176,6 +177,23 @@ id?: number,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/order/get/NK',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getVipEChars
+     * @returns BaseResponse_Map_int_List_Order_ OK
+     * @throws ApiError
+     */
+    public static getVipECharsUsingGet(): CancelablePromise<BaseResponse_Map_int_List_Order_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/order/get/Vip/EChars',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

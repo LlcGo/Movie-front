@@ -34,7 +34,9 @@
         </div>
 
       </div>
-      <div class="actor" v-html=" '主演：'+ currentMovie?.actorsName"></div>
+      <div class="hid">
+        <div class="actor" v-html=" '主演：'+ currentMovie?.actorsName"></div>
+      </div>
       <div class="dy">
         导演:
         <div class="xsjl">
@@ -321,8 +323,14 @@ img{
   margin-top: 5%;
 }
 .actor{
+  width: 460px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
   margin-top: 5%;
 }
+
 .dy{
   margin-top: 5%;
 }

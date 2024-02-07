@@ -34,6 +34,7 @@ export type { BaseResponse_List_Users_ } from './models/BaseResponse_List_Users_
 export type { BaseResponse_List_UserVo_ } from './models/BaseResponse_List_UserVo_';
 export type { BaseResponse_long_ } from './models/BaseResponse_long_';
 export type { BaseResponse_Map_int_List_Movie_ } from './models/BaseResponse_Map_int_List_Movie_';
+export type { BaseResponse_Map_int_List_Order_ } from './models/BaseResponse_Map_int_List_Order_';
 export type { BaseResponse_Map_object_object_ } from './models/BaseResponse_Map_object_object_';
 export type { BaseResponse_MovieNation_ } from './models/BaseResponse_MovieNation_';
 export type { BaseResponse_MovieType_ } from './models/BaseResponse_MovieType_';

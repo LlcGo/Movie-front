@@ -6,7 +6,7 @@
     </div>
     <el-form ref="loginFromRef" class="login-form" :model="loginForm" >
       <div class="title-container">
-        <h3 class="title">Vue3后台系统</h3>
+        <h3 class="title">罗罗影视后台系统</h3>
       </div>
 
       <el-form-item prop="username" style="display: flex;flex-direction: row">
@@ -203,6 +203,7 @@ $txt_color: #333;
   //background-size: cover;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
   .login-form {
+    border-radius: 15px;
     position: relative;
     width: 420px;
     max-width: 100%;

@@ -41,6 +41,7 @@ import OrderDetial from "../page/context/admin/orderManger/OrderDetial.vue";
 import OrderSetDDL from "../page/context/admin/orderManger/OrderSetDDL.vue";
 import VipPrice from "../page/context/admin/orderManger/VipPrice.vue";
 import Visualization from "../page/context/admin/adminVisualization/Visualization.vue";
+import UserVisualization from "../page/context/admin/adminVisualization/UserVisualization.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -364,6 +365,12 @@ const routes: Array<RouteRecordRaw> = [
                 component: Visualization,
                 name: 'visualization',
                 meta: { title: '影视分析',icon:'permission'}
+            },
+            {
+                path: '/adminVisualization/UserVisualization',
+                component: UserVisualization,
+                name: 'UserVisualization',
+                meta: { title: '订单数据可视化',icon:'permission'}
             },
         ]
     }
