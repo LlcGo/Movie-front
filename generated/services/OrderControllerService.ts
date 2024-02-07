@@ -5,6 +5,7 @@
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Order_ } from '../models/BaseResponse_List_Order_';
+import type { BaseResponse_Map_int_List_Movie_ } from '../models/BaseResponse_Map_int_List_Movie_';
 import type { BaseResponse_Order_ } from '../models/BaseResponse_Order_';
 import type { BaseResponse_Page_Order_ } from '../models/BaseResponse_Page_Order_';
 import type { DeleteRequest } from '../models/DeleteRequest';
@@ -131,6 +132,77 @@ id?: number,
     }
 
     /**
+     * getEChars
+     * @returns BaseResponse_Map_int_List_Movie_ OK
+     * @throws ApiError
+     */
+    public static getECharsUsingGet(): CancelablePromise<BaseResponse_Map_int_List_Movie_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/order/get/EChars',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getJK
+     * @returns BaseResponse_int_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getJkUsingPost(): CancelablePromise<BaseResponse_int_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/get/JK',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getNK
+     * @returns BaseResponse_int_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getNkUsingPost(): CancelablePromise<BaseResponse_int_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/get/NK',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getYK
+     * @returns BaseResponse_int_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getYkUsingPost(): CancelablePromise<BaseResponse_int_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/get/YK',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * getOrderByUserId
      * @returns BaseResponse_List_Order_ OK
      * @throws ApiError
@@ -209,6 +281,78 @@ vipType?: number,
                 'sortOrder': sortOrder,
                 'state': state,
                 'vipType': vipType,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setJK
+     * @param price price
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setJkUsingPost(
+price?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/set/JK',
+            query: {
+                'price': price,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setNK
+     * @param price price
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setNkUsingPost(
+price?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/set/NK',
+            query: {
+                'price': price,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * setYK
+     * @param price price
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static setYkUsingPost(
+price?: string,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/order/set/YK',
+            query: {
+                'price': price,
             },
             errors: {
                 401: `Unauthorized`,

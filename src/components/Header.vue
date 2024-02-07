@@ -31,7 +31,7 @@
         <img class="homeImg" @click="toHome" :src="home">
         <div class="scFont" @click="toHome">主页</div>
       </div>
-      <div @click="()=>{open = true}">
+      <div @click="openVip">
         <img class="homeImg" :src="vip">
         <div class="scFont">vip充值</div>
       </div>
@@ -40,6 +40,7 @@
 <!--    会员充值弹框-->
     <a-modal v-model:open="open"
              @ok="nowBuy"
+             @cancel="toCloseVip"
              width="400px"
              cancelText="取消"
              style="position: relative"
@@ -87,9 +88,9 @@
 <!--用户头像以及下拉框-->
     <div class="userContent" v-if="currentUser">
       <div class="userName">
-        {{currentUser.nickname}}
+        {{currentUser?.nickname}}
       </div>
-      <div>(用户)</div>
+      <div>{{getRole(currentUser?.userRole)}}</div>
       <a-dropdown>
         <a class="ant-dropdown-link" @click.prevent>
           <a-avatar size="large">
@@ -154,7 +155,7 @@ const currentUser = ref<Users>();
 const router = useRouter();
 const value = ref();
 const open = ref<boolean>(false)
-const price = ref(15)
+const price = ref()
 const date = ref('月');
 const userStore = useUserStore();
 const unreadStore =  unReadStore();
@@ -162,12 +163,24 @@ const unreadStore =  unReadStore();
 const unReadTotal = ref();
 onMounted(()=>{
   getUser();
+  getYK()
 })
 
 watch(userStore,(value, oldValue)=>{
   getUser();
+  getYK()
 },)
 
+const toCloseVip = () => {
+  open.value = false;
+  activeKey.value = '1'
+
+}
+
+const openVip = () => {
+  open.value = true;
+  getYK();
+}
 const toChat = () => {
   if(currentUser.value == null){
     message.warn('请先登录')
@@ -187,6 +200,16 @@ const toAccount = () => {
     path:'/layout/account'
   })
 }
+const getRole = (val:string) => {
+   switch (val){
+     case 'admin':
+       return "(管理员)"
+     case 'user':
+       return "(用户)"
+     case 'vip':
+       return "(会员)"
+   }
+}
 
 //去我的收藏
 const toFavour = () => {
@@ -203,19 +226,34 @@ const toFavour = () => {
   })
 }
 
+const getYK = async () => {
+  const res = await OrderControllerService.getYkUsingPost()
+  price.value = Number(res.data)
+}
+
+const getJK = async () => {
+  const res = await OrderControllerService.getJkUsingPost()
+  price.value = Number(res.data)
+}
+
+const getNK = async () => {
+  const res = await OrderControllerService.getNkUsingPost()
+  price.value = Number(res.data)
+}
+
 watch(activeKey,()=>{
   if (activeKey.value == '1'){
-    price.value = 15
+    getYK()
     date.value ='月'
     return;
   }
   if(activeKey.value == '2'){
-    price.value = 50
+    getJK()
     date.value = '季度'
     return;
   }
   if(activeKey.value == '3'){
-    price.value = 148
+    getNK()
     date.value = '年'
     return;
   }

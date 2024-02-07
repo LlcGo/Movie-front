@@ -155,6 +155,9 @@ const getType = () => {
   color: skyblue;
 }
 
+img{
+  cursor: pointer;
+}
 
 .warp{
   display: flex;

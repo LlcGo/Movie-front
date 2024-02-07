@@ -13,6 +13,7 @@
               class="avatar"
               :src="currentUser?.currentUser?.faceImage"
           ></el-image>
+          {{currentUser?.currentUser?.nickname}}(管理员)
 <!--          <div>{{ $store.getters.userInfo.admin_nick_name }}</div>-->
           <CaretBottom style="width: 1em; height: 1em; margin-left: 4px;"/>
 

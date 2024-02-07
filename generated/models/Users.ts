@@ -17,4 +17,5 @@ export type Users = {
     updateTime?: string;
     userRole?: string;
     username?: string;
+    vipOverTime?: string;
 };

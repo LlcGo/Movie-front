@@ -39,6 +39,8 @@ import MovieRemark from "../page/context/admin/movieRemark/MovieRemark.vue";
 import MovieBarrage from "../page/context/admin/movieRemark/MovieBarrage.vue";
 import OrderDetial from "../page/context/admin/orderManger/OrderDetial.vue";
 import OrderSetDDL from "../page/context/admin/orderManger/OrderSetDDL.vue";
+import VipPrice from "../page/context/admin/orderManger/VipPrice.vue";
+import Visualization from "../page/context/admin/adminVisualization/Visualization.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -336,7 +338,7 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 path: '/adminOrder/vipSet',
-                component: UserList,
+                component: VipPrice,
                 name: 'vipSet',
                 meta: { title: '会员价格管理',icon:'permission'}
             },
@@ -359,9 +361,9 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '/adminVisualization/visualization',
-                component: UserList,
+                component: Visualization,
                 name: 'visualization',
-                meta: { title: '网站流量',icon:'permission'}
+                meta: { title: '影视分析',icon:'permission'}
             },
         ]
     }

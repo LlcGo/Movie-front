@@ -6,6 +6,9 @@
     <a-form-item label="用户名">
       <a-tag color="skyblue" >{{formState.username}}</a-tag>
     </a-form-item>
+    <a-form-item v-if="formState?.vipOverTime" label="会员过期时间">
+      <a-tag color="skyblue" >{{dayjs(formState?.vipOverTime).format('DD/MM/YYYY')}}</a-tag>
+    </a-form-item>
     <a-form-item label="用户头像">
      <a-avatar @click="showModal">
        <template #icon>
@@ -106,6 +109,7 @@ import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
 import {useUserStore} from "../../../../store/user.ts";
+import dayjs from "dayjs";
 const userChange = useUserStore();
 const value = ref<string>('0');
 const like = ref([]);
@@ -238,6 +242,7 @@ interface FormState {
   username: string;
   nickname: string;
   signature:string;
+  vipOverTime: string;
 }
 //头像
 const avaImg = ref();
@@ -255,6 +260,7 @@ const formState: UnwrapRef<FormState> = reactive({
   nickname: '',
   username: '',
   signature: '',
+  vipOverTime: '',
 });
 const formItemLayout = computed(() => {
   const {layout} = formState;
@@ -291,6 +297,7 @@ const getCurrentUser = async () => {
   console.log(currentUser.value);
   formState.nickname = currentUser.value.nickname
   formState.username = currentUser.value.username
+  formState.vipOverTime = currentUser.value.vipOverTime;
   if(currentUser.value.likeType != null && currentUser.value.likeType != ''){
     let b = currentUser.value.likeType.replace('[',"");
     let a = b.replace(']',"")

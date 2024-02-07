@@ -6,8 +6,10 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_ConcurrentHashMap_int_List_Movie_ } from '../models/BaseResponse_ConcurrentHashMap_int_List_Movie_';
 import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_List_Movie_ } from '../models/BaseResponse_List_Movie_';
+import type { BaseResponse_Map_int_List_Movie_ } from '../models/BaseResponse_Map_int_List_Movie_';
 import type { BaseResponse_Map_object_object_ } from '../models/BaseResponse_Map_object_object_';
 import type { BaseResponse_MovieVo_ } from '../models/BaseResponse_MovieVo_';
+import type { BaseResponse_object_ } from '../models/BaseResponse_object_';
 import type { BaseResponse_Page_Movie_ } from '../models/BaseResponse_Page_Movie_';
 import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { DeleteRequest } from '../models/DeleteRequest';
@@ -36,6 +38,23 @@ movieAddRequest: MovieAddRequest,
             method: 'POST',
             url: '/movie/add',
             body: movieAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getAllByTypeEChars
+     * @returns BaseResponse_Map_int_List_Movie_ OK
+     * @throws ApiError
+     */
+    public static getAllByTypeECharsUsingGet(): CancelablePromise<BaseResponse_Map_int_List_Movie_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/movie/allByType/EChars',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -205,6 +224,57 @@ type?: number,
             query: {
                 'type': type,
             },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getHotEChars
+     * @returns BaseResponse_Map_int_List_Movie_ OK
+     * @throws ApiError
+     */
+    public static getHotECharsUsingGet(): CancelablePromise<BaseResponse_Map_int_List_Movie_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/movie/getHot/EChars',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getScoreEChars
+     * @returns BaseResponse_Map_int_List_Movie_ OK
+     * @throws ApiError
+     */
+    public static getScoreECharsUsingGet(): CancelablePromise<BaseResponse_Map_int_List_Movie_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/movie/getScore/EChars',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getScoreAndScoreEChars
+     * @returns BaseResponse_object_ OK
+     * @throws ApiError
+     */
+    public static getScoreAndScoreECharsUsingGet(): CancelablePromise<BaseResponse_object_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/movie/getScoreAndScore/EChars',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
