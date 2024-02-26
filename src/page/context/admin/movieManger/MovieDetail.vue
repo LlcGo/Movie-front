@@ -1,7 +1,7 @@
 <template>
   <div class="user-info-container">
     <el-card class="print-box">
-      <el-button type="primary" @click="dialogVisible = true">修改影片信息</el-button>
+      <el-button type="primary" @click="edit">修改影片信息</el-button>
     </el-card>
     <el-card>
       <div id="movieInfoBox" class="user-info-box">
@@ -11,10 +11,10 @@
         <div class="header">
           <!-- 头部渲染表格 -->
           <!-- 头像渲染 -->
-          <el-image
-              class="avatar"
-              :src="movieInfo.img"
-          ></el-image>
+          <div class="avatar">
+            <img :src="movieInfo.img">
+          </div>
+<!--          <img class="avatar" :src="movieInfo.img">-->
           <el-descriptions :column="2" border>
             <el-descriptions-item label="影片ID">{{ movieInfo.id }}</el-descriptions-item>
             <el-descriptions-item label="影片名">
@@ -30,7 +30,7 @@
             <el-descriptions-item label="类型">
               {{ movieInfo.movieType }}
             </el-descriptions-item>
-            <el-descriptions-item label="导演名">
+            <el-descriptions-item label="导演名" class="outText">
               {{ movieInfo.directorName }}
             </el-descriptions-item>
             <el-descriptions-item label="演员名">
@@ -171,39 +171,53 @@
                   </a-upload>
                 </el-form-item>
 
-                <el-form-item label="影视资源">
-                  <a-upload-dragger
-                      name="file"
-                      :multiple="false"
-                      :disabled="isOk"
-                      :showUploadList="false"
-                      :customRequest="AddMovieBeforeUpload"
-                  >
-                    <template v-if="!isOk">
-                      <p class="ant-upload-drag-icon">
-                        <a-icon type="inbox" />
-                      </p>
-                      <p class="ant-upload-text">
-                        点击修改已上传的资源
-                      </p>
-                      <p class="ant-upload-hint">
-                        影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视
-                      </p>
-                    </template>
-                    <template v-if="isOk">
-                      <p class="ant-upload-drag-icon">
-                        <a-icon type="inbox" />
-                      </p>
-                      <p class="ant-upload-text">
-                        视频上传完成
-                      </p>
-                      <p class="ant-upload-hint">
-                        影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视
-                      </p>
-                    </template>
+        <el-form-item label="选择影视ID">
+          <el-select
+              v-model="formEditLabelAlign.videoId"
+              class="m-2"
+              placeholder="影片ID"
+              style="width: 240px"
+              clearable
+          >
+            <el-option
+                v-for="item in videoIds"
+                :key="item.id"
+                :label="item.id"
+                :value="item.id"
+            />
+          </el-select>
+          <!--          <a-upload-dragger-->
+          <!--              name="file"-->
+          <!--              :multiple="false"-->
+          <!--              :disabled="isOk"-->
+          <!--              :showUploadList="false"-->
+          <!--              :customRequest="AddMovieBeforeUpload"-->
+          <!--          >-->
+          <!--            <template v-if="!isOk">-->
+          <!--              <p class="ant-upload-drag-icon">-->
+          <!--                <a-icon type="inbox" />-->
+          <!--              </p>-->
+          <!--              <p class="ant-upload-text">-->
+          <!--                点击上传影视资源-->
+          <!--              </p>-->
+          <!--              <p class="ant-upload-hint">-->
+          <!--                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视-->
+          <!--              </p>-->
+          <!--            </template>-->
+          <!--            <template v-if="isOk">-->
+          <!--              <p class="ant-upload-drag-icon">-->
+          <!--                <a-icon type="inbox" />-->
+          <!--              </p>-->
+          <!--              <p class="ant-upload-text">-->
+          <!--                视频上传完成-->
+          <!--              </p>-->
+          <!--              <p class="ant-upload-hint">-->
+          <!--                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视-->
+          <!--              </p>-->
+          <!--            </template>-->
 
-                  </a-upload-dragger>
-                </el-form-item>
+          <!--          </a-upload-dragger>-->
+        </el-form-item>
 
       </el-form>
       <template #footer>
@@ -227,7 +241,7 @@ import {
   FileControllerService,
   MovieControllerService,
   MovieNationControllerService,
-  MovieTyepControllerService, MovieYearControllerService,
+  MovieTyepControllerService, MovieYearControllerService, ParsingControllerService,
   UserControllerService
 } from "../../../../../generated/index.ts";
 import {useApp} from "@/store/modules/app.ts";
@@ -242,6 +256,7 @@ const route = useRoute();
 const movieInfo = ref({})
 const tempVideoId = ref('');
 const isOk = ref(false)
+const videoIds = ref([]);
 const handleEditClose = () => {
   dialogVisible.value = false;
   isOk.value = false
@@ -285,6 +300,9 @@ const getInit = () => {
     for (let i = 0; i < current.length; i++) {
       if (current[i].name === route.name) {
         console.log('store.tagsViewList[i]', current[i].query)
+        if(current[i].query.actorsName.length > 18){
+          current[i].query.actorsName = current[i].query.actorsName.substring(0,18) + '...'
+        }
         movieInfo.value = current[i].query
         getFormEditLabelAlign(current[i].query)
       }
@@ -489,6 +507,10 @@ const getFormEditLabelAlign = (movie) => {
   formEditLabelAlign.movieProfile = movie.movieProfile
   formEditLabelAlign.videoId = Number(movie.videoId)
   formEditLabelAlign.actorsName = movie.actorsName
+  console.log(formEditLabelAlign.actorsName.length)
+  if(formEditLabelAlign.actorsName.length > 18){
+    formEditLabelAlign.actorsName = formEditLabelAlign.actorsName.substring(0,18) + '...'
+  }
 }
 
 
@@ -497,6 +519,9 @@ watch(
     () => route.query.id,
     val => {
       if (val) {
+          if(route.query.actorsName.length > 18){
+            route.query.actorsName = route.query.actorsName.substring(0,18) + '...'
+          }
         movieInfo.value = route.query
         getFormEditLabelAlign(route.query)
         console.log("watch= ", route.query)
@@ -515,6 +540,20 @@ watch(
     }
 )
 
+const edit = async () => {
+  dialogVisible.value = true
+  videoIds.value = [];
+  const res = await ParsingControllerService.getVideoListUsingPost();
+  console.log('获得的数据',res.data)
+  res.data.forEach(item => {
+    let a = {
+      id:item.id
+    }
+    videoIds.value.push(a);
+  })
+  console.log(videoIds.value)
+}
+
 
 </script>
 <style lang="scss" scoped>
@@ -527,6 +566,14 @@ watch(
   text-align: right;
 }
 
+.outText{
+  white-space: nowrap;
+}
+
+img{
+  height: 100%;
+  width: 100%;
+}
 .user-info-box {
   width: 1024px;
   margin: 0 auto;
@@ -544,8 +591,9 @@ watch(
     }
 
     .avatar {
-      width: 100px;
-      height: 159px;
+      width: 10%;
+      height: 158px;
+      background: #1677ff;
       box-sizing: border-box;
       border: 1px solid #ebeef5;
       border-right: none;
@@ -572,5 +620,14 @@ watch(
     margin-top: 42px;
     text-align: right;
   }
+}
+
+:deep(.el-descriptions__body .el-descriptions__table.is-bordered .el-descriptions__cell) {
+  border: var(--el-descriptions-table-border);
+  padding: 8px 11px;
+  overflow: hidden;
+  height: 39px;
+  width: 35px;
+  text-overflow: ellipsis;
 }
 </style>

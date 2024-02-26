@@ -48,6 +48,7 @@ export type { BaseResponse_Page_MovieType_ } from './models/BaseResponse_Page_Mo
 export type { BaseResponse_Page_MovieYear_ } from './models/BaseResponse_Page_MovieYear_';
 export type { BaseResponse_Page_Order_ } from './models/BaseResponse_Page_Order_';
 export type { BaseResponse_Page_UserVo_ } from './models/BaseResponse_Page_UserVo_';
+export type { BaseResponse_Page_VideoUpload_ } from './models/BaseResponse_Page_VideoUpload_';
 export type { BaseResponse_Remark_ } from './models/BaseResponse_Remark_';
 export type { BaseResponse_string_ } from './models/BaseResponse_string_';
 export type { BaseResponse_Users_ } from './models/BaseResponse_Users_';
@@ -82,6 +83,7 @@ export type { Page_MovieType_ } from './models/Page_MovieType_';
 export type { Page_MovieYear_ } from './models/Page_MovieYear_';
 export type { Page_Order_ } from './models/Page_Order_';
 export type { Page_UserVo_ } from './models/Page_UserVo_';
+export type { Page_VideoUpload_ } from './models/Page_VideoUpload_';
 export type { Purchased } from './models/Purchased';
 export type { QCCode } from './models/QCCode';
 export type { RecentChat } from './models/RecentChat';
@@ -99,6 +101,7 @@ export type { Users } from './models/Users';
 export type { UserUpdateRequest } from './models/UserUpdateRequest';
 export type { UserVo } from './models/UserVo';
 export type { VideoUpload } from './models/VideoUpload';
+export type { VideQueryRequest } from './models/VideQueryRequest';
 export type { View } from './models/View';
 
 export { BarrageControllerService } from './services/BarrageControllerService';
@@ -113,6 +116,7 @@ export { MovieNationControllerService } from './services/MovieNationControllerSe
 export { MovieTyepControllerService } from './services/MovieTyepControllerService';
 export { MovieYearControllerService } from './services/MovieYearControllerService';
 export { OrderControllerService } from './services/OrderControllerService';
+export { ParsingControllerService } from './services/ParsingControllerService';
 export { PurchasedControllerService } from './services/PurchasedControllerService';
 export { RecentChatControllerService } from './services/RecentChatControllerService';
 export { RemarkAndUserControllerService } from './services/RemarkAndUserControllerService';

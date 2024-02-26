@@ -378,38 +378,52 @@
           </a-upload>
         </el-form-item>
 
-        <el-form-item label="影视资源">
-          <a-upload-dragger
-              name="file"
-              :multiple="false"
-              :disabled="isOk"
-              :showUploadList="false"
-              :customRequest="AddMovieBeforeUpload"
+        <el-form-item label="选择影视ID">
+          <el-select
+              v-model="formAddLabelAlign.videoId"
+              class="m-2"
+              placeholder="影片ID"
+              style="width: 240px"
+              clearable
           >
-            <template v-if="!isOk">
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">
-                点击上传影视资源
-              </p>
-              <p class="ant-upload-hint">
-                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视
-              </p>
-            </template>
-            <template v-if="isOk">
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">
-                视频上传完成
-              </p>
-              <p class="ant-upload-hint">
-                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视
-              </p>
-            </template>
+            <el-option
+                v-for="item in videoIds"
+                :key="item.id"
+                :label="item.id"
+                :value="item.id"
+            />
+          </el-select>
+<!--          <a-upload-dragger-->
+<!--              name="file"-->
+<!--              :multiple="false"-->
+<!--              :disabled="isOk"-->
+<!--              :showUploadList="false"-->
+<!--              :customRequest="AddMovieBeforeUpload"-->
+<!--          >-->
+<!--            <template v-if="!isOk">-->
+<!--              <p class="ant-upload-drag-icon">-->
+<!--                <a-icon type="inbox" />-->
+<!--              </p>-->
+<!--              <p class="ant-upload-text">-->
+<!--                点击上传影视资源-->
+<!--              </p>-->
+<!--              <p class="ant-upload-hint">-->
+<!--                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视-->
+<!--              </p>-->
+<!--            </template>-->
+<!--            <template v-if="isOk">-->
+<!--              <p class="ant-upload-drag-icon">-->
+<!--                <a-icon type="inbox" />-->
+<!--              </p>-->
+<!--              <p class="ant-upload-text">-->
+<!--                视频上传完成-->
+<!--              </p>-->
+<!--              <p class="ant-upload-hint">-->
+<!--                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视-->
+<!--              </p>-->
+<!--            </template>-->
 
-          </a-upload-dragger>
+<!--          </a-upload-dragger>-->
         </el-form-item>
 
       </el-form>
@@ -434,7 +448,7 @@ import {ElMessageBox, ElMessage} from 'element-plus'
 import {
   FileControllerService,
   MovieControllerService, MovieNationControllerService,
-  MovieTyepControllerService, MovieYearControllerService,
+  MovieTyepControllerService, MovieYearControllerService, ParsingControllerService,
 } from "../../../../../generated/index.ts";
 import {message} from "ant-design-vue";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons-vue";
@@ -445,7 +459,7 @@ const router = useRouter();
 const showSearch = ref(true);
 const addDialogVisible = ref(false);
 
-
+const videoIds = ref([]);
 
 const fileList = ref([]);
 // const currentImgURI = ref();
@@ -932,8 +946,18 @@ const searchEvent = () => {
 //   getListData();
 //
 // };
-const onDownTemplate = () => {
+const onDownTemplate = async () => {
   addDialogVisible.value = true
+  videoIds.value = [];
+  const res = await ParsingControllerService.getVideoListUsingPost();
+  console.log('获得的数据',res.data)
+  res.data.forEach(item => {
+    let a = {
+      id:item.id
+    }
+   videoIds.value.push(a);
+  })
+  console.log(videoIds.value)
 }
 
 </script>

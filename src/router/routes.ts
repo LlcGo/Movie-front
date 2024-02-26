@@ -42,6 +42,7 @@ import OrderSetDDL from "../page/context/admin/orderManger/OrderSetDDL.vue";
 import VipPrice from "../page/context/admin/orderManger/VipPrice.vue";
 import Visualization from "../page/context/admin/adminVisualization/Visualization.vue";
 import UserVisualization from "../page/context/admin/adminVisualization/UserVisualization.vue";
+import MovieParsing from "../page/context/admin/movieManger/MovieParsing.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -228,6 +229,12 @@ const routes: Array<RouteRecordRaw> = [
                 component: MovieList,
                 name: 'movieList',
                 meta: { title: '影片列表',icon:'permission'}
+            },
+            {
+                path: '/adminMovie/movieParsing',
+                component: MovieParsing,
+                name: 'movieParsing',
+                meta: { title: '影片解析',icon:'permission'}
             },
             {
                 path: '/adminMovie/movieDetail',
