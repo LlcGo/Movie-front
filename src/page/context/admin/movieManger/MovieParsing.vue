@@ -102,8 +102,8 @@
 <!--    新增-->
     <el-dialog
         v-model="addDialogVisible"
-        title="新增影视"
-        width="50%"
+        title="解析视频"
+        width="20%"
         :before-close="handleAddClose"
     >
       <!--    <span>This is a message</span>-->
@@ -114,7 +114,7 @@
           :model="formAddLabelAlign"
           style="max-width: 800px"
       >
-        <el-form-item label="选择影视ID">
+        <el-form-item >
           <a-upload-dragger
               name="file"
               :multiple="false"
@@ -130,7 +130,7 @@
                 点击上传影视资源
               </p>
               <p class="ant-upload-hint">
-                影视资源解析过程会很长,请耐心等待，解析视频完成后会有所提示，在此之前请先不要上架影视
+                影视资源解析过程会很长,请耐心等待。
               </p>
             </template>
             <template v-if="isOk">
@@ -141,7 +141,7 @@
                 视频上传完成
               </p>
               <p class="ant-upload-hint">
-                影视资源解析过程会很长,请耐心等待
+                影视资源解析过程会很长,请耐心等待。
               </p>
             </template>
 
@@ -197,11 +197,31 @@ const AddMovieBeforeUpload = async (files,info) => {
   const formData = new FormData();
   formData.append("file",files.file)
   const res = await FileControllerService.uploadVideoToM3U8UsingPost(formData);
+  if(res.code === 0){
+    let milliseconds = parseInt(res.data);
+    let seconds = Math.floor(milliseconds / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds %= 60;
+    minutes %= 60;
+
+    const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+    console.log(formattedTime)
+    console.log(new Date().getTime())
+  }
+
+
   ElMessage({
-    message:'修改成功,视频正在解析请稍后上架,系统解析完毕会发送提醒信息',
+    message:'正在解析，请稍后',
     type:"success",
   })
   isOk.value = true;
+  getListData();
+}
+
+const padZero = (value) => {
+  return String(value).padStart(2, '0');
 }
 const toAdd = async () => {
   const res =await MovieTyepControllerService.addMovieTypeUsingPost(formAddLabelAlign.value.typeName);
@@ -235,6 +255,7 @@ const formLabelAlign = ref({})
 
 const handleAddClose = () => {
   addDialogVisible.value = false;
+  isOk.value = false;
   // currentImgURI.value = '';
 }
 

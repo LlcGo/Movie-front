@@ -620,7 +620,8 @@ const toAddMovie = async () => {
     // message.warn()
     return;
   }
-
+  // console.log('发送的信息',formAddLabelAlign);
+  // return;
   const res = await MovieControllerService.addMovieUsingPost(formAddLabelAlign);
   if(res.code === 0){
     ElMessage({
@@ -630,6 +631,11 @@ const toAddMovie = async () => {
 
     getListData();
     handleAddClose();
+  }else {
+    ElMessage({
+      message:res.message,
+      type: "warning"
+    })
   }
 }
 //下架

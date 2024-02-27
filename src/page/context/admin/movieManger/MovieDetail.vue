@@ -491,6 +491,11 @@ const toEditMovie = async () => {
     })
     dialogVisible.value = false;
     getInit();
+  }else {
+    ElMessage({
+      message:res.message,
+      type: "warning"
+    })
   }
 }
 
