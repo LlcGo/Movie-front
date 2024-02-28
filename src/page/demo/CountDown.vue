@@ -14,7 +14,8 @@
     </div>
     <div class="date-item">
       <div class="time">{{ state.seconds }}</div>
-      <div class="label">秒后自动取消订单</div>
+      <div class="label" v-if="props?.videoName">秒后自动取消订单</div>
+      <div class="label" v-if="!props?.videoName">解析完毕</div>
     </div>
   </div>
 </template>

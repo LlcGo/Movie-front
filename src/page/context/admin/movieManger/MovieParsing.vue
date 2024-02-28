@@ -34,7 +34,7 @@
         <el-table-column prop="address" label="剩余时间" width="300" align="center">
           <template #default="{ row }">
             <div v-if="row.state === 0">
-              <el-tag type="success">时间</el-tag>
+              <count-down class="countClass" :order="row" @setOrderState="setState"/>
             </div>
             <div v-if="row.state === 1">
               <el-tag type="success">已完成</el-tag>
@@ -167,11 +167,12 @@ import {useRoute, useRouter} from "vue-router";
 import {ElMessageBox, ElMessage} from 'element-plus'
 import {
   FileControllerService,
-  MovieControllerService, MovieNationControllerService,
-  MovieTyepControllerService, MovieYearControllerService, ParsingControllerService,
+  MovieTyepControllerService,ParsingControllerService,
 } from "../../../../../generated/index.ts";
 import {message} from "ant-design-vue";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons-vue";
+import dayjs from "dayjs";
+import CountDown from "@/page/demo/CountDown.vue";
 
 const isOk = ref(false);
 const route = useRoute();
@@ -188,6 +189,9 @@ onMounted(() => {
   getListData();
 });
 
+const setState = (record) => {
+  record.state = 1
+}
 const handleAdd = () => {
   addDialogVisible.value = true;
 }
@@ -243,6 +247,15 @@ const getListData = async () => {
   const res = await ParsingControllerService.getListVideoUsingPost(searchForm.value);
   console.log('获得的数据', res)
   if (res.data !== null) {
+    res.data.records.forEach(item => {
+      if(item.state === 0){
+        console.log('正在解析',item.updateTime)
+        let curTime = dayjs(item.updateTime).toDate()
+        curTime.setMinutes(curTime.getMinutes())
+        item.end = curTime.valueOf();
+        console.log(item.end)
+      }
+    })
     total.value = Number(res.data.total);
     tableData.value = res.data.records;
   }
