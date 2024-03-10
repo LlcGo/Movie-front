@@ -281,6 +281,7 @@ const pushComment = async () => {
   const res = await RemarkControllerService.addRemarkUsingPost(data);
   content.value = '';
   if (res.code == 0) {
+    message.success('评论已发布,请稍等需管理员审核后可显示')
     getComment();
   }
 }

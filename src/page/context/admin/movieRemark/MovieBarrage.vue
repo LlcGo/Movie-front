@@ -48,10 +48,10 @@
         <el-table-column label="状态" width="180" align="center">
           <template #default="{ row }">
             <div v-if="row.state === 1">
-              <el-tag type="danger">已删除</el-tag>
+              <el-tag type="danger">未审核</el-tag>
             </div>
             <div v-if="row.state === 0">
-              <el-tag type="success">正常</el-tag>
+              <el-tag type="success">下架弹幕</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -62,14 +62,14 @@
                 type="primary"
                 size="small"
                 v-auth="'/adminAuth/look'"
-                @click="onRemoveClick(row)">删除
+                @click="onRemoveClick(row)">下架该弹幕
             </el-button>
             <el-button
                 v-if="row.state === 1"
                 type="danger"
                 size="small"
                 v-auth="'/adminAuth/del'"
-                @click="onHuiFu(row)">恢复
+                @click="onHuiFu(row)">审核通过
             </el-button>
           </template>
         </el-table-column>
@@ -166,7 +166,7 @@ const getListData = async () => {
  */
 const onRemoveClick = row => {
   ElMessageBox.confirm(
-      "确定要删除" + row.movie.movieName + "的这一条评论吗",
+      "确定要下架" + row.movie.movieName + "的这一条该弹幕吗",
       {type: 'warning'}
   ).then(async () => {
     const res = await BarrageControllerService.adminDeleteUsingPost(row.id)
@@ -183,7 +183,7 @@ const onRemoveClick = row => {
 
 const onHuiFu = (row) => {
   ElMessageBox.confirm(
-      "确定要恢复" + row.movie.movieName + "的这一条评论吗",
+      "确定要审核通过" + row.movie.movieName + "的这一条弹幕吗",
       {type: 'warning'}
   ).then(async () => {
     const res = await BarrageControllerService.adminHuiFuUsingPost(row.id)

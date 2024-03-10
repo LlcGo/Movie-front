@@ -43,6 +43,7 @@ import VipPrice from "../page/context/admin/orderManger/VipPrice.vue";
 import Visualization from "../page/context/admin/adminVisualization/Visualization.vue";
 import UserVisualization from "../page/context/admin/adminVisualization/UserVisualization.vue";
 import MovieParsing from "../page/context/admin/movieManger/MovieParsing.vue";
+import Mysecret from "../page/context/front/userCenter/Mysecret.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -116,6 +117,10 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'movie',
                 name: '我的影视',
                 component : MyMovie
+            },{
+                path: 'secret',
+                name: '密保问题',
+                component : Mysecret
             }]
         },{
             path: "chat",

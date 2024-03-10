@@ -91,6 +91,7 @@ const items: ItemType[] = reactive([
   getItem('修改密码', '2', h(AppstoreOutlined)),
   getItem('我的订单', '3', h(AppstoreOutlined)),
   getItem('我的影视', '4', h(AppstoreOutlined)),
+  getItem('密保问题', '5', h(AppstoreOutlined)),
 ]);
 
 const handleClick: MenuProps['onClick'] = e => {
@@ -121,6 +122,11 @@ const handleClick: MenuProps['onClick'] = e => {
     case 4:
       router.push({
         path:'/layout/account/movie'
+      })
+      return;
+    case 5:
+      router.push({
+        path:'/layout/account/secret'
       })
       return;
   }

@@ -385,6 +385,7 @@ const sendBarrage = async (data: BarrageAddRequest) => {
   }
   const res = await BarrageControllerService.addBarrageUsingPost(data)
   if (res.data){
+    message.success('弹幕已成功发送,等待管理员审核通过即可展示')
     getBarrage();
   }
   console.log(res);
