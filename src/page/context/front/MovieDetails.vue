@@ -251,7 +251,7 @@ const getUserAndHotAndCurrentMovie = async () => {
 
 //设置是否观影
 const getComment = async () => {
-  const res = await RemarkControllerService.listRemarkByPageUsingGet(current.value, Number(query.currentMovieId), pageSize.value);
+  const res = await RemarkControllerService.listRemarkByPageUsingGet(null,current.value, Number(query.currentMovieId), null,null,pageSize.value);
   // total.value = res.data?[0].total;
   // alert(total.value)
   currentComment.value = res.data;

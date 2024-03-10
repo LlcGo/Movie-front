@@ -1,9 +1,9 @@
 <template>
   <div class="home-box">
     <el-form :inline="true" :model="searchForm" v-show="showSearch">
-      <el-form-item label="影片ID" prop="id">
-        <el-input v-model="searchForm.id" placeholder="影片ID" clearable/>
-      </el-form-item>
+<!--      <el-form-item label="影片ID" prop="id">-->
+<!--        <el-input v-model="searchForm.id" placeholder="影片ID" clearable/>-->
+<!--      </el-form-item>-->
 
       <el-form-item label="影片名字">
         <el-input v-model="searchForm.movieName" placeholder="影片名字" clearable></el-input>
@@ -112,7 +112,7 @@
                 v-loading="loading"
                 element-loading-text="加载中..."
                 border>
-        <el-table-column prop="id" label="ID" width="180"></el-table-column>
+<!--        <el-table-column prop="id" label="ID" width="180"></el-table-column>-->
         <el-table-column prop="movieName" label="电影名" width="180"></el-table-column>
         <el-table-column prop="movieNation" label="电影地区" width="180"></el-table-column>
         <el-table-column prop="movieType" width="88" label="电影类型"></el-table-column>

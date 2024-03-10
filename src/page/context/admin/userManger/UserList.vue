@@ -1,9 +1,9 @@
 <template>
   <div class="home-box">
     <el-form :inline="true" :model="searchForm" v-show="showSearch">
-      <el-form-item label="账号ID" prop="id">
-        <el-input v-model="searchForm.id" clearable/>
-      </el-form-item>
+<!--      <el-form-item label="账号ID" prop="id">-->
+<!--        <el-input v-model="searchForm.id" clearable/>-->
+<!--      </el-form-item>-->
 
       <el-form-item label="账号">
         <el-input v-model="searchForm.username" placeholder="账号" clearable></el-input>
@@ -73,7 +73,7 @@
                 v-loading="loading"
                 element-loading-text="加载中..."
                 border>
-        <el-table-column prop="id" label="ID" width="180"></el-table-column>
+<!--        <el-table-column prop="id" label="ID" width="180"></el-table-column>-->
         <el-table-column prop="username" label="账号" width="180"></el-table-column>
         <el-table-column prop="nickname" label="用户名" width="180"></el-table-column>
         <el-table-column label="角色" width="88" align="center">
