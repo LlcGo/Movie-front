@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse } from '../models/BaseResponse';
-import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
 import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { BaseResponse_VideoUpload_ } from '../models/BaseResponse_VideoUpload_';
 
@@ -146,13 +145,13 @@ file: Blob,
     /**
      * uploadVideoToM3U8
      * @param file file
-     * @returns BaseResponse_int_ OK
+     * @returns BaseResponse_string_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static uploadVideoToM3U8UsingPost(
 file: Blob,
-): CancelablePromise<BaseResponse_int_ | any> {
+): CancelablePromise<BaseResponse_string_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/uploadVideoToM3U8',

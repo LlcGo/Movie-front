@@ -33,6 +33,9 @@
               <div class="forms_field">
                 <input v-model="qcCode" type="text" placeholder="请输入验证码" class="forms_field-input" />
               </div>
+              <div class="wj" @click="showSecret">
+               忘记密码
+              </div>
               <img
                   class="login-imgStyle"
                   id="accountImg"
@@ -65,6 +68,44 @@
       </div>
     </div>
   </section>
+  <div>
+    <a-modal v-model:open="open" title="找回密码" @ok="handleOk" @cancel="handleClose">
+      <div v-if="!show">
+        <a-input v-model:value="userName"  placeholder="请输入您的账号" />
+      </div>
+      <div v-if="show">
+        <a-form
+            name="basic"
+            :label-col="{ span: 8 }"
+            :wrapper-col="{ span: 8 }"
+            autocomplete="off"
+        >
+          <a-form-item label="第一个问题" >
+            <div>{{secret?.question1}}</div>
+          </a-form-item>
+
+          <a-form-item
+              label="问题答案"
+          >
+            <a-input v-model:value="answer1" />
+          </a-form-item>
+
+          <a-form-item label="第二个问题" >
+            <div>{{secret?.question2}}</div>
+          </a-form-item>
+
+          <a-form-item
+              label="问题答案"
+          >
+            <a-input v-model:value="answer2" />
+          </a-form-item>
+
+        </a-form>
+
+      </div>
+
+    </a-modal>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -72,6 +113,9 @@ import {onMounted, ref} from "vue";
 import {UserControllerService} from "../../../generated";
 import {message} from "ant-design-vue";
 import {useRouter} from "vue-router";
+const userName = ref();
+const secret = ref()
+const open = ref<boolean>(false);
 const signupButton = ref();
 const loginButton = ref();
 const userForms = ref();
@@ -95,7 +139,7 @@ onMounted(()=>{
   refreshAccountImg();
 
 })
-
+const show = ref(false);
 const router =  useRouter();
 //注册字段
 const registerUserName = ref();
@@ -108,7 +152,42 @@ const loginPassword = ref();
 const imgSrc = ref();
 const qcCode = ref();
 
+const answer1 = ref()
+const answer2 = ref();
 
+
+const handleOk = async () => {
+  if(show.value){
+    // await UserControllerService.
+    const res = sessionStorage.getItem("secretName");
+    console.log("数据",res)
+    const res1 =  await UserControllerService.getSecretNoUserNameUsingPost(answer1,answer2,res);
+    console.log('返回的数据',res1)
+    if(res1.code === 0){
+      alert('您的密码是'+res1.data)
+    }
+  }else {
+    const res = await UserControllerService.getSecretUsingPost(userName.value);
+    console.log('数据',res)
+    if(res.code == 40000){
+      message.warn(res.message)
+      return
+    }
+    sessionStorage.setItem("secretName",userName.value)
+    secret.value = res.data
+    show.value = true;
+  }
+
+}
+
+const handleClose = () => {
+  open.value = false;
+  userName.value = null;
+  show.value = false;
+}
+const showSecret = () => {
+  open.value = true
+}
 
 const login = async () => {
   if(loginUsername.value == null){
@@ -296,6 +375,16 @@ input
     opacity: 1
     visibility: visible
     transform: translate3d(0, 0, 0)
+
+.wj
+  position: absolute
+  right: 0
+  cursor: pointer
+
+.wj:hover
+  color: #1677ff
+
+
 
 
 /**

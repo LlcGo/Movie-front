@@ -304,6 +304,30 @@ userName?: string,
     }
 
     /**
+     * shRemark
+     * @param id id
+     * @returns BaseResponse_int_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static shRemarkUsingPost(
+id?: number,
+): CancelablePromise<BaseResponse_int_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/remark/sh',
+            query: {
+                'id': id,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * deleteUserRemark
      * @param remarkDeleteRequest remarkDeleteRequest
      * @returns BaseResponse_boolean_ OK

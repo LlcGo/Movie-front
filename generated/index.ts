@@ -32,6 +32,7 @@ export type { BaseResponse_List_RecentChat_ } from './models/BaseResponse_List_R
 export type { BaseResponse_List_Remark_ } from './models/BaseResponse_List_Remark_';
 export type { BaseResponse_List_Users_ } from './models/BaseResponse_List_Users_';
 export type { BaseResponse_List_UserVo_ } from './models/BaseResponse_List_UserVo_';
+export type { BaseResponse_List_VideoUpload_ } from './models/BaseResponse_List_VideoUpload_';
 export type { BaseResponse_long_ } from './models/BaseResponse_long_';
 export type { BaseResponse_Map_int_List_Movie_ } from './models/BaseResponse_Map_int_List_Movie_';
 export type { BaseResponse_Map_int_List_Order_ } from './models/BaseResponse_Map_int_List_Order_';
@@ -92,6 +93,7 @@ export type { RemarkAddRequest } from './models/RemarkAddRequest';
 export type { RemarkDeleteRequest } from './models/RemarkDeleteRequest';
 export type { RemarkUser } from './models/RemarkUser';
 export type { RemarkUserAddQuery } from './models/RemarkUserAddQuery';
+export type { SecretRequest } from './models/SecretRequest';
 export type { UpdatePassWord } from './models/UpdatePassWord';
 export type { UserAddRequest } from './models/UserAddRequest';
 export type { UserLoginRequest } from './models/UserLoginRequest';

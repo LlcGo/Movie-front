@@ -8,73 +8,157 @@
         autocomplete="off"
         @finish="onFinish"
     >
-      <a-form-item
-          label="第一个问题"
-          name="oldPassword"
-          :rules="[{ required: true, message: 'Please input your username!' }]"
-      >
-        <a-input-password v-model:value="formState.oldPassword" />
+      <a-form-item label="第一个问题" >
+        <a-select
+            v-model:value="question1"
+            style="width: 100%"
+            placeholder="请选择您的密保问题"
+            :options="options1"
+        ></a-select>
       </a-form-item>
 
       <a-form-item
           label="问题答案"
-          name="newPassword"
-          :rules="[{ required: true, message: 'Please input your password!' }]"
       >
-        <a-input-password v-model:value="formState.newPassword" />
+        <a-input v-model:value="answer1" />
       </a-form-item>
 
-      <a-form-item
-          label="第二个问题"
-          name="oldPassword"
-          :rules="[{ required: true, message: 'Please input your username!' }]"
-      >
-        <a-input-password v-model:value="formState.oldPassword" />
+      <a-form-item label="第二个问题" >
+        <a-select
+            v-model:value="question2"
+            style="width: 100%"
+            placeholder="请选择您的密保问题"
+            :options="options2"
+        ></a-select>
       </a-form-item>
 
       <a-form-item
           label="问题答案"
-          name="newPassword"
-          :rules="[{ required: true, message: 'Please input your password!' }]"
       >
-        <a-input-password v-model:value="formState.newPassword" />
+        <a-input v-model:value="answer2" />
       </a-form-item>
 
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">确认修改</a-button>
+        <a-button type="primary" html-type="submit">保存</a-button>
       </a-form-item>
     </a-form>
 
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {UserControllerService} from "../../../../../generated";
 import {message} from "ant-design-vue";
 import {useRouter} from "vue-router";
 const router = useRouter();
-interface updatePassWord{
-  newPassword: string,
-  oldPassword: string,
+const question2 = ref();
+const question1 = ref();
+const answer1 = ref();
+const answer2 = ref();
+
+onMounted(()=>{
+  getSecret()
+})
+
+const getSecret = async () => {
+  const res = await UserControllerService.getsecretNoUserNameUsingPost();
+  console.log('获得的数据',res)
+  if(res.code == 0){
+    question1.value = res.data.question1
+    question2.value = res.data.question2
+  }
 }
 
-const formState = reactive<updatePassWord>({
-  newPassword:'',
-  oldPassword:'',
+const options1 = ref([
+  {
+    value: '您母亲的姓名是?',
+    label: '您母亲的姓名是?',
+  },
+  {
+    value: '您的出生地是?',
+    label: '您的出生地是?',
+  },
+  {
+    value: '您的小学校名是?',
+    label: '您的小学校名是?',
+  },
+  {
+    value: '您的大学校名是?',
+    label: '您的大学校名是?',
+  },
+  {
+    value: '我最喜欢的小说?',
+    label: '我最喜欢的小说?',
+  },
+  {
+    value: '我最喜欢的食物?',
+    label: '我最喜欢的食物?',
+  },
+])
+const options2 = ref([
+  {
+    value: '您母亲的姓名是?',
+    label: '您母亲的姓名是?',
+  },
+  {
+    value: '您的出生地是?',
+    label: '您的出生地是?',
+  },
+  {
+    value: '您的小学校名是?',
+    label: '您的小学校名是?',
+  },
+  {
+    value: '您的大学校名是?',
+    label: '您的大学校名是?',
+  },
+  {
+    value: '我最喜欢的小说?',
+    label: '我最喜欢的小说?',
+  },
+  {
+    value: '我最喜欢的食物?',
+    label: '我最喜欢的食物?',
+  },
+])
+
+interface Secret{
+  question1: string,
+  question2: string,
+  answer1:string,
+  answer2:string
+}
+
+const formState = reactive<Secret>({
+  question1: '',
+  question2: '',
+  answer1:'',
+  answer2:''
 });
-const onFinish = async (values: updatePassWord) => {
-  console.log('Success:', values);
-  const res = await UserControllerService.updateUserUsingPost(values)
-  console.log(res);
-  if(!res.data){
-    message.warn(res.message)
-    return;
+const onFinish = async (value) => {
+  console.log('问题1---》',question1.value,'答案',answer1.value,'问题2---》',question2.value,'答案',answer2.value)
+  let data = {
+    question1:question1.value,
+    question2:question2.value,
+    answer1:answer1.value,
+    answer2:answer2.value
   }
-  message.success('修改成功,请重新登录')
-  router.push({
-    path: '/',
-  })
+  const res = await UserControllerService.userSecretUsingPost(data);
+  if(res.data){
+    message.success('设置成功')
+  }
+  // console.log('Success:', values);
+  // const res = await UserControllerService.updateUserUsingPost(values)
+  // console.log(res);
+  // if(!res.data){
+  //   message.warn(res.message)
+  //   return;
+  // }
+  // message.success('修改成功,请重新登录')
+  // router.push({
+  //   path: '/',
+  // })
 };
 
 

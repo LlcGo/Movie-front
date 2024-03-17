@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BaseResponse_List_VideoUpload_ } from '../models/BaseResponse_List_VideoUpload_';
 import type { BaseResponse_Page_VideoUpload_ } from '../models/BaseResponse_Page_VideoUpload_';
-import type { VideoUpload } from '../models/VideoUpload';
 import type { VideQueryRequest } from '../models/VideQueryRequest';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -36,11 +36,11 @@ videQueryRequest: VideQueryRequest,
 
     /**
      * getVideoList
-     * @returns VideoUpload OK
+     * @returns BaseResponse_List_VideoUpload_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static getVideoListUsingPost(): CancelablePromise<Array<VideoUpload> | any> {
+    public static getVideoListUsingPost(): CancelablePromise<BaseResponse_List_VideoUpload_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/parsing/getVideoList',

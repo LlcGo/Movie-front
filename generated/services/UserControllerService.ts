@@ -12,6 +12,7 @@ import type { BaseResponse_Users_ } from '../models/BaseResponse_Users_';
 import type { BaseResponse_UserVo_ } from '../models/BaseResponse_UserVo_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { QCCode } from '../models/QCCode';
+import type { SecretRequest } from '../models/SecretRequest';
 import type { UpdatePassWord } from '../models/UpdatePassWord';
 import type { UserAddRequest } from '../models/UserAddRequest';
 import type { UserLoginRequest } from '../models/UserLoginRequest';
@@ -70,6 +71,28 @@ userAddRequest: UserAddRequest,
     }
 
     /**
+     * userSecret
+     * @param secretRequest secretRequest
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static userSecretUsingPost(
+secretRequest: SecretRequest,
+): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/add/secret',
+            body: secretRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
      * adminUpdatePassword
      * @param id id
      * @param password password
@@ -87,6 +110,36 @@ password?: string,
             query: {
                 'id': id,
                 'password': password,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getSecretNoUserName
+     * @param answer1 answer1
+     * @param answer2 answer2
+     * @param userName userName
+     * @returns BaseResponse_string_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getSecretNoUserNameUsingPost(
+answer1?: string,
+answer2?: string,
+userName?: string,
+): CancelablePromise<BaseResponse_string_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/check/secre',
+            query: {
+                'answer1': answer1,
+                'answer2': answer2,
+                'userName': userName,
             },
             errors: {
                 401: `Unauthorized`,
@@ -150,6 +203,46 @@ id?: number,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/user/get/login',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getSecret
+     * @param userName userName
+     * @returns BaseResponse_object_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getSecretUsingPost(
+userName: string,
+): CancelablePromise<BaseResponse_object_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/get/secret',
+            body: userName,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * getsecretNoUserName
+     * @returns BaseResponse_object_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getsecretNoUserNameUsingPost(): CancelablePromise<BaseResponse_object_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/get/secretNoUserName',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

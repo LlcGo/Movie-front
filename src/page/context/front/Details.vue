@@ -18,10 +18,10 @@
           <a-divider type="vertical" />
         </template>
         <div style="font-size: 16px">年份:<p style="display: inline" >
-          {{getYear(currentMovie?.year) }}
+          {{currentMovie?.movieYear?.yearName}}
         </p></div>
         <div style="font-size: 16px">地区:<p style="display: inline" >
-          {{ getMovieNation(currentMovie?.nation) }}
+          {{currentMovie?.movieNation?.nationName}}
         </p></div>
         <div style="font-size: 16px">类型:<p style="display: inline" >
           {{ currentMovie?.movieType?.typeName }}
