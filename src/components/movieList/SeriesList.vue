@@ -18,7 +18,7 @@
               <div class="imgName"  @click="toDetail(movieItem)">
                 {{movieItem.movieName}}
               </div>
-              <div v-html="movieItem.actorsName" class="imgAc">
+              <div v-html="setMovie(movieItem.actorsName)" class="imgAc">
               </div>
             </div>
           </div>
@@ -43,7 +43,13 @@ const props = defineProps({
   //子组件接收父组件传递过来的值
   movie: [] as Movie,
 })
-
+const setMovie = (name:string) => {
+  // alert(name)
+  if(name.length > 15){
+    name = name.substring(0,20) + '...';
+  }
+  return name;
+}
 onMounted(()=>{
   getType();
 })

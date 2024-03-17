@@ -297,14 +297,16 @@ const movieYears = ref([])
 const getInit = () => {
   if (flag.value) {
     const current =  getItem('tagsView')
-    for (let i = 0; i < current.length; i++) {
-      if (current[i].name === route.name) {
-        console.log('store.tagsViewList[i]', current[i].query)
-        if(current[i].query.actorsName.length > 18){
-          current[i].query.actorsName = current[i].query.actorsName.substring(0,18) + '...'
+    if(current !== null){
+      for (let i = 0; i < current.length; i++) {
+        if (current[i].name === route.name) {
+          console.log('store.tagsViewList[i]', current[i].query)
+          if(current[i].query.actorsName.length > 18){
+            current[i].query.actorsName = current[i].query.actorsName.substring(0,18) + '...'
+          }
+          movieInfo.value = current[i].query
+          getFormEditLabelAlign(current[i].query)
         }
-        movieInfo.value = current[i].query
-        getFormEditLabelAlign(current[i].query)
       }
     }
   }
@@ -476,14 +478,16 @@ const toEditMovie = async () => {
       }
     })
     const currentTage =  getItem('tagsView')
-    currentTage.forEach(item =>{
-      if(item.name === route.name){
-        console.log(item)
-        item.query = movieInfo.value;
-        console.log('修改后',item)
-      }
-    })
-    console.log(currentTage)
+    if(currentTage !== null){
+      currentTage.forEach(item =>{
+        if(item.name === route.name){
+          console.log(item)
+          item.query = movieInfo.value;
+          console.log('修改后',item)
+        }
+      })
+      console.log(currentTage)
+    }
     setItem("tagsView",currentTage)
     ElMessage({
       message: '修改成功',
